@@ -1,5 +1,5 @@
 ---
-name: Css issue report
+name: "\U0001F484 style issue report"
 about: css에 대한 부분을 사용할 때 쓰는 템플릿입니다.
 title: ''
 labels: ''

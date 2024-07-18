@@ -1,5 +1,5 @@
 ---
-name: Bug issue report
+name: "\U0001F41BBug issue report"
 about: 버그 발생 시 사용하는 템플릿입니다.
 title: ''
 labels: ''
