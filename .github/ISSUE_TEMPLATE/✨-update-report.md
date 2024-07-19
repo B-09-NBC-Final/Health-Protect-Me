@@ -1,5 +1,5 @@
 ---
-name: Update report
+name: "✨ Update report"
 about: 새로운 기능 추가 시 사용하는 템플릿입니다.
 title: ''
 labels: ''

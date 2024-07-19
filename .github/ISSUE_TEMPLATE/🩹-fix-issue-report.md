@@ -1,5 +1,5 @@
 ---
-name: Fix issue report
+name: "\U0001FA79 Fix issue report"
 about: 수정 시 사용하는 템플릿입니다.
 title: ''
 labels: ''
