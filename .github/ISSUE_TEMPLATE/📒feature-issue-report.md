@@ -1,16 +1,16 @@
 ---
-name: '✨ Update report'
-about: 기존의 기능을 개선하거나 업데이트 시 사용하는 템플릿입니다.
-title: ''
+name: '📒FEATURE'
+about: 새로운 기능 추가 시 사용하는 템플릿입니다.
+title: '[FEATURE] '
 labels: ''
 assignees: ''
 ---
 
 ---
 
-name: ' UPDATE'
+name: 'FEAT'
 about: 코드의 구조나 디자인을 변경하되 기능은 그대로 유지
-title: '[UPDATE] '
+title: '[FEAT] '
 labels: ''
 assignees: ''
 
@@ -18,7 +18,7 @@ assignees: ''
 
 ## Description
 
-### 어떤 코드를 업데이트 중인지 작성해주세요.
+### 어떤 기능을 추가했는지 작성해주세요.
 
 ## To-Do
 
