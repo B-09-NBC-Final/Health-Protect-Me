@@ -1,7 +1,13 @@
 import React from 'react';
+import MyPage from '@/components/MyPage';
+import MainLayout from '@/app/(main)/layout';
 
-const MyPage = () => {
-  return <div>MyPage</div>;
+const MyPageComponent: React.FC = () => {
+  return (
+    <MainLayout>
+      <MyPage />
+    </MainLayout>
+  );
 };
 
-export default MyPage;
+export default MyPageComponent;
