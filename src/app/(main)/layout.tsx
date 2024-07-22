@@ -1,13 +1,13 @@
 import Header from '@/components/common/Header';
 import React from 'react';
 
-const MainPage = () => {
+const MainLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
       <Header />
-      Main page
+      {children}
     </>
   );
 };
 
-export default MainPage;
+export default MainLayout;
