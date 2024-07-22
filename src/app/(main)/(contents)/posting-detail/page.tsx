@@ -1,7 +1,6 @@
 import React from 'react';
 
-const PostingDetailPage = ({ params }: { params: { id: string } }) => {
-  console.log(params.id);
+const PostingDetailPage = () => {
   return <div>PostingDetailPage</div>;
 };
 
