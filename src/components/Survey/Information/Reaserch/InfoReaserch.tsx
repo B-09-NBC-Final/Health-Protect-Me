@@ -1,20 +1,7 @@
-'use client'; // Next.js 13 이상에서 클라이언트 컴포넌트임을 명시
+'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-
-// 설문 입력지에 대한 정보 type
-type Step = '출생년도' | '성별' | '신장' | '체중' | '식단 목적';
-type Gender = '남' | '여';
-type DietGoal = '체중 감량' | '체중 유지' | '건강 식습관' | '체중 증량';
-
-// 데이터 구조 type 지정
-type SurveyData = {
-  birthYear: string;
-  gender: Gender | null;
-  height: string;
-  weight: string;
-  dietGoal: DietGoal | null;
-};
+import { Step, Gender, DietGoal, SurveyData } from '@/types/infoReaserch';
 
 const InfoResearch = (): JSX.Element => {
   const [currentStep, setCurrentStep] = useState<number>(0);
