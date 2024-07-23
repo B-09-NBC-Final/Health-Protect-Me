@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-<<<<<<< HEAD
 .truncate-lines-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -10,5 +9,4 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
-=======
->>>>>>> 822f78f707d8430b1374bd3d16e31a1bcfd4d77e
+
