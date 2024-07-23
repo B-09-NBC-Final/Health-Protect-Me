@@ -19,10 +19,10 @@ const PostingDetailPost = ({ params }: { params: { id: string } }) => {
   }, []);
 
   return (
-    <div className="py-5">
-      <p className="text-bold">{post?.title}</p>
-      <Image src="" alt="" width={200} height={200} className="mt-3 rounded-xl" />
-      <p className="mt-3">{post?.content}</p>
+    <div>
+      <p className="font-bold border-b-2 border-solid border-coral pb-1 mb-5">{post?.title}</p>
+      <Image src={post?.image_url as string} alt="" width={200} height={200} className="mb-3 rounded-xl" />
+      <p className="mb-5">{post?.content}</p>
     </div>
   );
 };
