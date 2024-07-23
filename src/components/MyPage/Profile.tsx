@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ProfileSection: React.FC = () => {
+const ProfileSection = () => {
   return (
     <div className="w-full max-w-6xl mx-auto">
       <div className="flex flex-col items-center text-center mb-8">
@@ -10,11 +10,9 @@ const ProfileSection: React.FC = () => {
         <h1 className="text-xl font-bold mt-5">물에빠진오리님</h1>
         <button className="w-[88px] h-[28px] bg-gray-200 text-gray-500 text-xs rounded mt-2">프로필 수정</button>
       </div>
-
       <div className="w-full flex justify-center my-8">
         <hr className="border-t border-gray-300 w-80" />
       </div>
-
       <section className="w-[320PX] h-[184px] mx-auto p-5 rounded-xl text-center bg-white border border-gray-300">
         <div className="w-[224px] bg-green-50 p-2 rounded-3xl mb-2 mx-auto">
           <h2 className="text-green-600 font-bold">체중 감량</h2>
@@ -40,5 +38,4 @@ const ProfileSection: React.FC = () => {
     </div>
   );
 };
-
 export default ProfileSection;

@@ -1,7 +1,7 @@
 import React from 'react';
 import '@/app/globals.css';
 
-const PostsSection: React.FC = () => {
+const PostsSection = () => {
   return (
     <section className="w-full mx-12">
       <h2 className="text-xl font-semibold ml-5 mb-6">내가 작성한 글</h2>
@@ -23,5 +23,4 @@ const PostsSection: React.FC = () => {
     </section>
   );
 };
-
 export default PostsSection;
