@@ -1,7 +1,12 @@
 import React from 'react';
+import TextareatPage from './Textarea/TextareatPage';
 
 const PostingMain = () => {
-  return <div>포스팅 메인 페이지</div>;
+  return (
+    <div>
+      <TextareatPage />
+    </div>
+  );
 };
 
 export default PostingMain;
