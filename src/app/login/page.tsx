@@ -2,7 +2,7 @@ import React from 'react';
 import LoginButton from '@/components/LoginPage/SocialLogin';
 import Logout from '@/components/LoginPage/SocialLogout';
 
-const LoginPage: React.FC = () => {
+const LoginPage = () => {
   return (
     <>
       <div>LoginPage</div>
