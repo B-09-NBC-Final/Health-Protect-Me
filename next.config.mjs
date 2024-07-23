@@ -11,7 +11,12 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'pdgwrjxbqywcmuxwjqos.supabase.co',
         pathname: '/**'
-      }
+      },
+      {
+        protocol: 'https',
+        hostname: 'search.pstatic.net',
+        pathname: '/**'
+      } // 이후에 삭제
     ]
   },
   env: {
