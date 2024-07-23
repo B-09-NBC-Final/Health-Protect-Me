@@ -16,7 +16,6 @@ const InfoResearch = (): JSX.Element => {
 
   // 설문단계의 배열 정렬
   const steps: Step[] = ['출생년도', '성별', '신장', '체중', '식단 목적'];
-
   const stepRefs = useRef<React.RefObject<HTMLDivElement>[]>(steps.map(() => React.createRef()));
 
   const nextStep = (): void => {
@@ -25,21 +24,24 @@ const InfoResearch = (): JSX.Element => {
     }
   };
 
+  const preStep = (): void => {
+    if (currentStep > 0) {
+      setCurrentStep(currentStep - 1);
+    }
+  };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
     setSurveyData((prevData) => ({ ...prevData, [name]: value }));
   };
-
   const handleGenderSelect = (gender: Gender): void => {
     setSurveyData((prevData) => ({ ...prevData, gender }));
     nextStep();
   };
-
   const handleDietGoalSelect = (dietGoal: DietGoal): void => {
     setSurveyData((prevData) => ({ ...prevData, dietGoal }));
     nextStep();
   };
-
   // 설문 후 다음 단계로 넘어가게 하는(스크롤)
   useEffect(() => {
     stepRefs.current[currentStep].current?.scrollIntoView({
@@ -49,9 +51,8 @@ const InfoResearch = (): JSX.Element => {
   }, [currentStep]);
 
   return (
-    <div className="max-w-2xl mx-auto mt-10 p-8 bg-white rounded-xl shadow-lg">
+    <div className="max-w-2xl mx-auto mt-10 mb-4 p-8 bg-white rounded-xl shadow-lg">
       <h1 className="text-3xl font-bold mb-8 text-center text-gray-800">설문조사</h1>
-
       {/* progress bar 구현 파트 */}
       <div className="mb-8 bg-gray-200 rounded-full h-4">
         <div
@@ -103,7 +104,6 @@ const InfoResearch = (): JSX.Element => {
           className="w-full p-3 text-lg border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         />
       </div>
-
       <div ref={stepRefs.current[3]} className={`mb-8 ${currentStep !== 3 && 'hidden'}`}>
         {/* 설문 항목 순서 명시 */}
         <label className="block text-xl mb-2 font-medium text-gray-700">체중이 어떻게 되나요?</label>
@@ -116,7 +116,6 @@ const InfoResearch = (): JSX.Element => {
           className="w-full p-3 text-lg border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         />
       </div>
-
       <div ref={stepRefs.current[4]} className={`mb-8 ${currentStep !== 4 && 'hidden'}`}>
         {/* 설문 항목 순서 명시 */}
         <p className="text-xl mb-4 font-medium text-gray-700">식단 목적은 무엇인가요?</p>
@@ -132,22 +131,31 @@ const InfoResearch = (): JSX.Element => {
           ))}
         </div>
       </div>
-
-      {/* 다음 단계로 넘어갈 수 있게 하고 마지막 설문에서는 멈추게 해놓기 */}
-      {currentStep < steps.length - 1 && (
-        <button
-          onClick={nextStep}
-          className="w-full py-3 px-6 text-lg bg-green-500 text-white rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-200"
-        >
-          다음
-        </button>
-      )}
-      {/* 마지막 설문에서의 제출 클릭 시, 제출할 수 있게 만들기  */}
-      {currentStep === steps.length - 1 && (
-        <button className="w-full py-3 px-6 text-lg bg-red-500 text-white rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-200">
-          제출하기
-        </button>
-      )}
+      <div className=" m-4 justify-around mt-4">
+        {/* 다음 단계로 넘어갈 수 있게 하고 마지막 설문에서는 멈추게 해놓기 */}
+        {currentStep < steps.length - 1 && (
+          <button
+            onClick={nextStep}
+            className="m-1 w-full py-3 px-6 text-lg bg-green-500 text-white rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-200"
+          >
+            다음
+          </button>
+        )}
+        {currentStep > 0 && (
+          <button
+            onClick={preStep}
+            className="m-1 w-full py-3 px-6 text-lg text-white rounded-lg focus:outline-none focus:ring-2 transition duration-200 bg-gray-500 hover:bg-gray-600 focus:ring-gray-500"
+          >
+            뒤로
+          </button>
+        )}
+        {/* 마지막 설문에서의 제출 클릭 시, 제출할 수 있게 만들기  */}
+        {currentStep === steps.length - 1 && (
+          <button className="w-full py-3 px-6 text-lg bg-red-500 text-white rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-200">
+            제출하기
+          </button>
+        )}
+      </div>
     </div>
   );
 };
