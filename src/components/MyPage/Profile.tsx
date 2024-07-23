@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ProfileSection: React.FC = () => {
+const ProfileSection = () => {
   return (
     <div className="w-full max-w-6xl mx-auto">
       <div className="flex flex-col items-center text-center mb-8">
