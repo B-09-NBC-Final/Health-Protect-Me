@@ -1,4 +1,3 @@
-// src/components/Login/LoginButton.tsx
 'use client';
 
 import React from 'react';
