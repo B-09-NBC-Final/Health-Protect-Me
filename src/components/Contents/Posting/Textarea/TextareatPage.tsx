@@ -6,14 +6,17 @@ import { useEffect, useState } from 'react';
 import { createClient } from '@/supabase/client';
 import { uuid } from 'uuidv4';
 import Image from 'next/image';
+import CategoryMain from '../Category/Categories';
 
 const supabase = createClient();
 
 const TextareaPage = () => {
-  const [selectCategory, setSelectCategory] = useState<string[]>([]);
+  const [selectCategory, setSelectCategory] = useState<string>('');
   const [fileUrl, setFileUrl] = useState<string[]>([]);
   const [uploadFile, setUploadFile] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
+
+  const categories = ['잡담', '질문', '후기'];
 
   useEffect(() => {
     return () => previews.forEach(URL.revokeObjectURL);
@@ -58,39 +61,40 @@ const TextareaPage = () => {
     setFileUrl((prevurl) => prevurl.filter((_, i) => i !== index));
   };
 
+  const handleCategorySelect = (category: string) => {
+    setSelectCategory(category === selectCategory ? '' : category);
+  };
+
   return (
     <div className="max-w-2xl mx-auto p-6">
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold mb-4">게시글 작성</h1>
-        <p className="mt-1 text-sm text-blue-500">당신의 이야기를 들려주세요.</p>
-        <Input
-          type="text"
-          placeholder="제목을 입력 해주세요."
-          className="mt-10 w-full p-2 mb-4 border-b border-transparent focus:border-[#FF7A85] focus:outline-none transition-colors duration-300 placeholder-gray-400 text-black"
+      <div className="mb-12">
+        <h1 className="text-4xl font-bold mb-6">게시글 작성</h1>
+        <CategoryMain
+          categories={categories}
+          selectedCategory={selectCategory}
+          onSelectCategory={handleCategorySelect}
         />
-        <p className="border-solid border-2"></p>
-        <Textarea
-          placeholder="내용을 적어주세요."
-          id="content"
-          className="mt-5 w-full h-64 p-4 border-transparent rounded-lg focus:ring-2 focus:ring-[#FF7A85] focus:border-[#FF7A85] outline-none transition-all duration-300 resize-none placeholder-gray-400 text-black"
-        />
+        <div className="border-t border-gray-200 pt-8">
+          <Input
+            type="text"
+            placeholder="제목을 입력 해주세요."
+            className="w-full p-2 mb-4 border-b border-transparent focus:border-[#FF7A85] focus:outline-none transition-colors duration-300 placeholder-gray-400 text-black"
+          />
+          <Textarea
+            placeholder="내용을 적어주세요."
+            id="content"
+            className="mt-4 w-full h-64 p-4 border-transparent rounded-lg focus:ring-2 focus:ring-[#FF7A85] focus:border-[#FF7A85] outline-none transition-all duration-300 resize-none placeholder-gray-400 text-black"
+          />
+        </div>
       </div>
-      <div className="flex items-start space-x-4">
-        <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="mt-8">
+        <div className="flex flex-wrap gap-4 mb-4">
           {previews.map((preview, index) => (
-            <div key={index} className="relative ">
-              <div className="relative p-10">
-                <div>
-                  <Image
-                    src={preview}
-                    alt={`preview-${index}`}
-                    layout="fill"
-                    objectFit="cover"
-                    className="rounded-lg"
-                  />
-                </div>
+            <div key={index} className="relative">
+              <div className="relative w-[120px] h-[120px]">
+                <Image src={preview} alt={`preview-${index}`} layout="fill" objectFit="cover" className="rounded-lg" />
                 <button
-                  className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-3 h-3 flex items-center justify-center text-xs"
+                  className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs"
                   onClick={() => handleRemovePrevFile(index)}
                 >
                   X
@@ -99,12 +103,13 @@ const TextareaPage = () => {
             </div>
           ))}
         </div>
+        <label className="flex items-center cursor-pointer">
+          <Image src="/add_image_icon.png" alt="addImg" width={30} height={30} className="mr-2" />
+          <span className="text-sm text-blue-500">이미지 추가</span>
+          <input type="file" id="test" multiple accept="image/*" className="hidden" onChange={handleUploadFiles} />
+        </label>
       </div>
-      <label className="flex items-center cursor-pointer">
-        <Image src="/add_image_icon.png" alt="addImg" width={30} height={30} className="" />
-        <input type="file" id="test" multiple accept="image/*" className="hidden" onChange={handleUploadFiles} />
-      </label>
-      <div>
+      <div className="mt-8">
         <TextareatBtn />
       </div>
     </div>
