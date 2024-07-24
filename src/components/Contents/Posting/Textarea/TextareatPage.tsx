@@ -17,7 +17,7 @@ const TextareaPage = () => {
         <p className="border-solid border-2"></p>
         <Textarea
           placeholder="내용을 적어주세요."
-          id="message-2"
+          id="content"
           className="mt-5 w-full h-64 p-4 border-transparent rounded-lg focus:ring-2 focus:ring-[#FF7A85] focus:border-[#FF7A85] outline-none transition-all duration-300 resize-none placeholder-gray-400 text-black"
         />
       </div>
