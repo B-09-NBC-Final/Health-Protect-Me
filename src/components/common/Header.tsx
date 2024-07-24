@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import Defaultimg from '../../../public/image/defaultimg.png';
+import Defaultimg from '../../assets/image/defaultimg.png';
 import Image from 'next/image';
 import Link from 'next/link';
 
