@@ -28,6 +28,7 @@
     "tailwind-merge": "^2.4.0",
     "tailwindcss-animate": "^1.0.7",
     "uuid": "^10.0.0",
+    "uuidv4": "^6.2.13",
     "zustand": "^4.5.4"
   },
   "devDependencies": {
