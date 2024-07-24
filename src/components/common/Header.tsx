@@ -5,7 +5,7 @@ import Defaultimg from '../../../public/image/defaultimg.png';
 import Image from 'next/image';
 import Link from 'next/link';
 
-const Header: React.FC = () => {
+const Header = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   return (
