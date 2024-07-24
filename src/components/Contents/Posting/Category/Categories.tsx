@@ -4,7 +4,7 @@ type CategoryProps = {
   onSelectCategory: (category: string) => void;
 };
 
-const CategoryMain: React.FC<CategoryProps> = ({ categories, selectedCategory, onSelectCategory }) => {
+const CategoryMain = ({ categories, selectedCategory, onSelectCategory }: CategoryProps): JSX.Element => {
   return (
     <div className="mb-8">
       <p className="text-sm text-blue-500 mb-2">카테고리를 선택해주세요.</p>
