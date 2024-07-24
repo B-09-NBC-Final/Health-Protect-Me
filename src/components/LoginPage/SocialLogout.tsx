@@ -1,11 +1,13 @@
 'use client';
-import { supabase } from '../../../supabase/supabaseClient';
+
+import { createClient } from '@/supabase/client';
 import { useRouter } from 'next/navigation';
 
 const SignOutButton = () => {
   const router = useRouter();
 
   const signOut = async () => {
+    const supabase = createClient();
     const { error } = await supabase.auth.signOut();
     router.push('/');
   };
