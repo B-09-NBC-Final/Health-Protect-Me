@@ -1,1 +1,1 @@
-export { default } from './Posting';
+export { default } from './PostingMain';
