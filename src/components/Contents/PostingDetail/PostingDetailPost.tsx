@@ -2,11 +2,12 @@
 
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import { supabase } from '../../../../supabase/supabaseClient';
+import { createClient } from '@/supabase/client';
 import { Post } from '@/types';
 
 const PostingDetailPost = ({ params }: { params: { id: string } }) => {
   const { id } = params;
+  const supabase = createClient();
   const [post, setPost] = useState<Post | null>(null);
 
   const getPost = async () => {

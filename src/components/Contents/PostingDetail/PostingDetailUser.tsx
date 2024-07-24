@@ -1,11 +1,12 @@
 'use client';
 
 import Image from 'next/image';
-import { supabase } from '../../../../supabase/supabaseClient';
 import { useEffect, useState } from 'react';
 import { User } from '@/types';
+import { createClient } from '@/supabase/client';
 
 const PostingDetailUser = () => {
+  const supabase = createClient();
   const [user, setUser] = useState<User | null>(null);
   const getUser = async () => {
     const session = await supabase.auth.getSession();

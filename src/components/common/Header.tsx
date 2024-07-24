@@ -24,13 +24,7 @@ const Header = () => {
             </Link>
             <li>
               <button onClick={() => setIsLoggedIn(false)} className="flex items-center">
-                <Image
-                  src={Defaultimg}
-                  alt="profile img"
-                  width={50}
-                  height={50}
-                  className="w-6 h-6 rounded-full mr-2"
-                />
+                <Image src="" alt="profile img" width={50} height={50} className="w-6 h-6 rounded-full mr-2" />
                 로그아웃
               </button>
             </li>
