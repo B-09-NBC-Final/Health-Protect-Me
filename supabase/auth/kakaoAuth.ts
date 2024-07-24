@@ -1,6 +1,7 @@
-import { supabase } from '../supabaseClient';
+import { createClient } from '@/supabase/client';
 
 export const signInWithKakao = async () => {
+  const supabase = createClient();
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: 'kakao',
     options: {
