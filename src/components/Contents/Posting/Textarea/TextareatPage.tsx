@@ -7,6 +7,7 @@ import { createClient } from '@/supabase/client';
 import { uuid } from 'uuidv4';
 import Image from 'next/image';
 import CategoryMain from '../Category/Categories';
+import dayjs from 'dayjs';
 
 const supabase = createClient();
 
@@ -64,6 +65,12 @@ const TextareaPage = () => {
   const handleCategorySelect = (category: string) => {
     setSelectCategory(category === selectCategory ? '' : category);
   };
+
+  // const handlePostRegist = async () => {
+  //   const timestamp = dayjs().format('YYYY-MM-DD HH:mm:ss');
+  //   const {data, error} = await supabase.from('posts')
+  //   .insert({})
+  // };
 
   return (
     <div className="max-w-2xl mx-auto p-6">
