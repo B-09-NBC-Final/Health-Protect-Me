@@ -16,7 +16,9 @@ export function createClient() {
         setAll(cookiesToSet) {
           try {
             cookiesToSet.forEach(({ name, value, options }) => cookieStore.set(name, value, options));
-          } catch {}
+          } catch (error) {
+            console.error('Error setting cookies:', error);
+          }
         }
       }
     }

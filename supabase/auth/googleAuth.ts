@@ -5,7 +5,7 @@ export const signInWithGoogle = async () => {
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: 'google',
     options: {
-      redirectTo: 'https://qdtbndpvityeryaniyfj.supabase.co/auth/v1/callback',
+      redirectTo: `${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/callback`,
       queryParams: {
         access_type: 'offline',
         prompt: 'consent'
