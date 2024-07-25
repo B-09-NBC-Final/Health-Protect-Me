@@ -1,6 +1,6 @@
 import MyPage from '@/components/MyPage/MyProfile';
 import React from 'react';
 
-const MyPageComponent: React.FC = () => <MyPage />;
+const MyPageComponent = () => <MyPage />;
 
 export default MyPageComponent;

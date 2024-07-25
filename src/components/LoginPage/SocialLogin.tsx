@@ -27,7 +27,7 @@ const LoginButton = () => {
   };
 
   return (
-    <div>
+    <div className="flex flex-col items-center space-y-2">
       <button onClick={handleGoogleLogin}>
         <Image src={googleLoginBtn} alt="Google Login" width={200} height={50} />
       </button>
