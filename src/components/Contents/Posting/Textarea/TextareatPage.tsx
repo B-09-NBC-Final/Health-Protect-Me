@@ -8,16 +8,21 @@ import { uuid } from 'uuidv4';
 import Image from 'next/image';
 import CategoryMain from '../Category/Categories';
 import dayjs from 'dayjs';
+import { Category } from '@/types/tags';
 
 const supabase = createClient();
 
 const TextareaPage = () => {
-  const [selectCategory, setSelectCategory] = useState<string>('');
+  const [selectedCategories, setSelectedCategories] = useState<string>('');
   const [fileUrl, setFileUrl] = useState<string[]>([]);
   const [uploadFile, setUploadFile] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
 
-  const categories = ['잡담', '질문', '후기'];
+  const categories: Category[] = [
+    { id: '1', name: '잡담' },
+    { id: '2', name: '질문' },
+    { id: '3', name: '후기' }
+  ];
 
   useEffect(() => {
     return () => previews.forEach(URL.revokeObjectURL);
@@ -62,8 +67,8 @@ const TextareaPage = () => {
     setFileUrl((prevurl) => prevurl.filter((_, i) => i !== index));
   };
 
-  const handleCategorySelect = (category: string) => {
-    setSelectCategory(category === selectCategory ? '' : category);
+  const handleCategorySelect = (categoryId: string) => {
+    setSelectedCategories(categoryId === selectedCategories ? '' : categoryId);
   };
 
   // const handlePostRegist = async () => {
@@ -78,7 +83,7 @@ const TextareaPage = () => {
         <h1 className="text-4xl font-bold mb-6">게시글 작성</h1>
         <CategoryMain
           categories={categories}
-          selectedCategory={selectCategory}
+          selectedCategories={selectedCategories}
           onSelectCategory={handleCategorySelect}
         />
         <div className="border-t border-gray-200 pt-8">
