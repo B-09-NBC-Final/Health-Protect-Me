@@ -97,8 +97,6 @@ const TextareaPage = () => {
       });
 
       if (error) throw error;
-
-      // 성공 처리 (예: 홈으로 리다이렉트)
     } catch (error) {
       setError('게시글 등록 중 문제가 발생했습니다. 다시 시도해주세요.');
       console.error(error);
