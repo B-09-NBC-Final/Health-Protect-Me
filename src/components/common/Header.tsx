@@ -1,12 +1,14 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import Defaultimg from '../../assets/image/defaultimg.png';
 import Image from 'next/image';
 import Link from 'next/link';
+import { UserContext } from '@/context/UserContext';
 
 const Header = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { user, setUser } = useContext(UserContext);
 
   return (
     <header className="flex justify-between items-center p-4 bg-gray-100">
@@ -14,6 +16,8 @@ const Header = () => {
         <div className="text-lg font-bold">Logo</div>
       </Link>
       <nav>
+        {user.email}
+        {/*  */}
         {isLoggedIn ? (
           <ul className="flex space-x-4">
             <Link href={'/info-detail'}>
