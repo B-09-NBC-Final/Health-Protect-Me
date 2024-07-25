@@ -9,6 +9,8 @@ import Image from 'next/image';
 import CategoryMain from '../Category/Categories';
 import dayjs from 'dayjs';
 import { Category } from '@/types/tags';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 const supabase = createClient();
 
@@ -71,11 +73,23 @@ const TextareaPage = () => {
     setSelectedCategories(categoryId === selectedCategories ? '' : categoryId);
   };
 
-  // const handlePostRegist = async () => {
-  //   const timestamp = dayjs().format('YYYY-MM-DD HH:mm:ss');
-  //   const {data, error} = await supabase.from('posts')
-  //   .insert({})
-  // };
+  const handlePostRegist = async (data) => {
+    const inputData = data;
+    try {
+      const timestamp = dayjs().format('YYYY-MM-DD HH:mm:ss');
+      const { data: postData, error } = await supabase.from('posts').insert({
+        title: inputData,
+        content: inputData,
+        // user_id:,
+        image_url: uploadFile.join(','),
+        created_at: timestamp,
+        category: selectedCategories
+      });
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  };
 
   return (
     <div className="max-w-2xl mx-auto p-6">
@@ -106,7 +120,7 @@ const TextareaPage = () => {
               <div className="relative w-[120px] h-[120px]">
                 <Image src={preview} alt={`preview-${index}`} layout="fill" objectFit="cover" className="rounded-lg" />
                 <button
-                  className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs"
+                  className="absolute -top-2 -right-2 bg-[#FF7A85]  text-white font-bold rounded-full w-6 h-6 flex items-center justify-center text-xs"
                   onClick={() => handleRemovePrevFile(index)}
                 >
                   X
@@ -122,7 +136,18 @@ const TextareaPage = () => {
         </label>
       </div>
       <div className="mt-8">
-        <TextareatBtn />
+        <div className="flex justify-end space-x-4">
+          <Link href="/posting-main">
+            <Button className="px-6 py-2 bg-[#FF848F] text-white rounded-lg hover:bg-[#FF7A85] transition duration-300">
+              등록하기
+            </Button>
+          </Link>
+          <Link href="/">
+            <Button className="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition duration-300">
+              취소하기
+            </Button>
+          </Link>
+        </div>
       </div>
     </div>
   );

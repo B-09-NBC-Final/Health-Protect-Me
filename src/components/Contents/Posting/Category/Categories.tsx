@@ -6,7 +6,7 @@ type CategoryProps = {
   onSelectCategory: (categoryId: string) => void;
 };
 
-const CategoryMain = ({ categories, selectedCategories, onSelectCategory }: CategoryProps) => {
+const CategoryMain = ({ categories, selectedCategories, onSelectCategory }: CategoryProps): JSX.Element => {
   return (
     <div className="mb-8">
       <p className="text-sm text-blue-500 mb-2">카테고리를 선택해주세요.</p>
@@ -23,15 +23,14 @@ const CategoryMain = ({ categories, selectedCategories, onSelectCategory }: Cate
           </button>
         ))}
       </div>
-      {selectedCategories.length > 0 && (
+      {/* {selectedCategories.length > 0 && (
         <p className="text-sm text-green-500 mt-2">
-          선택된 카테고리:{' '}
           {categories
             .filter((cat) => selectedCategories.includes(cat.id))
             .map((cat) => cat.name)
             .join(', ')}
         </p>
-      )}
+      )} */}
     </div>
   );
 };
