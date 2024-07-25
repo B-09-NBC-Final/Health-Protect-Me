@@ -10,6 +10,11 @@ const PostingDetailPost = ({ params }: { params: { id: string } }) => {
   const supabase = createClient();
   const [post, setPost] = useState<Post | null>(null);
   const [user, setUser] = useState<User | null>(null);
+  const postDate = new Date(post?.created_at as string);
+  const postYear = String(postDate.getFullYear()).slice(-2);
+  const postMonth = String(postDate.getMonth() + 1).padStart(2, '0');
+  const postDay = String(postDate.getDate()).padStart(2, '0');
+  const dateOnly = `${postYear}.${postMonth}.${postDay}`;
 
   const getPost = async () => {
     const { data: getPost, error } = await supabase.from('posts').select('*').eq('id', id).single();
@@ -19,12 +24,10 @@ const PostingDetailPost = ({ params }: { params: { id: string } }) => {
       return;
     }
     setPost(getPost);
+  };
 
-    const { data: getUser } = await supabase
-      .from('users')
-      .select('*')
-      .eq('user_id', post?.user_id as string)
-      .single();
+  const getUser = async (userId: string) => {
+    const { data: getUser, error } = await supabase.from('users').select('*').eq('user_id', userId).single();
 
     if (error) {
       console.log('error', error);
@@ -32,21 +35,16 @@ const PostingDetailPost = ({ params }: { params: { id: string } }) => {
       setUser(getUser);
     }
   };
-  console.log(post?.user_id);
-  // const getUser = async () => {
-  //   const session = await supabase.auth.getSession();
-  //   const isSignIn = !!session.data.session;
-  //   console.log(isSignIn);
 
-  //   console.log('aaaa', post);
-
-  // };
   useEffect(() => {
     getPost();
-    // getUser();
   }, []);
 
-  // console.log(user);
+  useEffect(() => {
+    if (post?.user_id) {
+      getUser(post.user_id);
+    }
+  }, [post]);
 
   return (
     <>
@@ -57,10 +55,10 @@ const PostingDetailPost = ({ params }: { params: { id: string } }) => {
       </div>
 
       <div className="flex border-y-2 border-solid border-coral py-5">
-        <Image src="" alt="" width={50} height={50} className="rounded-full" />
+        <Image src={user?.profile_url as string} alt="" width={50} height={50} className="rounded-full" />
         <div className="flex flex-col ml-5">
           <strong>{user?.nickname}</strong>
-          <span>24.7.18</span>
+          <span>{dateOnly}</span>
         </div>
       </div>
     </>
