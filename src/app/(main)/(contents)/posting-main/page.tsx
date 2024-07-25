@@ -100,6 +100,7 @@ const PostingMainPage = () => {
               <div className="flex">
                 <p className="">이미지 들어감</p>
                 <div className="items-center">
+                  <p>태그</p>
                   <h2 className="font-bold mb-2">{item.title}</h2>
                   <p className="mb-2">{item.description}</p>
                   <div className="flex justify-between">
