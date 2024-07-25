@@ -1,10 +1,11 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { supabase } from '../../../../supabase/supabaseClient';
+import { createClient } from '@/supabase/client';
 
 const PostingDetailBtn = ({ params }: { params: { id: string } }) => {
   const { id } = params;
+  const supabase = createClient();
   const router = useRouter();
 
   const handleDelete = async () => {
