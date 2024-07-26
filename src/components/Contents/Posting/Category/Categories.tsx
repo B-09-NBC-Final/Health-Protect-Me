@@ -23,6 +23,7 @@ const CategoryMain = ({ categories, selectedCategories, onSelectCategory }: Cate
           </button>
         ))}
       </div>
+
       {/* {selectedCategories.length > 0 && (
         <p className="text-sm text-green-500 mt-2">
           {categories
