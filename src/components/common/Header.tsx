@@ -1,12 +1,13 @@
 'use client';
 
 import React, { useState, useContext } from 'react';
-import Defaultimg from '../../assets/image/defaultimg.png';
+import Defaultimg from '@/assets/image/defaultimg.png';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useUserStore } from '@/store/userStore';
 
 const Header = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { user, setUser } = useUserStore((state) => state);
 
   return (
     <header className="flex justify-between items-center p-4 bg-gray-100">
@@ -14,7 +15,7 @@ const Header = () => {
         <div className="text-lg font-bold">Logo</div>
       </Link>
       <nav>
-        {isLoggedIn ? (
+        {user ? (
           <ul className="flex space-x-4">
             <Link href={'/info-detail'}>
               <li>나만의 식단</li>
@@ -23,16 +24,10 @@ const Header = () => {
               <li>커뮤니티</li>
             </Link>
             <li>
-              <button onClick={() => setIsLoggedIn(false)} className="flex items-center">
-                <Image
-                  src={Defaultimg}
-                  alt="profile img"
-                  width={50}
-                  height={50}
-                  className="w-6 h-6 rounded-full mr-2"
-                />
+              <Image src={Defaultimg} alt="profile img" width={50} height={50} className="w-6 h-6 rounded-full mr-2" />
+              <Link href={'/'} className="flex items-center">
                 로그아웃
-              </button>
+              </Link>
             </li>
           </ul>
         ) : (

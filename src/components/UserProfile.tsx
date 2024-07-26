@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import { useUserStore } from './store/userStore';
+import { useUserStore } from '../store/userStore';
 import { createClient } from '@/supabase/client';
 
 const UserProfile = () => {
@@ -18,8 +18,6 @@ const UserProfile = () => {
           email: data.user.email
         });
       }
-      console.log(data);
-      console.log(user);
     }
     getUser();
   }, [setUser]);
