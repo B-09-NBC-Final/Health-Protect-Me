@@ -1,7 +1,7 @@
 import Profile from './Profile';
 import PostsSection from './PostsSection';
 
-const MyPage: React.FC = () => {
+const MyPage = () => {
   return (
     <main className="min-h-screen bg-white text-black p-8">
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row">
