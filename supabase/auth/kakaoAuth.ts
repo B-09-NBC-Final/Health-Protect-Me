@@ -5,7 +5,7 @@ export const signInWithKakao = async () => {
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: 'kakao',
     options: {
-      redirectTo: process.env.NEXT_PUBLIC_SUPABASE_REDIRECT_URL!
+      redirectTo: `${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/callback`
     }
   });
   if (error) throw error;
