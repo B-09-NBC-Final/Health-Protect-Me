@@ -1,5 +1,3 @@
-import { useEffect, useState } from 'react';
-import { Post, User } from '@/types';
 import PostingDetailPost from '@/components/Contents/PostingDetail/PostingDetailPost';
 import PostingDetailBtn from '@/components/Contents/PostingDetail/PostingDetailBtn';
 
