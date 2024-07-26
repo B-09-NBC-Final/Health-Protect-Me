@@ -1,122 +1,60 @@
-'use client'
-import React, { useState } from 'react';
+'use client';
+import { createClient } from '@/supabase/client';
+import { Post } from '@/types';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 const PostingMainPage = () => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage] = useState(4);
+  const [posts, setPosts] = useState<Post | null>(null);
+  const supabase = createClient();
+  // const [currentPage, setCurrentPage] = useState(1);
+  // const [postsPerPage] = useState(4);
 
-  //임시 더미 데이터
-  const lunchItems = [
-    {
-      image: 'image1.jpg',
-      title: '오늘 제 점심입니다!',
-      description: '점심이라고 팍씨',
-      nickname: 'User1',
-      date: '24.7.12'
-    },
-    {
-      image: 'image2.jpg',
-      title: '오늘 제 점심입니다!',
-      description: '점심이라고 팍씨',
-      nickname: 'User2',
-      date: '24.7.12'
-    },
-    {
-      image: 'image3.jpg',
-      title: '오늘 제 점심입니다!',
-      description: '점심이라고 팍씨',
-      nickname: 'User3',
-      date: '24.7.12'
-    },
-    {
-      image: 'image4.jpg',
-      title: '오늘 제 점심입니다!',
-      description: '점심이라고 팍씨',
-      nickname: 'User4',
-      date: '24.7.12'
-    },
-    {
-      image: 'image5.jpg',
-      title: '오늘 제 점심입니다!',
-      description: '점심이라고 팍씨',
-      nickname: 'User5',
-      date: '24.7.12'
-    },
-    {
-      image: 'image5.jpg',
-      title: '오늘 제 점심입니다!',
-      description: '점심이라고 팍씨',
-      nickname: 'User6',
-      date: '24.7.12'
-    },
-    {
-      image: 'image5.jpg',
-      title: '오늘 제 점심입니다!',
-      description: '점심이라고 팍씨',
-      nickname: 'User7',
-      date: '24.7.12'
-    },
-    {
-      image: 'image5.jpg',
-      title: '오늘 제 점심입니다!',
-      description: '점심이라고 팍씨',
-      nickname: 'User8',
-      date: '24.7.12'
-    },
-    {
-      image: 'image5.jpg',
-      title: '오늘 제 점심입니다!',
-      description: '점심이라고 팍씨',
-      nickname: 'User9',
-      date: '24.7.12'
-    },
-    {
-      image: 'image5.jpg',
-      title: '오늘 제 점심입니다!',
-      description: '점심이라고 팍씨',
-      nickname: 'User10',
-      date: '24.7.12'
-    }
-  ];
+  // const indexOfLastPost = currentPage * postsPerPage;
+  // const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  // const currentPosts = posts?.slice(indexOfFirstPost, indexOfLastPost);
 
-  const indexOfLastPost = currentPage * postsPerPage;
-  const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = lunchItems.slice(indexOfFirstPost, indexOfLastPost);
+  // const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
-  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+  const getPosts = async () => {
+    const { data: post, error } = await supabase.from('posts').select('*');
+    setPosts(post);
+  };
+
+  useEffect(() => {
+    getPosts();
+  }, []);
 
   return (
-    <div className="flex justify-center place-items-center h-screen">
-      <div className="items-center">
-        <div className="flex space-x-4">
-          <button>전체</button>
-          <button>잡담</button>
-          <button>질문</button>
-          <button>후기</button>
-        </div>
-        <div>
-          {currentPosts.map((item, index) => (
-            <div key={index} className="flex flex-col border-b pb-4 mb-4">
-              <div className="flex">
-                <p className="">이미지 들어감</p>
-                <div className="items-center">
-                  <p>태그</p>
-                  <h2 className="font-bold mb-2">{item.title}</h2>
-                  <p className="mb-2">{item.description}</p>
-                  <div className="flex justify-between">
+    <main className="min-h-screen">
+      <div className="mx-auto max-w-[1280px] p-[100px]">
+        <ul>
+          {posts?.map((item, index: number) => (
+            <li key={index} className="border-b pb-4 mb-4 cursor-pointer">
+              <Link href={`/posting-detail/${item?.id}`} className="flex">
+                <Image src={item.image_url[0]} alt="" width={144} height={144} className="!w-[144px] !h-[144px]" />
+                <div className="flex flex-col justify-between ml-5">
+                  <div>
+                    <h2 className="font-bold mb-2">{item.title}</h2>
+                    <p className="mb-2">{item.content}</p>
+                  </div>
+                  {/* <div className="flex justify-between">
                     <p>{item.nickname}</p>
                     <p>{item.date}</p>
-                  </div>
+                  </div> */}
                 </div>
-              </div>
-            </div>
+              </Link>
+            </li>
           ))}
+        </ul>
+        <div className="mt-5 text-right">
+          <button type="button" className="p-3 bg-gray-200">
+            <Link href={`/posting`}>글 작성</Link>
+          </button>
         </div>
-        <div className="flex justify-center mt-4">
-          <button
-            className={`px-3 py-1`}
-            onClick={() => paginate(currentPage - 1)}
-          >
+        {/* <div className="flex justify-center mt-4">
+          <button className={`px-3 py-1`} onClick={() => paginate(currentPage - 1)}>
             &lt;
           </button>
           {Array.from({ length: Math.ceil(lunchItems.length / postsPerPage) }, (_, i) => i + 1).map((pageNumber) => (
@@ -128,15 +66,12 @@ const PostingMainPage = () => {
               {pageNumber}
             </button>
           ))}
-          <button
-            className={`px-3 py-1`}
-            onClick={() => paginate(currentPage + 1)}
-          >
+          <button className={`px-3 py-1`} onClick={() => paginate(currentPage + 1)}>
             &gt;
           </button>
-        </div>
+        </div> */}
       </div>
-    </div>
+    </main>
   );
 };
 
