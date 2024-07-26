@@ -1,11 +1,16 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { supabase } from '../../../../supabase/supabaseClient';
+import { createClient } from '@/supabase/client';
 
 const PostingDetailBtn = ({ params }: { params: { id: string } }) => {
   const { id } = params;
+  const supabase = createClient();
   const router = useRouter();
+
+  const handleUpdate = () => {
+    router.push(`/posting-update/${id}`);
+  };
 
   const handleDelete = async () => {
     const checkConfirm = confirm('정말 삭제하시겠습니까?');
@@ -17,9 +22,10 @@ const PostingDetailBtn = ({ params }: { params: { id: string } }) => {
       alert('취소되었습니다.');
     }
   };
+
   return (
     <div className="mt-5 text-right">
-      <button type="button" className="p-3 bg-gray-200">
+      <button onClick={handleUpdate} type="button" className="p-3 bg-gray-200">
         수정하기
       </button>
       <button onClick={handleDelete} type="button" className="p-3 bg-gray-200 ml-5">
