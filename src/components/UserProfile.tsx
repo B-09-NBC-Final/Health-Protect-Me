@@ -20,9 +20,10 @@ const UserProfile = () => {
       }
     }
     getUser();
-  }, [setUser]);
+  }, []);
+  console.log(user);
 
-  return <div></div>;
+  return null;
 };
 
 export default UserProfile;
