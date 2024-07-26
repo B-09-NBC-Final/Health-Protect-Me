@@ -1,10 +1,19 @@
 // import React from 'react';
 
 const InforDetailPage = () => {
+  const handleClickAPICall = async () => {
+    const content = await fetch("/api").then(response => response.json())
+    console.log("content", content);
+  };
+
   return (
     <div className="flex justify-center place-items-center h-screen">
       <div className="items-center">
         <div>
+          {/* 데이터 호출을 위한 임시 버튼 */}
+          <div className="App">
+            <button onClick={handleClickAPICall}>GPT Call</button>
+          </div>
           <h1>dd님을 위한 맞춤 식단</h1>
           <p className="mb-4">AI를 통해 진단한 나의 정보에 맞춰 나만을 위한 식단을 매일 알려드려요</p>
         </div>
