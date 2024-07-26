@@ -2,6 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { Step, Gender, DietGoal, SurveyData } from '@/types/infoReaserch';
+import Link from 'next/link';
 
 const InfoResearch = (): JSX.Element => {
   const [currentStep, setCurrentStep] = useState<number>(0);
@@ -152,7 +153,7 @@ const InfoResearch = (): JSX.Element => {
         {/* 마지막 설문에서의 제출 클릭 시, 제출할 수 있게 만들기  */}
         {currentStep === steps.length - 1 && (
           <button className="w-full py-3 px-6 text-lg bg-red-500 text-white rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-200">
-            제출하기
+            <Link href="/info-detail">제출하기</Link>
           </button>
         )}
       </div>

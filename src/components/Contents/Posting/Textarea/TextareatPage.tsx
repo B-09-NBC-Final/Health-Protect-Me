@@ -1,6 +1,5 @@
 'use client';
 import { Textarea } from '@/components/ui/textarea';
-import TextareatBtn from '../Btn/TextareatBtn';
 import { Input } from '@/components/ui/input';
 import { useEffect, useState } from 'react';
 import { createClient } from '@/supabase/client';
@@ -88,12 +87,12 @@ const TextareaPage = () => {
     try {
       const timestamp = dayjs().format('YYYY-MM-DD HH:mm:ss');
       const { data: postData, error } = await supabase.from('posts').insert({
+        user_id: id,
         title,
         content,
-        // user_id:,
         image_url: fileInfos.map((info) => info.url).join(','),
         created_at: timestamp,
-        category: selectedCategory
+        category: selectedCategory.
       });
 
       if (error) throw error;

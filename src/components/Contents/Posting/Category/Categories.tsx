@@ -17,7 +17,7 @@ const CategoryMain = ({ categories, selectedCategories, onSelectCategory }: Cate
             onClick={() => onSelectCategory(category.id)}
             className={`px-4 py-2 ml-3 border-spacing-1 ${
               selectedCategories.includes(category.id) ? 'bg-[#64D1B7] text-white' : 'bg-gray-200 text-gray-700'
-            } hover:bg-[#1DB898] hover:text-white transition-colors duration-300`}
+            } hover:bg-[#1DB898]  hover:text-white transition-colors duration-300`}
           >
             {category.name}
           </button>
