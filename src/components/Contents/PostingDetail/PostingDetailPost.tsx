@@ -50,11 +50,17 @@ const PostingDetailPost = ({ params }: { params: { id: string } }) => {
     <>
       <div>
         <p className="font-bold border-b-2 border-solid border-coral pb-1 mb-5">{post?.title}</p>
-        <Image src={post?.image_url as string} alt="" width={200} height={200} className="mb-3 rounded-xl" />
+        <Image src={post?.image_url[0] as string} alt="" width={200} height={200} className="mb-3 rounded-xl" />
         <p className="mb-5">{post?.content}</p>
+        {post?.image_url[1] ? (
+          <Image src={post?.image_url[1] as string} alt="" width={200} height={200} className="mb-3 rounded-xl" />
+        ) : null}
+        {post?.image_url[2] ? (
+          <Image src={post?.image_url[2] as string} alt="" width={200} height={200} className="mb-3 rounded-xl" />
+        ) : null}
       </div>
 
-      <div className="flex border-y-2 border-solid border-coral py-5">
+      <div className="flex border-y-2 border-solid border-coral py-5 mt-5">
         <Image src={user?.profile_url as string} alt="" width={50} height={50} className="rounded-full" />
         <div className="flex flex-col ml-5">
           <strong>{user?.nickname}</strong>
