@@ -48,7 +48,7 @@ const ProfileEdit = ({
 
   return (
     <section className="w-full max-w-md mx-auto">
-      <header className="text-2xl font-bold mb-5 text-center">내 정보 수정</header>
+      <header className="text-2xl m-5 text-center">내 정보 수정</header>
       <div className="flex flex-col items-center text-center mb-8">
         <figure className="w-24 h-24 rounded-full bg-gray-300 flex items-center justify-center mb-4">
           <img
