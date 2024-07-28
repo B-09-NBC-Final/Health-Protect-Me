@@ -1,10 +1,9 @@
 // import React from 'react';
-'use client'
-
+'use client';
 const InforDetailPage = () => {
   const handleClickAPICall = async () => {
-    const content = await fetch("/api/gpt").then(response => response.json())
-    console.log("content", content);
+    const content = await fetch('/api').then((response) => response.json());
+    console.log('content', content);
   };
 
   return (
