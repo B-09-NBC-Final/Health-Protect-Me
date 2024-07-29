@@ -19,6 +19,7 @@ const Header = () => {
       router.push('/');
     }
   };
+  console.log(user);
 
   return (
     <header className="flex justify-between items-center p-4 bg-gray-100">
