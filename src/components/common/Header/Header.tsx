@@ -1,25 +1,14 @@
 'use client';
 
-import Defaultimg from '@/assets/image/defaultimg.png';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useUserStore } from '@/store/userStore';
-import { useRouter } from 'next/navigation';
 import { createClient } from '@/supabase/client';
 import { useEffect } from 'react';
+import Dropdown from './Dropdown';
 
 const Header = () => {
   const { user, setUser } = useUserStore((state) => state);
-  const router = useRouter();
   const supabase = createClient();
-
-  const signOut = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (!error) {
-      setUser(null);
-      router.push('/');
-    }
-  };
 
   useEffect(() => {
     const getUser = async () => {
@@ -29,7 +18,8 @@ const Header = () => {
       } else if (data) {
         setUser({
           userId: data.user?.id || '',
-          email: data.user?.email
+          email: data.user?.email,
+          profile_url: data.user?.user_metadata?.profile_url || ''
         });
       }
     };
@@ -51,15 +41,7 @@ const Header = () => {
               <Link href={'/posting-main'}>커뮤니티</Link>
             </li>
             <li>
-              <Link href={'/my-page'}>내 프로필</Link>
-            </li>
-            <li>
-              <Image src={Defaultimg} alt="profile img" width={50} height={50} className="w-6 h-6 rounded-full mr-2" />
-            </li>
-            <li>
-              <button onClick={signOut} className="flex items-center">
-                로그아웃
-              </button>
+              <Dropdown />
             </li>
           </ul>
         ) : (
