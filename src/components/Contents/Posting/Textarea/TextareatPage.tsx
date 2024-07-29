@@ -12,13 +12,14 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useUserStore } from '@/store/userStore';
 
-const supabase = createClient();
 
 type FileInfo = {
   file: File;
   preview: string;
   url: string;
 };
+
+const supabase = createClient();
 
 const TextareaPage = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('');
@@ -29,9 +30,9 @@ const TextareaPage = () => {
   const user = useUserStore((state) => state.user);
 
   const categories: Category[] = [
-    { id: '1', name: '잡담' },
-    { id: '2', name: '질문' },
-    { id: '3', name: '후기' }
+    { id: '잡담', name: '잡담' },
+    { id: '질문', name: '질문' },
+    { id: '후기', name: '후기' }
   ];
 
   useEffect(() => {
@@ -92,8 +93,9 @@ const TextareaPage = () => {
         return;
       }
 
+console.log(user.userId)
       const timestamp = dayjs().format('YYYY-MM-DD HH:mm:ss');
-      const imageUrls = fileInfos.map(info => info.url).join(',')
+      const imageUrls = fileInfos.map(info => info.url)
       const { data: postData, error } = await supabase.from('posts').insert({
         user_id: user.userId,
         title,
