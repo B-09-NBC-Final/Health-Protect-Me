@@ -12,13 +12,14 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useUserStore } from '@/store/userStore';
 
-const supabase = createClient();
 
 type FileInfo = {
   file: File;
   preview: string;
   url: string;
 };
+
+const supabase = createClient();
 
 const TextareaPage = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('');
@@ -93,7 +94,7 @@ const TextareaPage = () => {
       }
 
       const timestamp = dayjs().format('YYYY-MM-DD HH:mm:ss');
-      const imageUrls = fileInfos.map(info => info.url).join(',')
+      const imageUrls = fileInfos.map(info => info.url)
       const { data: postData, error } = await supabase.from('posts').insert({
         user_id: user.userId,
         title,
