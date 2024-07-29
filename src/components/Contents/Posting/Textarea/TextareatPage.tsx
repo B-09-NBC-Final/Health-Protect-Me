@@ -93,11 +93,12 @@ const TextareaPage = () => {
       }
 
       const timestamp = dayjs().format('YYYY-MM-DD HH:mm:ss');
+      const imageUrls = fileInfos.map(info => info.url).join(',')
       const { data: postData, error } = await supabase.from('posts').insert({
         user_id: user.userId,
         title,
         content,
-        image_url: fileInfos.join(','),
+        image_url: imageUrls,
         created_at: timestamp,
         category: selectedCategory
       });
