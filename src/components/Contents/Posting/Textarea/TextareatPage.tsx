@@ -93,6 +93,7 @@ const TextareaPage = () => {
         return;
       }
 
+console.log(user.userId)
       const timestamp = dayjs().format('YYYY-MM-DD HH:mm:ss');
       const imageUrls = fileInfos.map(info => info.url)
       const { data: postData, error } = await supabase.from('posts').insert({

@@ -9,7 +9,6 @@ type CategoryProps = {
 const CategoryMain = ({ categories, selectedCategories, onSelectCategory }: CategoryProps): JSX.Element => {
   return (
     <div className="mb-8">
-      <p className="text-sm text-blue-500 mb-2">카테고리를 선택해주세요.</p>
       <div>
         {categories.map((category) => (
           <button
