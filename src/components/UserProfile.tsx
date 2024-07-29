@@ -15,7 +15,8 @@ const UserProfile = () => {
       if (data && data.user) {
         setUser({
           userId: data.user.id,
-          email: data.user.email
+          email: data.user.email,
+          profile_url: data.user?.user_metadata?.profile_url
         });
       }
     }
