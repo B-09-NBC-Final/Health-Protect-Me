@@ -10,14 +10,15 @@ import dayjs from 'dayjs';
 import { Category } from '@/types/tags';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { useUserStore } from '@/store/userStore';
 
 const supabase = createClient();
 
-interface FileInfo {
+type FileInfo = {
   file: File;
   preview: string;
   url: string;
-}
+};
 
 const TextareaPage = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('');
@@ -25,6 +26,7 @@ const TextareaPage = () => {
   const [title, setTitle] = useState<string>('');
   const [content, setContent] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
+  const user = useUserStore((state) => state.user);
 
   const categories: Category[] = [
     { id: '1', name: '잡담' },
@@ -85,14 +87,20 @@ const TextareaPage = () => {
 
   const handlePostRegist = async () => {
     try {
+      if (!user) {
+        setError('로그인이 필요합니다.');
+        return;
+      }
+
       const timestamp = dayjs().format('YYYY-MM-DD HH:mm:ss');
+      const imageUrls = fileInfos.map(info => info.url).join(',')
       const { data: postData, error } = await supabase.from('posts').insert({
-        user_id: id,
+        user_id: user.userId,
         title,
         content,
-        image_url: fileInfos.map((info) => info.url).join(','),
+        image_url: imageUrls,
         created_at: timestamp,
-        category: selectedCategory.
+        category: selectedCategory
       });
 
       if (error) throw error;

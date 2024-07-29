@@ -1,13 +1,16 @@
+'use client';
+// 서버 클라이언트에선 지양
+// 없이 가능하
 import dynamic from 'next/dynamic';
 
 const ProfileEditClient = dynamic(() => import('../../../../components/MyPage/ProfileEdit'), { ssr: false });
 
 const EditPage = () => {
   const currentUserData = {
-    currentHeight: 175,
-    currentWeight: 70,
-    currentGoal: '건강한 식사',
-    currentNickname: '사용자',
+    currentHeight: 0,
+    currentWeight: 0,
+    currentGoal: '',
+    currentNickname: '',
     currentProfileImage: '/'
   };
 
