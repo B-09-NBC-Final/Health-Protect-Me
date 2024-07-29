@@ -30,9 +30,9 @@ const TextareaPage = () => {
   const user = useUserStore((state) => state.user);
 
   const categories: Category[] = [
-    { id: '1', name: '잡담' },
-    { id: '2', name: '질문' },
-    { id: '3', name: '후기' }
+    { id: '잡담', name: '잡담' },
+    { id: '질문', name: '질문' },
+    { id: '후기', name: '후기' }
   ];
 
   useEffect(() => {
