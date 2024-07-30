@@ -73,6 +73,10 @@
   margin: 0 auto;
 }
 
+.swiper {
+  margin: 0 !important;
+}
+
 .swiper-area {
   height: 984px;
   overflow: hidden;
@@ -108,6 +112,7 @@
   right: 0;
   width: 100%;
   height: 100%;
+  border-radius: 16px;
   z-index: 1;
 }
 

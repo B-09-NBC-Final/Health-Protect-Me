@@ -21,7 +21,6 @@ const MainSwiper = ({ reverseDirection }: { reverseDirection: boolean }) => {
       speed={3000}
       autoplay={{
         delay: 0,
-        // pauseOnMouseEnter: true,
         disableOnInteraction: false,
         reverseDirection: reverseDirection
       }}
