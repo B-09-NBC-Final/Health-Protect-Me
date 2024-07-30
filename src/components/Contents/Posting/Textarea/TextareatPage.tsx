@@ -11,7 +11,7 @@ import { Category } from '@/types/tags';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useUserStore } from '@/store/userStore';
-
+import { useRouter } from 'next/navigation';
 
 type FileInfo = {
   file: File;
@@ -27,8 +27,11 @@ const TextareaPage = () => {
   const [title, setTitle] = useState<string>('');
   const [content, setContent] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
+  const [titleError, setTitleError] = useState<string | null>(null);
+  const [contentError, setContentError] = useState<string | null>(null);
   const user = useUserStore((state) => state.user);
-
+  const router = useRouter();
+  
   const categories: Category[] = [
     { id: '잡담', name: '잡담' },
     { id: '질문', name: '질문' },
@@ -44,7 +47,12 @@ const TextareaPage = () => {
     if (fileList) {
       const fileArray = Array.from(fileList);
       for (const file of fileArray) {
-        await addImgFile(file);
+        if (fileInfos.length < 3) {
+          await addImgFile(file);
+        } else {
+          setError('최대 3개의 이미지만 업로드할 수 있습니다.');
+          break;
+        }
       }
     }
   };
@@ -75,15 +83,32 @@ const TextareaPage = () => {
 
   const handleRemovePrevFile = (index: number) => {
     setFileInfos((prev) => {
-      const newFileInfos = [...prev];
-      URL.revokeObjectURL(newFileInfos[index].preview);
-      newFileInfos.splice(index, 1);
+      const newFileInfos = prev.filter((_, i) => i !== index);
+      URL.revokeObjectURL(prev[index].preview);
       return newFileInfos;
     });
   };
 
   const handleCategorySelect = (categoryId: string) => {
     setSelectedCategory(categoryId === selectedCategory ? '' : categoryId);
+  };
+
+  const validateTitle = (value: string) => {
+    if (value.length < 2) {
+      setTitleError('제목은 최소 2자 이상이어야 합니다.');
+    } else {
+      setTitleError(null);
+    }
+    setTitle(value);
+  };
+
+  const validateContent = (value: string) => {
+    if (value.length > 500) {
+      setContentError('내용은 최대 500자까지 입력 가능합니다.');
+    } else {
+      setContentError(null);
+    }
+    setContent(value);
   };
 
   const handlePostRegist = async () => {
@@ -93,7 +118,12 @@ const TextareaPage = () => {
         return;
       }
 
-console.log(user.userId)
+      if (title.length < 2 || content.length > 500) {
+        setError('제목 또는 내용의 길이가 올바르지 않습니다.');
+        return;
+      }
+
+      console.log(user.userId)
       const timestamp = dayjs().format('YYYY-MM-DD HH:mm:ss');
       const imageUrls = fileInfos.map(info => info.url)
       const { data: postData, error } = await supabase.from('posts').insert({
@@ -124,18 +154,20 @@ console.log(user.userId)
         <div className="border-t border-gray-200 pt-8">
           <Input
             type="text"
-            placeholder="제목을 입력 해주세요."
-            className="w-full p-2 mb-4 border-b border-transparent focus:border-[#FF7A85] focus:outline-none transition-colors duration-300 placeholder-gray-400 text-black"
+            placeholder="제목을 입력 해주세요. (최소 2자)"
+            className="w-full p-2 mb-4 border-b focus:outline-none transition-colors duration-300 placeholder-gray-400 text-black"
             value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            onChange={(e) => validateTitle(e.target.value)}
           />
+          {titleError && <div className="text-red-500 mb-2">{titleError}</div>}
           <Textarea
-            placeholder="내용을 적어주세요."
+            placeholder="식단을 공유하거나, 자유롭게 이야기를 나눠보세요. (최대 500자)"
             id="content"
-            className="mt-4 w-full h-64 p-4 border-transparent rounded-lg focus:ring-2 focus:ring-[#FF7A85] focus:border-[#FF7A85] outline-none transition-all duration-300 resize-none placeholder-gray-400 text-black"
+            className="mt-4 w-full h-64 p-4 rounded-lg focus:ring-2 outline-none transition-all duration-300 resize-none placeholder-gray-400 text-black"
             value={content}
-            onChange={(e) => setContent(e.target.value)}
+            onChange={(e) => validateContent(e.target.value)}
           />
+          {contentError && <div className="text-red-500 mt-2">{contentError}</div>}
         </div>
       </div>
       <div className="mt-8">
@@ -160,26 +192,30 @@ console.log(user.userId)
             </div>
           ))}
         </div>
-        <label className="flex items-center cursor-pointer">
-          <Image src="/add_image_icon.png" alt="addImg" width={30} height={30} className="mr-2" />
-          <span className="text-sm text-blue-500">이미지 추가</span>
-          <input type="file" id="test" multiple accept="image/*" className="hidden" onChange={handleUploadFiles} />
-        </label>
+        {fileInfos.length < 3 && (
+          <label className="flex items-center cursor-pointer">
+            <Image src="/assets/image/imageUploadBtn.png" alt="addImg" width={30} height={30} className="mr-2" />
+            <span className="text-sm text-blue-500">이미지 추가 (최대 3개)</span>
+            <input type="file" id="test" multiple accept="image/*" className="hidden" onChange={handleUploadFiles} />
+          </label>
+        )}
       </div>
       {error && <div className="text-red-500 mt-4">{error}</div>}
-      <div className="mt-8">
-        <div className="flex justify-end space-x-4">
+      <div className="mt-8 flex justify-center">
+        <div className="space-x-4">
+          <Link href="/posting-main">
           <Button
             className="px-6 py-2 bg-[#FF848F] text-white rounded-lg hover:bg-[#FF7A85] transition duration-300"
             onClick={handlePostRegist}
           >
             등록하기
           </Button>
-          <Link href="/">
-            <Button className="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition duration-300">
+          </Link>
+            <Button className="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition duration-300"
+            onClick={() => router.push('/posting-main')}
+            >
               취소하기
             </Button>
-          </Link>
         </div>
       </div>
     </div>
