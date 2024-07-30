@@ -3,7 +3,7 @@ import '@/app/globals.css';
 
 const PostsSection = () => {
   return (
-    <section className="w-full mx-12">
+    <section className="w-[880px] mx-20">
       <h2 className="text-xl font-semibold ml-5 mb-6">내가 작성한 글</h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {[...Array(3)].map((_, index) => (
