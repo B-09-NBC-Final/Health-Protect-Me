@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "genTypes": "supabase gen types typescript --project-id qdtbndpvityeryaniyfj --schema public > src/types/supabase.ts"
+    "genTypes": "npx supabase gen types typescript --project-id 'qdtbndpvityeryaniyfj' --schema public > src/types/supabase.ts"
   },
   "dependencies": {
     "@radix-ui/react-dropdown-menu": "^2.1.1",
@@ -27,8 +27,8 @@
     "react-dom": "^18.3.1",
     "react-router": "^6.25.1",
     "react-router-dom": "^6.25.1",
-    "supabase": ">=1.8.1",
-    "swiper": "^11.1.7",
+    "supabase": "^1.187.10",
+    "swiper": "^11.1.8",
     "tailwind-merge": "^2.4.0",
     "tailwindcss-animate": "^1.0.7",
     "uuid": "^10.0.0",
