@@ -2731,6 +2731,15 @@ postcss@^8, postcss@^8.4.23:
     picocolors "^1.0.1"
     source-map-js "^1.2.0"
 
+postcss@^8.4.14:
+  version "8.4.40"
+  resolved "https://registry.yarnpkg.com/postcss/-/postcss-8.4.40.tgz#eb81f2a4dd7668ed869a6db25999e02e9ad909d8"
+  integrity sha512-YF2kKIUzAofPMpfH6hOi2cGnv/HrUlfucspc7pDyvv7kGdqXrfj8SCl/t8owkEgKEuu8ZcRjSOxFxVLqwChZ2Q==
+  dependencies:
+    nanoid "^3.3.7"
+    picocolors "^1.0.1"
+    source-map-js "^1.2.0"
+
 prelude-ls@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/prelude-ls/-/prelude-ls-1.2.1.tgz#debc6489d7a6e6b0e7611888cec880337d316396"
@@ -3273,6 +3282,14 @@ to-regex-range@^5.0.1:
   integrity sha512-65P7iz6X5yEr1cwcgvQxbbIw7Uk3gOy5dIdtZ4rDveLqhrdJP+Li/Hx6tyK0NEb+2GCyneCMJiGqrADCSNk8sQ==
   dependencies:
     is-number "^7.0.0"
+
+toastify-react@^4.3.1:
+  version "4.3.1"
+  resolved "https://registry.yarnpkg.com/toastify-react/-/toastify-react-4.3.1.tgz#6cd9258a5cd0dfb05b5be54da2093b0334ea8872"
+  integrity sha512-BYjUdJE2BmeC1RN5EaQIHbcds3vN0i+ViNHMdItAZWfZeQLVoaMNsGjyLFeTCsPHup/1OaQXnrr9ZPJ+bKDe3Q==
+  dependencies:
+    postcss "^8.4.14"
+    tslib "^2.4.0"
 
 tr46@~0.0.3:
   version "0.0.3"

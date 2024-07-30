@@ -1,12 +1,11 @@
-'use client';
-
+'use client'
 import React, { useState, useRef, useEffect } from 'react';
 import { Step, Gender, DietGoal, SurveyData } from '@/types/infoReaserch';
 import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 
 const InfoResearch = (): JSX.Element => {
   const [currentStep, setCurrentStep] = useState<number>(0);
-  // 사용자가 작성한 설문 응답 초기값
   const [surveyData, setSurveyData] = useState<SurveyData>({
     birthYear: '',
     gender: null,
@@ -15,19 +14,34 @@ const InfoResearch = (): JSX.Element => {
     dietGoal: null
   });
 
-  // 설문단계의 배열 정렬
-  const steps: Step[] = ['출생년도', '성별', '신장', '체중', '식단 목적'];
+  const [stepData, setStepData] = useState<Partial<SurveyData>[]>([
+    { birthYear: '', gender: null },
+    { height: '', weight: '' },
+    { dietGoal: null }
+  ]);
+
+  const steps: Step[] = ['기본 정보', '신체 정보', '식단 목표'];
   const stepRefs = useRef<React.RefObject<HTMLDivElement>[]>(steps.map(() => React.createRef()));
 
   const nextStep = (): void => {
     if (currentStep < steps.length - 1) {
+      // 현재 단계의 데이터를 stepData에 저장
+      setStepData(prev => {
+        const newStepData = [...prev];
+        newStepData[currentStep] = { ...newStepData[currentStep], ...surveyData };
+        return newStepData;
+      });
       setCurrentStep(currentStep + 1);
+      // 다음 단계의 데이터로 surveyData 업데이트
+      setSurveyData(prev => ({ ...prev, ...stepData[currentStep + 1] }));
     }
   };
 
   const preStep = (): void => {
     if (currentStep > 0) {
       setCurrentStep(currentStep - 1);
+      // 이전 단계의 데이터로 surveyData 업데이트
+      setSurveyData(prev => ({ ...prev, ...stepData[currentStep - 1] }));
     }
   };
 
@@ -35,15 +49,15 @@ const InfoResearch = (): JSX.Element => {
     const { name, value } = e.target;
     setSurveyData((prevData) => ({ ...prevData, [name]: value }));
   };
+
   const handleGenderSelect = (gender: Gender): void => {
     setSurveyData((prevData) => ({ ...prevData, gender }));
-    nextStep();
   };
+
   const handleDietGoalSelect = (dietGoal: DietGoal): void => {
     setSurveyData((prevData) => ({ ...prevData, dietGoal }));
-    nextStep();
   };
-  // 설문 후 다음 단계로 넘어가게 하는(스크롤)
+
   useEffect(() => {
     stepRefs.current[currentStep].current?.scrollIntoView({
       behavior: 'smooth',
@@ -53,108 +67,112 @@ const InfoResearch = (): JSX.Element => {
 
   return (
     <div className="max-w-2xl mx-auto mt-10 mb-4 p-8 bg-white rounded-xl shadow-lg">
-      <h1 className="text-3xl font-bold mb-8 text-center text-gray-800">설문조사</h1>
-      {/* progress bar 구현 파트 */}
-      <div className="mb-8 bg-gray-200 rounded-full h-4">
+      <h1 className="text-3xl font-bold mb-8 text-center text-gray-800">{steps[currentStep]}</h1>
+      <div className="mb-8 bg-gray-200 rounded-full h-2">
         <div
-          className="bg-violet-700 h-4 rounded-full transition-all duration-500 ease-in-out"
-          style={{ width: `${(currentStep / (steps.length - 1)) * 100}%` }}
+          className="bg-red-400 h-2 rounded-full transition-all duration-500 ease-in-out"
+          style={{ width: `${((currentStep + 1) / steps.length) * 100}%` }}
         ></div>
       </div>
 
+      {/* 기본 정보 (출생년도와 성별) */}
       <div ref={stepRefs.current[0]} className={`mb-8 ${currentStep !== 0 && 'hidden'}`}>
-        <label className="block text-xl mb-2 font-medium text-gray-700">출생년도는 언제인가요?</label>
-        <input
-          type="text"
-          name="birthYear"
-          placeholder="19xx년"
-          value={surveyData.birthYear}
-          onChange={handleInputChange}
-          className="w-full p-3 text-lg border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-        />
+        <div className="mb-4">
+          <label className="block text-sm mb-2 font-medium text-gray-700">출생년도</label>
+          <input
+            type="text"
+            name="birthYear"
+            placeholder="예) 1995년"
+            value={surveyData.birthYear}
+            onChange={handleInputChange}
+            className="w-full p-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400 focus:border-transparent"
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-sm mb-2 font-medium text-gray-700">성별</label>
+          <div className="flex space-x-4">
+            <button
+              onClick={() => handleGenderSelect('남')}
+              className={`flex-1 py-2 px-4 text-sm bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-red-400 transition duration-200 ${
+                surveyData.gender === '남' ? 'bg-red-100' : ''
+              }`}
+            >
+              남자
+            </button>
+            <button
+              onClick={() => handleGenderSelect('여')}
+              className={`flex-1 py-2 px-4 text-sm bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-red-400 transition duration-200 ${
+                surveyData.gender === '여' ? 'bg-red-100' : ''
+              }`}
+            >
+              여자
+            </button>
+          </div>
+        </div>
       </div>
 
       <div ref={stepRefs.current[1]} className={`mb-8 ${currentStep !== 1 && 'hidden'}`}>
-        {/* 설문 항목 순서 명시 */}
-        <p className="text-xl mb-4 font-medium text-gray-700">성별(Gender)은 무엇인가요?</p>
-        <div className="flex space-x-4">
-          <button
-            onClick={() => handleGenderSelect('남')}
-            className="flex-1 py-3 px-6 text-lg bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
-          >
-            남(Male)
-          </button>
-          <button
-            onClick={() => handleGenderSelect('여')}
-            className="flex-1 py-3 px-6 text-lg bg-pink-500 text-white rounded-lg hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-500 transition duration-200"
-          >
-            여(Female)
-          </button>
+        <div className="mb-4">
+          <label className="block text-sm mb-2 font-medium text-gray-700">키</label>
+          <input
+            type="text"
+            name="height"
+            placeholder="174cm"
+            value={surveyData.height}
+            onChange={handleInputChange}
+            className="w-full p-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400 focus:border-transparent"
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-sm mb-2 font-medium text-gray-700">체중</label>
+          <input
+            type="text"
+            name="weight"
+            placeholder="70kg"
+            value={surveyData.weight}
+            onChange={handleInputChange}
+            className="w-full p-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400 focus:border-transparent"
+          />
         </div>
       </div>
 
       <div ref={stepRefs.current[2]} className={`mb-8 ${currentStep !== 2 && 'hidden'}`}>
-        {/* 설문 항목 순서 명시 */}
-        <label className="block text-xl mb-2 font-medium text-gray-700">신장이 어떻게 되나요?</label>
-        <input
-          type="text"
-          name="height"
-          placeholder="cm"
-          value={surveyData.height}
-          onChange={handleInputChange}
-          className="w-full p-3 text-lg border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-        />
-      </div>
-      <div ref={stepRefs.current[3]} className={`mb-8 ${currentStep !== 3 && 'hidden'}`}>
-        {/* 설문 항목 순서 명시 */}
-        <label className="block text-xl mb-2 font-medium text-gray-700">체중이 어떻게 되나요?</label>
-        <input
-          type="text"
-          name="weight"
-          placeholder="kg"
-          value={surveyData.weight}
-          onChange={handleInputChange}
-          className="w-full p-3 text-lg border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-        />
-      </div>
-      <div ref={stepRefs.current[4]} className={`mb-8 ${currentStep !== 4 && 'hidden'}`}>
-        {/* 설문 항목 순서 명시 */}
-        <p className="text-xl mb-4 font-medium text-gray-700">식단 목적은 무엇인가요?</p>
-        <div className="grid grid-cols-2 gap-4">
-          {(['체중 감량', '체중 유지', '건강 식습관', '체중 증량'] as DietGoal[]).map((goal) => (
+        <p className="text-lg mb-4 font-medium text-gray-700">식단을 통해 이루고자 하는 목표를 입력해주세요</p>
+        <div className="grid grid-cols-1 gap-2">
+          {['체중을 감량하고 싶어요', '체중을 증량하고 싶어요', '건강한 식생활 하고 싶어요'].map((goal) => (
             <button
               key={goal}
-              onClick={() => handleDietGoalSelect(goal)}
-              className="py-3 px-6 text-lg bg-cyan-500 text-white rounded-lg hover:bg-cyan-600 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition duration-200"
+              onClick={() => handleDietGoalSelect(goal as DietGoal)}
+              className={`py-2 px-4 text-sm bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-red-400 transition duration-200 ${
+                surveyData.dietGoal === goal ? 'bg-red-100' : ''
+              }`}
             >
               {goal}
             </button>
           ))}
         </div>
       </div>
-      <div className=" m-4 justify-around mt-4">
-        {/* 다음 단계로 넘어갈 수 있게 하고 마지막 설문에서는 멈추게 해놓기 */}
-        {currentStep < steps.length - 1 && (
-          <button
+
+      <div className="mt-8 flex justify-between">
+        {currentStep > 0 && (
+          <Button
+            onClick={preStep}
+            className="py-3 px-6 text-lg text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 transition duration-200"
+          >
+            이전
+          </Button>
+        )}
+        {currentStep < steps.length - 1 ? (
+          <Button
             onClick={nextStep}
-            className="m-1 w-full py-3 px-6 text-lg bg-green-500 text-white rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-200"
+            className="py-3 px-6 text-lg bg-red-400 text-white rounded-lg hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-400 transition duration-200"
           >
             다음
-          </button>
-        )}
-        {currentStep > 0 && (
-          <button
-            onClick={preStep}
-            className="m-1 w-full py-3 px-6 text-lg text-white rounded-lg focus:outline-none focus:ring-2 transition duration-200 bg-gray-500 hover:bg-gray-600 focus:ring-gray-500"
-          >
-            뒤로
-          </button>
-        )}
-        {/* 마지막 설문에서의 제출 클릭 시, 제출할 수 있게 만들기  */}
-        {currentStep === steps.length - 1 && (
-          <button className="w-full py-3 px-6 text-lg bg-red-500 text-white rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-200">
-            <Link href="/info-detail">제출하기</Link>
-          </button>
+          </Button>
+        ) : (
+          <Button className="py-3 px-6 text-lg bg-red-400 text-white rounded-lg hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-400 transition duration-200">
+            <Link href="/info-detail">결과보기</Link>
+          </Button>
         )}
       </div>
     </div>
