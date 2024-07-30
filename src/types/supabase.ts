@@ -44,45 +44,54 @@ export type Database = {
       };
       information: {
         Row: {
-          allergy: string;
+          allergy: string | null;
           created_at: string;
-          disease: string;
+          disease: string | null;
           gender: boolean;
           height: number;
           id: string;
           purpose: string;
+          result_diet: string;
+          result_exercise: string;
           sleep_time: number;
+          user_id: string;
           weight: number;
           year_of_birth: number;
         };
         Insert: {
-          allergy: string;
+          allergy?: string | null;
           created_at?: string;
-          disease: string;
+          disease?: string | null;
           gender: boolean;
           height: number;
           id?: string;
           purpose: string;
+          result_diet: string;
+          result_exercise: string;
           sleep_time: number;
+          user_id?: string;
           weight: number;
           year_of_birth: number;
         };
         Update: {
-          allergy?: string;
+          allergy?: string | null;
           created_at?: string;
-          disease?: string;
+          disease?: string | null;
           gender?: boolean;
           height?: number;
           id?: string;
           purpose?: string;
+          result_diet?: string;
+          result_exercise?: string;
           sleep_time?: number;
+          user_id?: string;
           weight?: number;
           year_of_birth?: number;
         };
         Relationships: [
           {
-            foreignKeyName: 'information_id_fkey';
-            columns: ['id'];
+            foreignKeyName: 'information_user_id_fkey';
+            columns: ['user_id'];
             isOneToOne: true;
             referencedRelation: 'users';
             referencedColumns: ['user_id'];
@@ -105,7 +114,7 @@ export type Database = {
           content: string;
           created_at?: string;
           id?: string;
-          image_url?: string[];
+          image_url: string[];
           title: string;
           updated_at?: string;
           user_id: string;
@@ -130,19 +139,60 @@ export type Database = {
           }
         ];
       };
+      result: {
+        Row: {
+          breakfast: Json | null;
+          created_at: string;
+          dayofweek: string | null;
+          dinner: Json | null;
+          exercise: string | null;
+          id: number;
+          lunch: Json | null;
+          total_calorie: string | null;
+          user_id: string | null;
+        };
+        Insert: {
+          breakfast?: Json | null;
+          created_at?: string;
+          dayofweek?: string | null;
+          dinner?: Json | null;
+          exercise?: string | null;
+          id?: number;
+          lunch?: Json | null;
+          total_calorie?: string | null;
+          user_id?: string | null;
+        };
+        Update: {
+          breakfast?: Json | null;
+          created_at?: string;
+          dayofweek?: string | null;
+          dinner?: Json | null;
+          exercise?: string | null;
+          id?: number;
+          lunch?: Json | null;
+          total_calorie?: string | null;
+          user_id?: string | null;
+        };
+        Relationships: [];
+      };
       users: {
         Row: {
+          email: string;
           nickname: string;
           profile_url: string | null;
           user_id: string;
           is_survey_done: boolean;
         };
         Insert: {
+          email: string;
+          is_survey_done: boolean;
           nickname: string;
           profile_url?: string | null;
           user_id?: string;
         };
         Update: {
+          email?: string;
+          is_survey_done: boolean;
           nickname?: string;
           profile_url?: string | null;
           user_id?: string;
