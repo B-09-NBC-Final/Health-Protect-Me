@@ -1,24 +1,26 @@
 'use client'
 import React, { useState, useRef, useEffect } from 'react';
 import { Step, Gender, DietGoal, SurveyData } from '@/types/infoReaserch';
-import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { createClient } from '@/supabase/client';
 import { useRouter } from 'next/navigation';
-import { toast } from 'react-toastify';
+import {toast} from 'react-toastify'
+import dayjs from 'dayjs';
+import { useUserStore } from '@/store/userStore';
 
 const supabase = createClient()
 
-
 const InfoResearch = (): JSX.Element => {
   const router = useRouter();
+  const user = useUserStore((state) => state.user);
   const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
   const [surveyData, setSurveyData] = useState<SurveyData>({
+   user_id:'' ,
     birthYear: '',
     gender: null,
     height: '',
     weight: '',
-    dietGoal: null
+    purpose: null
   });
 
   const steps: Step[] = ['출생년도', '성별', '신장', '체중', '식단 목적'];
@@ -45,8 +47,8 @@ const InfoResearch = (): JSX.Element => {
     setSurveyData((prevData) => ({ ...prevData, gender }));
   };
 
-  const handleDietGoalSelect = (dietGoal: DietGoal): void => {
-    setSurveyData((prevData) => ({ ...prevData, dietGoal }));
+  const handleDietGoalSelect = (purpose: DietGoal): void => {
+    setSurveyData((prevData) => ({ ...prevData, purpose }));
   };
 
   useEffect(() => {
@@ -57,10 +59,21 @@ const InfoResearch = (): JSX.Element => {
   }, [currentStepIndex]);
 
   const saveDataToSupabase = async () => {
+    const timestamp = dayjs().format('YYYY-MM-DD HH:mm:ss');
+
     try {
       const { data, error } = await supabase
-        .from('survey_results')
-        .insert([surveyData]);
+        .from('information')
+        .insert({
+          user_id: user?.userId,
+          created_at: timestamp,
+          year_of_birth: surveyData.height ,
+          gender: surveyData.gender,
+          height: surveyData.height,
+          weight: surveyData.weight,
+          purpose: surveyData.purpose,
+
+        });
 
       if (error) throw error;
       
@@ -83,7 +96,7 @@ const InfoResearch = (): JSX.Element => {
       case '체중':
         return !!surveyData.weight;
       case '식단 목적':
-        return !!surveyData.dietGoal;
+        return !!surveyData.purpose;
       default:
         return false;
     }
@@ -98,7 +111,7 @@ const InfoResearch = (): JSX.Element => {
             <input
               type="text"
               name="birthYear"
-              placeholder="예) 1995년"
+              placeholder="예) 19xx "
               value={surveyData.birthYear}
               onChange={handleInputChange}
               className="w-full p-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400 focus:border-transparent"
@@ -136,7 +149,7 @@ const InfoResearch = (): JSX.Element => {
             <input
               type="text"
               name="height"
-              placeholder="174cm"
+              placeholder="cm"
               value={surveyData.height}
               onChange={handleInputChange}
               className="w-full p-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400 focus:border-transparent"
@@ -150,7 +163,7 @@ const InfoResearch = (): JSX.Element => {
             <input
               type="text"
               name="weight"
-              placeholder="70kg"
+              placeholder="kg"
               value={surveyData.weight}
               onChange={handleInputChange}
               className="w-full p-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400 focus:border-transparent"
@@ -167,7 +180,7 @@ const InfoResearch = (): JSX.Element => {
                   key={goal}
                   onClick={() => handleDietGoalSelect(goal)}
                   className={`py-2 px-4 text-sm bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-red-400 transition duration-200 ${
-                    surveyData.dietGoal === goal ? 'bg-red-100' : ''
+                    surveyData.purpose === goal ? 'bg-red-100' : ''
                   }`}
                 >
                   {goal}
