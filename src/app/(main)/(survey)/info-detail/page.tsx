@@ -9,25 +9,41 @@ const InforDetailPage = () => {
     exercise: '',
   });
 
+  // const handleClickAPICall = async () => {
+  //   const response = await fetch("/api/gpt");
+  //   const data = await response.json();
+
+  //   const content = data.data;
+  //   const splitContent = content.split('###');
+
+  //   // 분리된 내용을 각각의 상태에 저장
+  //   setMealPlan({
+  //     breakfast: splitContent[1] || '',
+  //     lunch: splitContent[2] || '',
+  //     dinner: splitContent[3] || '',
+  //     exercise: splitContent[4] || '',
+  //   });
+
+  //   // 각 섹션을 콘솔에 출력 (디버깅용)
+  //   splitContent.forEach((section, index) => {
+  //     console.log(`Section ${index + 1}:`, section);
+  //   });
+  // };
   const handleClickAPICall = async () => {
-    const response = await fetch("/api/gpt");
-    const data = await response.json();
+    try {
+      const response = await fetch("/api/gpt");
+      const content = await response.json();
 
-    const content = data.data;
-    const splitContent = content.split('###');
+      // JSON 형식으로 저장할 수 있는 객체로 변환
+      const jsonContent = JSON.stringify(content);
 
-    // 분리된 내용을 각각의 상태에 저장
-    setMealPlan({
-      breakfast: splitContent[1] || '',
-      lunch: splitContent[2] || '',
-      dinner: splitContent[3] || '',
-      exercise: splitContent[4] || '',
-    });
+      // localStorage에 저장
+      localStorage.setItem("gptContent", jsonContent);
 
-    // 각 섹션을 콘솔에 출력 (디버깅용)
-    splitContent.forEach((section, index) => {
-      console.log(`Section ${index + 1}:`, section);
-    });
+      console.log("content", jsonContent);
+    } catch (error) {
+      console.error("Error fetching the content:", error);
+    }
   };
 
   return (

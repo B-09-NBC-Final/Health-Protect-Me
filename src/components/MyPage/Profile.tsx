@@ -20,8 +20,8 @@ const getBMIStatus = (bmi: number) => {
 const ProfileSection = () => {
   const supabase = createClient(); // supabase 클라이언트 생성
   const [userData, setUserData] = useState({
-    height: 0,
-    weight: 0,
+    height: 170,
+    weight: 80,
     goal: '',
     nickname: '',
     profileImage: ''
@@ -66,7 +66,7 @@ const ProfileSection = () => {
       }
     };
 
-    fetchUserData(); // 사용자 데이터 가져오기
+    fetchUserData();
   }, [router]);
 
   const handleNavigateToEdit = () => {

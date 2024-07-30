@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useUserStore } from '@/store/userStore';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/supabase/client';
+import { useEffect } from 'react';
 
 const Header = () => {
   const { user, setUser } = useUserStore((state) => state);
@@ -19,6 +20,21 @@ const Header = () => {
       router.push('/');
     }
   };
+
+  useEffect(() => {
+    const getUser = async () => {
+      const { data, error } = await supabase.auth.getUser();
+      if (error) {
+        console.error('Error fetching user:', error);
+      } else if (data) {
+        setUser({
+          userId: data.user?.id || '',
+          email: data.user?.email
+        });
+      }
+    };
+    getUser();
+  }, []);
 
   return (
     <header className="flex justify-between items-center p-4 bg-gray-100">
