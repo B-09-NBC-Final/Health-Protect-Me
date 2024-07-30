@@ -44,6 +44,7 @@ export type Database = {
       };
       information: {
         Row: {
+
           allergy: string | null;
           created_at: string;
           disease: string | null;
@@ -88,6 +89,7 @@ export type Database = {
           weight?: number;
           year_of_birth?: number;
         };
+
         Relationships: [
           {
             foreignKeyName: 'information_user_id_fkey';
@@ -177,26 +179,28 @@ export type Database = {
       };
       users: {
         Row: {
-          email: string;
-          nickname: string;
-          profile_url: string | null;
-          user_id: string;
-          is_survey_done: boolean;
-        };
+
+          email: string
+          is_survey_done: boolean
+          nickname: string
+          profile_url: string | null
+          user_id: string
+        }
         Insert: {
-          email: string;
-          is_survey_done: boolean;
-          nickname: string;
-          profile_url?: string | null;
-          user_id?: string;
-        };
+          email: string
+          is_survey_done?: boolean
+          nickname: string
+          profile_url?: string | null
+          user_id?: string
+        }
         Update: {
-          email?: string;
-          is_survey_done: boolean;
-          nickname?: string;
-          profile_url?: string | null;
-          user_id?: string;
-        };
+          email?: string
+          is_survey_done?: boolean
+          nickname?: string
+          profile_url?: string | null
+          user_id?: string
+        }
+
         Relationships: [
           {
             foreignKeyName: 'user_user_id_fkey';
