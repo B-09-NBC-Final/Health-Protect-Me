@@ -2,6 +2,55 @@
 import React from 'react';
 
 const InforDetailPage = () => {
+  const handleClickAPICall = async () => {
+    const content = await fetch("/api/gpt").then(response => response.json())
+    console.log("content", content);
+  };
+  // const [text, setText] = useState('');
+  // const extractMealsByDay = (text) => {
+  //   const lines: string[] = text.split('\n').map((line) => line.trim());
+  //   const days = [];
+  //   let currentDay = null;
+  //   let currentMeal = null;
+  //   let currentExercise = null;
+  //   lines.forEach((line) => {
+  //     if (line.match(/월요일|화요일|수요일|목요일|금요일|토요일|일요일/)) {
+  //       if (currentDay) {
+  //         days.push(currentDay);
+  //       }
+  //       currentDay = { day: line, meals: [], calories: null, notes: [], exercise: {} };
+  //     } else if (line.startsWith('아침 메뉴:') || line.startsWith('점심 메뉴:') || line.startsWith('저녁 메뉴:')) {
+  //       const [type, ...contentParts] = line.split(':');
+  //       currentMeal = { type: type.trim(), content: contentParts.join(':').trim(), nutrients: '', calories: '' };
+  //       currentDay.meals.push(currentMeal);
+  //     } else if (line.startsWith('총 칼로리:')) {
+  //       currentDay.calories = line.split(':')[1].trim();
+  //     } else if (line.startsWith('주의사항:')) {
+  //       currentDay.notes.push(line.split(':')[1].trim());
+  //     } else if (line.startsWith('추천운동')) {
+  //       currentExercise = {};
+  //       currentDay.exercise = currentExercise;
+  //     } else if (line.startsWith('운동종류:')) {
+  //       currentExercise.type = line.split(':')[1].trim();
+  //     } else if (line.startsWith('운동 횟수 및 시간:')) {
+  //       currentExercise.frequency = line.split(':')[1].trim();
+  //     } else if (line.startsWith('운동의 영향:')) {
+  //       currentExercise.effect = line.split(':')[1].trim();
+  //     } else if (currentMeal) {
+  //       if (line.startsWith('탄수화물, 단백질, 지방 비율:')) {
+  //         currentMeal.nutrients = line.split(':')[1].trim();
+  //       } else if (line.startsWith('칼로리:')) {
+  //         currentMeal.calories = line.split(':')[1].trim();
+  //       } else {
+  //         currentMeal.content += '\n' + line;
+  //       }
+  //     }
+  //   });
+  //   if (currentDay) {
+  //     days.push(currentDay);
+  //   }
+  //   return days;
+  // };
   const [mealPlan, setMealPlan] = React.useState({
     breakfast: '',
     lunch: '',
@@ -29,22 +78,22 @@ const InforDetailPage = () => {
   //     console.log(`Section ${index + 1}:`, section);
   //   });
   // };
-  const handleClickAPICall = async () => {
-    try {
-      const response = await fetch("/api/gpt");
-      const content = await response.json();
+  // const handleClickAPICall = async () => {
+  //   try {
+  //     const response = await fetch("/api/gpt");
+  //     const content = await response.json();
 
-      // JSON 형식으로 저장할 수 있는 객체로 변환
-      const jsonContent = JSON.stringify(content);
+  //     // JSON 형식으로 저장할 수 있는 객체로 변환
+  //     const jsonContent = JSON.stringify(content);
 
-      // localStorage에 저장
-      localStorage.setItem("gptContent", jsonContent);
+  //     // localStorage에 저장
+  //     localStorage.setItem("gptContent", jsonContent);
 
-      console.log("content", jsonContent);
-    } catch (error) {
-      console.error("Error fetching the content:", error);
-    }
-  };
+  //     console.log("content", jsonContent);
+  //   } catch (error) {
+  //     console.error("Error fetching the content:", error);
+  //   }
+  // };
 
   return (
     <div className="flex justify-center place-items-center h-screen">
