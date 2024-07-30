@@ -135,6 +135,7 @@ export type Database = {
           nickname: string;
           profile_url: string | null;
           user_id: string;
+          is_survey_done: boolean;
         };
         Insert: {
           nickname: string;
