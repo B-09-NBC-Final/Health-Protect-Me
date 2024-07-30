@@ -10,6 +10,7 @@ export async function GET(request: Request) {
     const supabase = createClient();
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
+      //if문추가
       return NextResponse.redirect(`${origin}${next}`);
     }
   }

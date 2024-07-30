@@ -22,7 +22,6 @@ const UserProfile = () => {
     }
     getUser();
   }, []);
-  console.log(user);
 
   return null;
 };
