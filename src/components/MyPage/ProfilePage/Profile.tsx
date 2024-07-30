@@ -30,7 +30,7 @@ type UserData = {
   profileImage: string;
 };
 
-const ProfileSection = () => {
+const Profile = () => {
   const supabase = createClient();
   const [userData, setUserData] = useState<UserData>({
     height: null,
@@ -152,4 +152,4 @@ const ProfileSection = () => {
   );
 };
 
-export default ProfileSection;
+export default Profile;
