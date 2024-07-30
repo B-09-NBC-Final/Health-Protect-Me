@@ -44,52 +44,6 @@ export type Database = {
       };
       information: {
         Row: {
-<<<<<<< HEAD
-          allergy: string | null
-          created_at: string
-          disease: string | null
-          gender: string
-          height: number
-          id: string
-          purpose: string
-          result_diet: string | null
-          result_exercise: string | null
-          sleep_time: number | null
-          user_id: string
-          weight: number
-          year_of_birth: number
-        }
-        Insert: {
-          allergy?: string | null
-          created_at?: string
-          disease?: string | null
-          gender: string
-          height: number
-          id?: string
-          purpose: string
-          result_diet?: string | null
-          result_exercise?: string | null
-          sleep_time?: number | null
-          user_id?: string
-          weight: number
-          year_of_birth: number
-        }
-        Update: {
-          allergy?: string | null
-          created_at?: string
-          disease?: string | null
-          gender?: string
-          height?: number
-          id?: string
-          purpose?: string
-          result_diet?: string | null
-          result_exercise?: string | null
-          sleep_time?: number | null
-          user_id?: string
-          weight?: number
-          year_of_birth?: number
-        }
-=======
           allergy: string | null;
           created_at: string;
           disease: string | null;
@@ -134,7 +88,6 @@ export type Database = {
           weight?: number;
           year_of_birth?: number;
         };
->>>>>>> ac7f22c9ea7313cbb5334db39dee0db12bba76f0
         Relationships: [
           {
             foreignKeyName: 'information_user_id_fkey';
@@ -224,28 +177,6 @@ export type Database = {
       };
       users: {
         Row: {
-<<<<<<< HEAD
-          email: string
-          is_survey_done: boolean
-          nickname: string
-          profile_url: string | null
-          user_id: string
-        }
-        Insert: {
-          email: string
-          is_survey_done?: boolean
-          nickname: string
-          profile_url?: string | null
-          user_id?: string
-        }
-        Update: {
-          email?: string
-          is_survey_done?: boolean
-          nickname?: string
-          profile_url?: string | null
-          user_id?: string
-        }
-=======
           email: string;
           nickname: string;
           profile_url: string | null;
@@ -266,7 +197,6 @@ export type Database = {
           profile_url?: string | null;
           user_id?: string;
         };
->>>>>>> ac7f22c9ea7313cbb5334db39dee0db12bba76f0
         Relationships: [
           {
             foreignKeyName: 'user_user_id_fkey';
