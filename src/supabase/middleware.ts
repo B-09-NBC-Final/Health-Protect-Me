@@ -5,7 +5,6 @@ import { getAuthToken } from '@/utils/getUserData';
 export const updateSession = async (req: NextRequest) => {
   const { pathname } = req.nextUrl;
   const authToken = await getAuthToken(req);
-  console.log(authToken);
 
   // 로그인 상태에서 접근할 수 없는 페이지는
   const restrictedPaths = ['/login'];
@@ -15,7 +14,7 @@ export const updateSession = async (req: NextRequest) => {
   }
 
   // 로그인하지 않은 상태에서 접근할 수 없는 페이지는
-  const protectedPaths = ['/mypage'];
+  const protectedPaths = ['/my-page'];
   if (protectedPaths.includes(pathname) && !authToken) {
     const url = new URL('/login', req.nextUrl.origin);
     url.searchParams.set('message', '로그인 후 이용부탁드립니다');
@@ -23,8 +22,4 @@ export const updateSession = async (req: NextRequest) => {
   }
 
   return NextResponse.next();
-};
-
-export const config = {
-  matcher: ['/login', '/mypage']
 };
