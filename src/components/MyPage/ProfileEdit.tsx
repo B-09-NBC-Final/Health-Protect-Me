@@ -1,7 +1,8 @@
 'use client';
+
 import React, { useState } from 'react';
 
-interface ProfileEditProps {
+type ProfileEditProps = {
   currentHeight: number;
   currentWeight: number;
   currentGoal: string;
@@ -9,7 +10,7 @@ interface ProfileEditProps {
   currentProfileImage: string;
   onCancel: () => void;
   onSave: (height: number, weight: number, goal: string, nickname: string, profileImage: string) => void;
-}
+};
 
 const ProfileEdit = ({
   currentHeight,
@@ -47,16 +48,17 @@ const ProfileEdit = ({
 
   return (
     <section className="w-full max-w-md mx-auto">
-      <header className="text-2xl m-5 text-center">내 정보 수정</header>
+      <h1 className="text-2xl m-5 text-center">프로필 수정</h1>
       <div className="flex flex-col items-center text-center mb-8">
-        <figure className="w-24 h-24 rounded-full bg-gray-300 flex items-center justify-center mb-4">
+        <div className="w-24 h-24 rounded-full bg-gray-300 flex items-center justify-center mb-4">
           <img
             className="w-full h-full rounded-full cursor-pointer"
             src={profileImage || '/path/to/default-profile-image.jpg'}
             alt="Profile"
+            onClick={() => document.getElementById('fileInput')?.click()}
           />
-          <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
-        </figure>
+          <input type="file" accept="image/*" id="fileInput" className="hidden" onChange={handleImageUpload} />
+        </div>
         <form className="w-full">
           <div className="mb-4">
             <label className="block text-left" htmlFor="nickname">

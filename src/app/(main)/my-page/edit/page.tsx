@@ -1,9 +1,7 @@
 'use client';
-// 서버 클라이언트에선 지양
-// 없이 가능하
-import dynamic from 'next/dynamic';
 
-const ProfileEditClient = dynamic(() => import('../../../../components/MyPage/ProfileEdit'), { ssr: false });
+import React from 'react';
+import ProfileEdit from '../../../../components/MyPage/ProfileEdit';
 
 const EditPage = () => {
   const currentUserData = {
@@ -15,18 +13,18 @@ const EditPage = () => {
   };
 
   const handleSave = async (height: number, weight: number, goal: string, nickname: string, profileImage: string) => {
-    // supabase에 업데이트 된 사용자 정보를 조회(가져오기)
+    console.log('Save', { height, weight, goal, nickname, profileImage });
   };
 
   const handleCancel = () => {
-    // 취소 로직 구현하기
+    console.log('Cancel');
   };
 
   return (
     <div>
-      <h1> 프로필 수정</h1>
-      <ProfileEditClient {...currentUserData} onSave={handleSave} onCancel={handleCancel} />
+      <ProfileEdit {...currentUserData} onSave={handleSave} onCancel={handleCancel} />
     </div>
   );
 };
+
 export default EditPage;
