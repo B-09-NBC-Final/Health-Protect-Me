@@ -11,3 +11,4 @@ export type SurveyData = {
   weight: string;
   dietGoal: DietGoal | null;
 };
+
