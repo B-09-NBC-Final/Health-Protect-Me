@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 import '@/app/globals.css';
 
 const PostsSection = () => {
@@ -8,8 +9,8 @@ const PostsSection = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {[...Array(3)].map((_, index) => (
           <article key={index} className="p-4">
-            <div className="w-full h-48 bg-gray-200 mb-4">
-              <img className="w-full h-full object-cover" src="/path/to/image.jpg" alt={`Post ${index + 1}`} />
+            <div className="w-full h-48 bg-gray-200 mb-4 relative">
+              <Image className="object-cover" src="/path/to/image.jpg" alt={`Post ${index + 1}`} layout="fill" />
             </div>
             <h3 className="text-green-500 font-semibold mb-2 truncate">잡담</h3>
             <p className="text-gray-700 font-semibold mb-2 truncate">제목입니다. 최대 1줄까지 생각중이에요</p>

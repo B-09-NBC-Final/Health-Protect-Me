@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Image from 'next/image';
 
 type ProfileEditProps = {
   currentHeight: number;
@@ -47,14 +48,16 @@ const ProfileEdit = ({
   };
 
   return (
-    <section className="w-full max-w-md mx-auto">
+    <section className="w-[1360px] max-w-md mx-auto">
       <h1 className="text-2xl m-5 text-center">프로필 수정</h1>
       <div className="flex flex-col items-center text-center mb-8">
-        <div className="w-24 h-24 rounded-full bg-gray-300 flex items-center justify-center mb-4">
-          <img
-            className="w-full h-full rounded-full cursor-pointer"
+        <div className="w-24 h-24 rounded-full bg-gray-300 flex items-center justify-center mb-4 relative">
+          <Image
+            className="rounded-full cursor-pointer"
             src={profileImage || '/path/to/default-profile-image.jpg'}
             alt="Profile"
+            layout="fill"
+            objectFit="cover"
             onClick={() => document.getElementById('fileInput')?.click()}
           />
           <input type="file" accept="image/*" id="fileInput" className="hidden" onChange={handleImageUpload} />

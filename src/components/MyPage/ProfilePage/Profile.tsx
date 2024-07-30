@@ -2,16 +2,19 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { createClient } from '@/supabase/client';
 
 const DEFAULT_PROFILE_IMAGE = '/path/to/default-profile-image.jpg';
 
-const calculateBMI = (height: number, weight: number): number => {
+const calculateBMI = (height: number | null, weight: number | null): number | null => {
+  if (height === null || weight === null) return null;
   const heightInMeters = height / 100;
   return weight / (heightInMeters * heightInMeters);
 };
 
-const getBMIStatus = (bmi: number): string => {
+const getBMIStatus = (bmi: number | null): string => {
+  if (bmi === null) return '정보 없음';
   if (bmi < 18.5) return '저체중';
   if (bmi >= 18.5 && bmi < 23) return '정상';
   if (bmi >= 23 && bmi < 25) return '과체중';
@@ -43,17 +46,19 @@ const ProfileSection = () => {
     const { data: sessionData } = await supabase.auth.getSession();
     const isSignIn = !!sessionData.session;
     if (!isSignIn) {
+      console.log('로그인 상태 아님');
       router.push('/login');
       return;
     }
 
+    console.log('세션 데이터', sessionData);
     const userId = sessionData.session.user.id;
-
+    console.log('유저 아이디', userId);
     try {
       const { data: userProfile, error: userError } = await supabase
         .from('users')
         .select('nickname, profile_url')
-        .eq('id', userId)
+        .eq('user_id', userId)
         .single();
 
       if (userError) {
@@ -75,7 +80,7 @@ const ProfileSection = () => {
         weight: userInfo.weight,
         goal: userInfo.purpose,
         nickname: userProfile.nickname,
-        profileImage: userProfile.profile_url
+        profileImage: userProfile.profile_url || DEFAULT_PROFILE_IMAGE
       };
 
       setUserData(data);
@@ -84,7 +89,7 @@ const ProfileSection = () => {
       setBmiStatus(getBMIStatus(bmi));
     } catch (error) {
       console.error('Failed to fetch user data:', error);
-      router.push('/login');
+      // router.push('/login');
     }
   };
 
@@ -95,19 +100,21 @@ const ProfileSection = () => {
   const handleNavigateToEdit = (): void => {
     const { height, weight, goal, nickname, profileImage } = userData;
     router.push(
-      `/my-page/edit?height=${height}&weight=${weight}&goal=${goal}&nickname=${nickname}&profileImage=${encodeURIComponent(
-        profileImage
-      )}`
+      `/my-page/edit?height=${height || ''}&weight=${
+        weight || ''
+      }&goal=${goal}&nickname=${nickname}&profileImage=${encodeURIComponent(profileImage)}`
     );
   };
 
   return (
     <div className="w-full max-w-6xl mx-auto pt-4 pb-6 px-10 rounded-2xl border border-gray-300 flex flex-col items-center">
-      <div className="w-24 h-24 rounded-full bg-gray-300 flex items-center justify-center cursor-pointer mb-4">
-        <img
-          className="w-full h-full rounded-full"
+      <div className="w-24 h-24 rounded-full bg-gray-300 flex items-center justify-center mb-4">
+        <Image
+          className="rounded-full cursor-pointer"
           src={userData.profileImage || DEFAULT_PROFILE_IMAGE}
           alt="Profile"
+          layout="fill"
+          objectFit="cover"
         />
       </div>
       <h1 className="text-sm font-bold mb-6 text-center">{userData.nickname || '사용자'}</h1>

@@ -5,7 +5,6 @@ import { getAuthToken } from '@/utils/cookieUtils';
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
   const authToken = getAuthToken(req); // 쿠키에서 auth token을 가져옴
-  console.log(authToken);
 
   // 로그인 상태에서 접근할 수 없는 페이지는
   const restrictedPaths = ['/login'];

@@ -1,5 +1,5 @@
-import Profile from './Profile';
-import PostsSection from './PostsSection';
+import Profile from '@/components/MyPage/ProfilePage/Profile';
+import PostsSection from '@/components/MyPage/ProfilePage/PostsSection';
 
 const MyPage = () => {
   return (
