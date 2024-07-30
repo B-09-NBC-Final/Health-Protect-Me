@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { getAuthToken } from '@/utils/cookieUtils';
+import { getAuthToken } from '@/utils/getUserData';
 
-export function middleware(req: NextRequest) {
+export const updateSession = async (req: NextRequest) => {
   const { pathname } = req.nextUrl;
-  const authToken = getAuthToken(req); // 쿠키에서 auth token을 가져옴
+  const authToken = await getAuthToken(req);
   console.log(authToken);
 
   // 로그인 상태에서 접근할 수 없는 페이지는
@@ -23,7 +23,7 @@ export function middleware(req: NextRequest) {
   }
 
   return NextResponse.next();
-}
+};
 
 export const config = {
   matcher: ['/login', '/mypage']
