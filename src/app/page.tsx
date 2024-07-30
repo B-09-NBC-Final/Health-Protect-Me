@@ -2,6 +2,7 @@ import MainContent from '@/components/MainPage/MainContent';
 import MainSwiper from '@/components/MainPage/MainSwiper';
 import Image from 'next/image';
 import Thumbnail from '@/assets/image/img_thumbnail.svg';
+import MainBanner from '@/components/MainPage/MainBanner';
 
 const MainPage = () => {
   return (
@@ -31,7 +32,7 @@ const MainPage = () => {
           </li>
           <li className="flex justify-between pt-40">
             <Image src={Thumbnail} alt="간편하게, 나만을 위한 맞춤형 건강 솔루션" width={600} height={480} />
-            <div>
+            <div className="w-[600px]">
               <p className="text-main-title2 font-medium leading-tight">
                 목표 달성을 <br />
                 도와줄 최적화된 운동 플랜
@@ -56,6 +57,9 @@ const MainPage = () => {
             <Image src={Thumbnail} alt="간편하게, 나만을 위한 맞춤형 건강 솔루션" width={600} height={480} />
           </li>
         </ul>
+      </section>
+      <section className="bg-gray-100">
+        <MainBanner />
       </section>
     </main>
   );
