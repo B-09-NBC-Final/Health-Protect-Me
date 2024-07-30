@@ -1,11 +1,10 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { getAuthToken } from '@/utils/cookieUtils';
+import { getAuthToken } from '@/utils/getUserData';
 
-export function middleware(req: NextRequest) {
+export const updateSession = async (req: NextRequest) => {
   const { pathname } = req.nextUrl;
-  const authToken = getAuthToken(req); // 쿠키에서 auth token을 가져옴
-  console.log(authToken);
+  const authToken = await getAuthToken(req);
 
   // 로그인 상태에서 접근할 수 없는 페이지는
   const restrictedPaths = ['/login'];
@@ -15,7 +14,7 @@ export function middleware(req: NextRequest) {
   }
 
   // 로그인하지 않은 상태에서 접근할 수 없는 페이지는
-  const protectedPaths = ['/mypage'];
+  const protectedPaths = ['/my-page'];
   if (protectedPaths.includes(pathname) && !authToken) {
     const url = new URL('/login', req.nextUrl.origin);
     url.searchParams.set('message', '로그인 후 이용부탁드립니다');
@@ -23,8 +22,4 @@ export function middleware(req: NextRequest) {
   }
 
   return NextResponse.next();
-}
-
-export const config = {
-  matcher: ['/login', '/mypage']
 };

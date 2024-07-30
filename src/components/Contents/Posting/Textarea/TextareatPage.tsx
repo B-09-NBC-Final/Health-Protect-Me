@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useUserStore } from '@/store/userStore';
 import { useRouter } from 'next/navigation';
+import imageUploadBtn from '@/assets/image/imageUploadBtn.png'
 
 type FileInfo = {
   file: File;
@@ -194,8 +195,8 @@ const TextareaPage = () => {
         </div>
         {fileInfos.length < 3 && (
           <label className="flex items-center cursor-pointer">
-            <Image src="/assets/image/imageUploadBtn.png" alt="addImg" width={30} height={30} className="mr-2" />
-            <span className="text-sm text-blue-500">이미지 추가 (최대 3개)</span>
+            <Image src={imageUploadBtn} alt="addImg" width={50} height={50} className="mr-2" />
+            <span className="text-sm text-blue-500">최대 3개</span>
             <input type="file" id="test" multiple accept="image/*" className="hidden" onChange={handleUploadFiles} />
           </label>
         )}

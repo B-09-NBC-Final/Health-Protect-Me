@@ -19,3 +19,4 @@ export const useUserStore = create<UserType & SetUserState>((set) => ({
   user: null,
   setUser: (payload) => set({ user: payload })
 }));
+
