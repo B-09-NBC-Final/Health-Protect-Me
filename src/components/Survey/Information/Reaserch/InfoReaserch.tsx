@@ -58,6 +58,9 @@ const InfoResearch = (): JSX.Element => {
     });
   }, [currentStepIndex]);
 
+  console.log(user?.userId)
+
+
   const saveDataToSupabase = async () => {
     const timestamp = dayjs().format('YYYY-MM-DD HH:mm:ss');
 
