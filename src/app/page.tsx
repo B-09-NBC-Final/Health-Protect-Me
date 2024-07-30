@@ -1,9 +1,11 @@
+import Header from '@/components/common/Header/Header';
 import MainSwiper from '@/components/MainPage/MainSwiper';
 import UserProfile from '@/components/UserProfile';
 
 const MainPage = () => {
   return (
     <main>
+      <Header/>
       <UserProfile />
       <div className="bg-neutral-800 min-h-screen">
         <div className="flex justify-between items-center">

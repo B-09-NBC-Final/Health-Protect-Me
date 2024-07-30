@@ -3,6 +3,7 @@ import { create } from 'zustand';
 type UserState = {
   userId: string | '';
   email: string | undefined;
+  profile_url: string | '';
 } | null;
 
 type UserType = {
