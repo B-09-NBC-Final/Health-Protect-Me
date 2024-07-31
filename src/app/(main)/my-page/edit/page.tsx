@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import ProfileEdit from '../../../../components/MyPage/ProfileEdit';
+import ProfileEdit from '@/components/MyPage/ProfileEdit';
 
 const EditPage = () => {
   const currentUserData = {

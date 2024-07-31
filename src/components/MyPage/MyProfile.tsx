@@ -1,7 +1,7 @@
-import Profile from './Profile';
-import PostsSection from './PostsSection';
+import Profile from '@/components/MyPage/ProfilePage/Profile';
+import PostsSection from '@/components/MyPage/ProfilePage/PostsSection';
 
-const MyPage = () => {
+const MyProfile = () => {
   return (
     <main className="min-h-screen bg-white text-black p-8">
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row">
@@ -17,4 +17,4 @@ const MyPage = () => {
   );
 };
 
-export default MyPage;
+export default MyProfile;
