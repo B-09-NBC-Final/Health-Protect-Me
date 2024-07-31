@@ -29,7 +29,6 @@ const InfoResearch = (): JSX.Element => {
       setCurrentStepIndex(currentStepIndex + 1);
     }
   };
-console.log(user)
   const preStep = (): void => {
     if (currentStepIndex > 0) {
       setCurrentStepIndex(currentStepIndex - 1);
@@ -64,7 +63,7 @@ console.log(user)
       const { data, error } = await supabase
         .from('information')
         .insert({
-          "year_of_birth": 1999,
+          "year_of_birth": surveyData,
           "weight": surveyData.weight,
           "gender": surveyData.gender,
           "height": surveyData.height,

@@ -4,9 +4,9 @@ export type DietGoal = '체중 감량' | '체중 유지' | '건강 식습관' | 
 
 export type SurveyData = {
   birthYear: number;
-  gender: Gender | null;
+  gender: Gender;
   height: string;
   weight: string;
-  purpose: DietGoal | null;
+  purpose: DietGoal;
 };
 
