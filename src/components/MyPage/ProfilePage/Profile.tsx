@@ -2,16 +2,19 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { createClient } from '@/supabase/client';
 
 const DEFAULT_PROFILE_IMAGE = '/path/to/default-profile-image.jpg';
 
-const calculateBMI = (height: number, weight: number): number => {
+const calculateBMI = (height: number | null, weight: number | null): number | null => {
+  if (height === null || weight === null) return null;
   const heightInMeters = height / 100;
   return weight / (heightInMeters * heightInMeters);
 };
 
-const getBMIStatus = (bmi: number): string => {
+const getBMIStatus = (bmi: number | null): string => {
+  if (bmi === null) return '정보 없음';
   if (bmi < 18.5) return '저체중';
   if (bmi >= 18.5 && bmi < 23) return '정상';
   if (bmi >= 23 && bmi < 25) return '과체중';
@@ -27,7 +30,7 @@ type UserData = {
   profileImage: string;
 };
 
-const ProfileSection = () => {
+const Profile = () => {
   const supabase = createClient();
   const [userData, setUserData] = useState<UserData>({
     height: null,
@@ -53,7 +56,7 @@ const ProfileSection = () => {
       const { data: userProfile, error: userError } = await supabase
         .from('users')
         .select('nickname, profile_url')
-        .eq('id', userId)
+        .eq('user_id', userId)
         .single();
 
       if (userError) {
@@ -75,7 +78,7 @@ const ProfileSection = () => {
         weight: userInfo.weight,
         goal: userInfo.purpose,
         nickname: userProfile.nickname,
-        profileImage: userProfile.profile_url
+        profileImage: userProfile.profile_url || DEFAULT_PROFILE_IMAGE
       };
 
       setUserData(data);
@@ -95,24 +98,26 @@ const ProfileSection = () => {
   const handleNavigateToEdit = (): void => {
     const { height, weight, goal, nickname, profileImage } = userData;
     router.push(
-      `/my-page/edit?height=${height}&weight=${weight}&goal=${goal}&nickname=${nickname}&profileImage=${encodeURIComponent(
-        profileImage
-      )}`
+      `/my-page/edit?height=${height || ''}&weight=${
+        weight || ''
+      }&goal=${goal}&nickname=${nickname}&profileImage=${encodeURIComponent(profileImage)}`
     );
   };
 
   return (
     <div className="w-full max-w-6xl mx-auto pt-4 pb-6 px-10 rounded-2xl border border-gray-300 flex flex-col items-center">
-      <div className="w-24 h-24 rounded-full bg-gray-300 flex items-center justify-center cursor-pointer mb-4">
-        <img
-          className="w-full h-full rounded-full"
+      <div className="w-24 h-24 rounded-full bg-gray-300 flex items-center justify-center mb-4">
+        <Image
+          className="rounded-full"
           src={userData.profileImage || DEFAULT_PROFILE_IMAGE}
           alt="Profile"
+          width={'120'}
+          height={'120'}
         />
       </div>
       <h1 className="text-sm font-bold mb-6 text-center">{userData.nickname || '사용자'}</h1>
-      <div className="py-4 px-10 text-center w-[320px] bg-[#FAFAFA] shadow-md rounded-2xl flex flex-col items-center justify-center">
-        <div className="flex items-center justify-center w-[240px] h-[40px] bg-[#EAF3EC] text-[#257D1D] rounded-2xl mb-2">
+      <div className="py-4 px-10 text-center w-80 bg-[#FAFAFA] shadow-md rounded-2xl flex flex-col items-center justify-center">
+        <div className="flex items-center justify-center w-60 h-10 bg-[#EAF3EC] text-[#257D1D] rounded-2xl mb-2">
           <h2 className="text-sm font-bold">{userData.goal}</h2>
         </div>
         <p className="text-gray-500 text-sm mt-2">헬프미와 함께 목표를 달성</p>
@@ -135,7 +140,7 @@ const ProfileSection = () => {
       </div>
       <div className="flex justify-center mt-8">
         <button
-          className="w-[320px] h-[40px] text-sm font-bold border border-[#B7B9BD] rounded-xl"
+          className="w-80 h-10 text-sm font-bold border border-[#B7B9BD] rounded-xl"
           onClick={handleNavigateToEdit}
         >
           프로필 수정
@@ -145,4 +150,4 @@ const ProfileSection = () => {
   );
 };
 
-export default ProfileSection;
+export default Profile;
