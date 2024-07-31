@@ -60,7 +60,7 @@ export type Database = {
           result_diet: string | null
           result_exercise: string | null
           sleep_time: number | null
-          user_id: string
+          user_id: string | null
           weight: number
           year_of_birth: number
         }
@@ -75,7 +75,7 @@ export type Database = {
           result_diet?: string | null
           result_exercise?: string | null
           sleep_time?: number | null
-          user_id?: string
+          user_id?: string | null
           weight: number
           year_of_birth: number
         }
@@ -90,7 +90,7 @@ export type Database = {
           result_diet?: string | null
           result_exercise?: string | null
           sleep_time?: number | null
-          user_id?: string
+          user_id?: string | null
           weight?: number
           year_of_birth?: number
         }
