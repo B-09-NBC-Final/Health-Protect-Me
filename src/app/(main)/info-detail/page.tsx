@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 
 const InforDetailPage = () => {
+  
   const [dayData, setDayData] = useState(null);
   const [error, setError] = useState(null);
 
