@@ -31,7 +31,7 @@ const InfoResearch = (): JSX.Element => {
       setCurrentStepIndex(currentStepIndex + 1);
     }
   };
-
+console.log(user)
   const preStep = (): void => {
     if (currentStepIndex > 0) {
       setCurrentStepIndex(currentStepIndex - 1);
