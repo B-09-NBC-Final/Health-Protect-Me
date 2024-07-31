@@ -1,142 +1,149 @@
-// 'use client'
-// import React, { useState, useEffect } from 'react';
-// import { createClient } from '@/supabase/client';
+'use client'
+import React, { useState, useEffect } from 'react';
+import { createClient } from '@/supabase/client';
 
-<<<<<<< HEAD
-// const InforDetailPage = () => {
-//   const [resultDiet, setResultDiet] = useState('');
-//   const [resultExercise, setResultExercise] = useState('');
-//   const [error, setError] = useState(null);
-=======
 const InforDetailPage = () => {
-  
-  const [dayData, setDayData] = useState(null);
+  const [resultDiet, setResultDiet] = useState('');
+  const [resultExercise, setResultExercise] = useState('');
   const [error, setError] = useState(null);
->>>>>>> 61e593a2a954b3f801fb84146e1db1829d95fb27
+  const [userId, setUserId] = useState('c11d5638-40f3-4b7d-8659-542c4b03ba82');
 
-//   useEffect(() => {
-//     const fetchData = async () => {
-//       const supabase = createClient();
+  useEffect(() => {
+    const fetchData = async () => {
+      const supabase = createClient();
+      const { data: userData, error: userError } = await supabase
+        .from('information')
+        .select('user_id')
+        .eq('user_id', "c11d5638-40f3-4b7d-8659-542c4b03ba82")
 
-//       const { data: dietData, error: dietError } = await supabase
-//         .from('information')
-//         .select('result_diet')
-//         .single(); // Assuming you want a single row
+      const { data: dietData, error: dietError } = await supabase
+        .from('information')
+        .select('result_diet')
+        .eq('user_id', userId)
+        .single()
 
-//       const { data: exerciseData, error: exerciseError } = await supabase
-//         .from('information')
-//         .select('result_exercise')
-//         .single(); // Assuming you want a single row
+      // Assuming you want a single row
+      console.log(22, dietData);
 
-//       if (dietError) setError(dietError);
-//       if (exerciseError) setError(exerciseError);
+      const { data: exerciseData, error: exerciseError } = await supabase
+        .from('information')
+        .select('result_exercise')
+        .eq('user_id', userId)
+        .single(); // Assuming you want a single row
+      console.log(33, exerciseData);
 
-//       if (dietData) setResultDiet(dietData.result_diet);
-//       if (exerciseData) setResultExercise(exerciseData.result_exercise);
-//     };
+      if (userData) setError(userError);
+      if (dietError) setError(dietError);
+      if (exerciseError) setError(exerciseError);
 
-//     fetchData();
-//   }, []);
+      if (userData) setUserId(userData.user_id);
+      if (dietData) setResultDiet(dietData.result_diet);
+      if (exerciseData) setResultExercise(exerciseData.result_exercise);
+    };
+    fetchData();
+  }, []);
 
-//   const parseDiet = (dietString) => {
-//     const sections = dietString.split('\n');
-//     const diet = {
-//       day: '',
-//       breakfast: { menu: '', ratio: '', calories: '' },
-//       lunch: { menu: '', ratio: '', calories: '' },
-//       dinner: { menu: '', ratio: '', calories: '' },
-//       totalCalories: ''
-//     };
+  const parseDiet = (dietString: string) => {
+    if (!dietString) return null; // dietString이 undefined인 경우를 처리
+    const sections = dietString.split('\n');
+    const diet = {
+      day: '',
+      breakfast: { menu: '', ratio: '', calories: '' },
+      lunch: { menu: '', ratio: '', calories: '' },
+      dinner: { menu: '', ratio: '', calories: '' },
+      totalCalories: ''
+    };
 
-//     let currentMeal = null;
+    let currentMeal = null;
 
-//     sections.forEach((line) => {
-//       if (line.startsWith('@')) diet.day = line.substring(1).trim();
-//       else if (line.startsWith('#')) {
-//         currentMeal = diet.breakfast;
-//         if (line.startsWith('#?메뉴:')) currentMeal.menu += line.substring(7).trim() + '\n';
-//         else if (line.startsWith('#-')) currentMeal.menu += line.substring(1).trim() + '\n';
-//         else if (line.startsWith('#$')) currentMeal.ratio = line.substring(1).trim();
-//         else if (line.startsWith('#&')) currentMeal.calories = line.substring(1).trim();
-//       } else if (line.startsWith('^')) {
-//         currentMeal = diet.lunch;
-//         if (line.startsWith('^?메뉴:')) currentMeal.menu += line.substring(7).trim() + '\n';
-//         else if (line.startsWith('^-')) currentMeal.menu += line.substring(1).trim() + '\n';
-//         else if (line.startsWith('^$')) currentMeal.ratio = line.substring(1).trim();
-//         else if (line.startsWith('^&')) currentMeal.calories = line.substring(1).trim();
-//       } else if (line.startsWith('!')) {
-//         currentMeal = diet.dinner;
-//         if (line.startsWith('!?메뉴:')) currentMeal.menu += line.substring(7).trim() + '\n';
-//         else if (line.startsWith('!-')) currentMeal.menu += line.substring(1).trim() + '\n';
-//         else if (line.startsWith('!$')) currentMeal.ratio = line.substring(1).trim();
-//         else if (line.startsWith('!&')) currentMeal.calories = line.substring(1).trim();
-//       } else if (line.startsWith('*')) diet.totalCalories = line.substring(1).trim();
-//     });
+    sections.forEach((line) => {
+      if (line.startsWith('@')) diet.day = line.substring(1).trim();
+      else if (line.startsWith('#')) {
+        currentMeal = diet.breakfast;
+        if (line.startsWith('#?메뉴:')) currentMeal.menu += line.substring(7).trim() + '\n';
+        else if (line.startsWith('#-')) currentMeal.menu += line.substring(1).trim() + '\n';
+        else if (line.startsWith('#$')) currentMeal.ratio = line.substring(1).trim();
+        else if (line.startsWith('#&')) currentMeal.calories = line.substring(1).trim();
+      } else if (line.startsWith('^')) {
+        currentMeal = diet.lunch;
+        if (line.startsWith('^?메뉴:')) currentMeal.menu += line.substring(7).trim() + '\n';
+        else if (line.startsWith('^-')) currentMeal.menu += line.substring(1).trim() + '\n';
+        else if (line.startsWith('^$')) currentMeal.ratio = line.substring(1).trim();
+        else if (line.startsWith('^&')) currentMeal.calories = line.substring(1).trim();
+      } else if (line.startsWith('!')) {
+        currentMeal = diet.dinner;
+        if (line.startsWith('!?메뉴:')) currentMeal.menu += line.substring(7).trim() + '\n';
+        else if (line.startsWith('!-')) currentMeal.menu += line.substring(1).trim() + '\n';
+        else if (line.startsWith('!$')) currentMeal.ratio = line.substring(1).trim();
+        else if (line.startsWith('!&')) currentMeal.calories = line.substring(1).trim();
+      } else if (line.startsWith('*')) diet.totalCalories = line.substring(1).trim();
+    });
 
-//     return diet;
-//   };
+    return diet;
+  };
 
-//   const parseExercise = (exerciseString) => {
-//     const [beforeTip, afterTip] = exerciseString.split('운동 팁:');
-//     return {
-//       beforeTip: beforeTip.trim(),
-//       afterTip: '운동 팁: ' + afterTip.trim()
-//     };
-//   };
+  const parseExercise = (exerciseString: string) => {
+    if (!exerciseString) return null; // exerciseString이 undefined인 경우를 처리
+    const [beforeTip, afterTip] = exerciseString.split('운동 팁:');
+    return {
+      beforeTip: beforeTip ? beforeTip.trim() : '',
+      afterTip: afterTip ? '운동 팁: ' + afterTip.trim() : ''
+    };
+  };
 
-//   const diet = parseDiet(resultDiet);
-//   const exercise = parseExercise(resultExercise);
+  const diet = parseDiet(resultDiet);
+  const exercise = parseExercise(resultExercise);
 
-//   if (error) return <div>Error: {error.message}</div>;
+  if (error) return <div>Error: {error.message}</div>;
 
-//   return (
-//     <div>
-//       <section>
-//         <h2>다이어트 계획 ({diet.day})</h2>
-//         <div>
-//           <h3>아침</h3>
-//           <pre style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}>
-//             메뉴: {diet.breakfast.menu}
-//           </pre>
-//           <pre style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}>
-//             탄단지 비율: {diet.breakfast.ratio}
-//           </pre>
-//           <pre style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}>
-//             칼로리: {diet.breakfast.calories}
-//           </pre>
-//         </div>
-//         <div>
-//           <h3>점심</h3>
-//           <pre style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}>
-//             메뉴: {diet.lunch.menu}
-//             탄단지 비율: {diet.lunch.ratio}
-//             칼로리: {diet.lunch.calories}
-//           </pre>
-//         </div>
-//         <div>
-//           <h3>저녁</h3>
-//           <pre style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}>
-//             메뉴: {diet.dinner.menu}
-//             탄단지 비율: {diet.dinner.ratio}
-//             칼로리: {diet.dinner.calories}
-//           </pre>
-//         </div>
-//         <div>
-//           <h3>총 칼로리</h3>
-//           <p>{diet.totalCalories}</p>
-//         </div>
-//       </section>
-//       <section>
-//         <h2>운동 계획</h2>
-//         <pre style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}>
-//           {exercise.beforeTip}
-//         </pre>
-//         <pre style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}>
-//           {exercise.afterTip}
-//         </pre>
-//       </section>
-//     </div>
-//   );
-// };
+  return (
+    <div>
+      <section>
+        <h2>다이어트 계획 ({diet?.day})</h2>
+        <div>
+          <h3>아침</h3>
+          <pre style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}>
+            메뉴: {diet?.breakfast.menu}
+          </pre>
+          <pre style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}>
+            탄단지 비율: {diet?.breakfast.ratio}
+          </pre>
+          <pre style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}>
+            칼로리: {diet?.breakfast.calories}
+          </pre>
+        </div>
+        <div>
+          <h3>점심</h3>
+          <pre style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}>
+            메뉴: {diet?.lunch.menu}
+            탄단지 비율: {diet?.lunch.ratio}
+            칼로리: {diet?.lunch.calories}
+          </pre>
+        </div>
+        <div>
+          <h3>저녁</h3>
+          <pre style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}>
+            메뉴: {diet?.dinner.menu}
+            탄단지 비율: {diet?.dinner.ratio}
+            칼로리: {diet?.dinner.calories}
+          </pre>
+        </div>
+        <div>
+          <h3>총 칼로리</h3>
+          <p>{diet?.totalCalories}</p>
+        </div>
+      </section>
+      <section>
+        <h2>운동 계획</h2>
+        <pre style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}>
+          {exercise?.beforeTip}
+        </pre>
+        <pre style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}>
+          {exercise?.afterTip}
+        </pre>
+      </section>
+    </div>
+  );
+};
 
-// export default InforDetailPage;
+export default InforDetailPage;
