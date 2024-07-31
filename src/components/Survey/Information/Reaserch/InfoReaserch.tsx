@@ -1,25 +1,30 @@
-'use client'
+'use client';
 import React, { useState, useRef, useEffect } from 'react';
-import { Step, Gender, DietGoal, SurveyData } from '@/types/infoReaserch';
+import { Step, Gender, DietGoal, SurveyData, InformationInsertDataType } from '@/types/infoReaserch';
 import { Button } from '@/components/ui/button';
 import { createClient } from '@/supabase/client';
 import { useRouter } from 'next/navigation';
-import {toast} from 'react-toastify'
+import { toast } from 'react-toastify';
 import { useUserStore } from '@/store/userStore';
 
-const supabase = createClient()
+const supabase = createClient();
 
 const InfoResearch = (): JSX.Element => {
   const router = useRouter();
   const user = useUserStore((state) => state.user);
   const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
-  const [surveyData, setSurveyData] = useState<SurveyData>({
-    birthYear: '',
-    gender: null,
-    height: '',
-    weight: '',
-    purpose: null
+  const [surveyData, setSurveyData] = useState<InformationInsertDataType>({
+    gender: '',
+    height: 0,
+    weight: 0,
+    purpose: '',
+    year_of_birth: 0
   });
+
+  const [aiResults, setAiResults] =useState<{result_diet: string, result_exercise: string}>({
+    result_diet: '',
+    result_exercise: ''
+  })
 
   const steps: Step[] = ['출생년도', '성별', '신장', '체중', '식단 목적'];
   const stepRefs = useRef<React.RefObject<HTMLDivElement>[]>(steps.map(() => React.createRef()));
@@ -41,10 +46,12 @@ const InfoResearch = (): JSX.Element => {
   };
 
   const handleGenderSelect = (gender: Gender): void => {
+    if (!gender) return;
     setSurveyData((prevData) => ({ ...prevData, gender }));
   };
 
   const handleDietGoalSelect = (purpose: DietGoal): void => {
+    if (!purpose) return;
     setSurveyData((prevData) => ({ ...prevData, purpose }));
   };
 
@@ -55,23 +62,50 @@ const InfoResearch = (): JSX.Element => {
     });
   }, [currentStepIndex]);
 
-  console.log(user?.userId)
-
-
+  console.log(user?.userId);
+// ai API 호출 함수 // 
+  const handleClickAPICall = async () => {
+    try {
+      const response = await fetch('/api/gpt', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(surveyData)
+      })
+      console.log(response)
+      if (!response.ok) {
+        throw new Error('Api 요청에 실패하였습니다..')
+      }
+      const content = await response.json()
+      console.log(22, content)
+      setAiResults({
+        result_diet: content.data.diet,
+        result_exercise: content.data.exercise
+      })
+      return content.data
+    } catch (error) {
+      console.error('Api 요청 중 오류:', error)
+      toast.error('분석 중 오류가 발생했습니다. 다시 시도해주세요!') 
+    }
+  }
+ 
   const saveDataToSupabase = async () => {
     try {
-      const { data, error } = await supabase
-        .from('information')
-        .insert({
-        year_of_birth: parseInt(surveyData.birthYear, 10),
-        weight: parseFloat(surveyData.weight), 
+      await handleClickAPICall()
+
+      const { data, error } = await supabase.from('information').insert({
+        year_of_birth: surveyData.year_of_birth,
+        weight: surveyData.weight,
         gender: surveyData.gender,
-        height: parseFloat(surveyData.height), 
+        height:surveyData.height,
         purpose: surveyData.purpose,
-        });
+        result_diet: aiResults.result_diet,
+        result_exercise: aiResults.result_exercise
+      });
 
       if (error) throw error;
-      
+
       toast.success('데이터가 성공적으로 저장되었습니다!');
       router.push('/info-detail');
     } catch (error) {
@@ -83,7 +117,7 @@ const InfoResearch = (): JSX.Element => {
   const isStepValid = (): boolean => {
     switch (steps[currentStepIndex]) {
       case '출생년도':
-        return !!surveyData.birthYear;
+        return !!surveyData.year_of_birth;
       case '성별':
         return !!surveyData.gender;
       case '신장':
@@ -105,9 +139,9 @@ const InfoResearch = (): JSX.Element => {
             <label className="block text-sm mb-2 font-medium text-gray-700">출생년도</label>
             <input
               type="text"
-              name="birthYear"
+              name="year_of_birth"
               placeholder="예) 19xx "
-              value={surveyData.birthYear}
+              value={surveyData.year_of_birth}
               onChange={handleInputChange}
               className="w-full p-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400 focus:border-transparent"
             />
@@ -217,7 +251,7 @@ const InfoResearch = (): JSX.Element => {
             다음
           </Button>
         ) : (
-          <Button 
+          <Button
             onClick={saveDataToSupabase}
             disabled={!isStepValid()}
             className="py-3 px-6 text-lg bg-red-400 text-white rounded-lg hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-400 transition duration-200 disabled:bg-gray-300 disabled:cursor-not-allowed"

@@ -1,7 +1,10 @@
+import { InformationInsertDataType } from "@/types/infoReaserch";
 import OpenAI from "openai";
 
-export const GET = async () => {
+export const POST = async (SurveyData: InformationInsertDataType) => {
     console.log(">>callGPT");
+    
+    const {year_of_birth ,gender, height, weight, purpose}= SurveyData
     const openai = new OpenAI({
         apiKey: process.env.NEXT_PUBLIC_OPENAI_SECRET_KEY,
     });
@@ -22,7 +25,7 @@ export const GET = async () => {
                 "content": [
                     {
                         "type": "text",
-                        "text": "2000년생, 남자, 170cm, 65kg, 체중증량 목적"
+                        "text": `{${year_of_birth}년 생, ${gender}, ${height}cm, ${weight}kg, ${purpose}}`
                     }
                 ]
             },

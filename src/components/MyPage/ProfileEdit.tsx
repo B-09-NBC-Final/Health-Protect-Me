@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/supabase/client';
 import { v4 as uuidv4 } from 'uuid';
+import Button from '@/components/common/Button';
 
 type ProfileEditProps = {
   currentHeight: number;
@@ -34,25 +35,27 @@ const ProfileEdit = ({
   const [imageFile, setImageFile] = useState<null | File>(null);
   const router = useRouter();
 
-  console.log(profileImage);
   const handleSave = async () => {
     try {
       const { data: sessionData } = await supabase.auth.getSession();
       const userId = sessionData.session.user.id;
+
+      let avatarUrl = profileImage;
+
       if (imageFile) {
         const { data: avatarData, error } = await supabase.storage
           .from('avatars')
           .upload(`public/${uuidv4()}.png`, imageFile);
         if (error) {
-          console.error('Error uploading file:', error);
+          throw new Error(`Error uploading file: ${error.message}`);
         }
+        const { data: publicUrlData } = supabase.storage.from('avatars').getPublicUrl(avatarData.path);
+        avatarUrl = publicUrlData.publicUrl;
       }
 
-      const { data } = supabase.storage.from('avatars').getPublicUrl(avatarData.path);
-      console.log(nickname);
       const { error: userUpdateError } = await supabase
         .from('users')
-        .update({ nickname, profile_url: data.publicUrl })
+        .update({ nickname, profile_url: avatarUrl })
         .eq('user_id', userId);
 
       if (userUpdateError) {
@@ -68,12 +71,7 @@ const ProfileEdit = ({
         throw new Error(infoUpdateError.message);
       }
 
-      if (typeof onSave === 'function') {
-        onSave(height, weight, goal, nickname, profileImage);
-      } else {
-        console.error('onSave is not a function');
-      }
-
+      onSave(height, weight, goal, nickname, avatarUrl);
       router.push('/my-page');
     } catch (error) {
       console.error('Failed to save user data:', error);
@@ -111,19 +109,11 @@ const ProfileEdit = ({
         throw new Error(infoError.message);
       }
 
-      const data = {
-        height: userInfo.height,
-        weight: userInfo.weight,
-        goal: userInfo.purpose,
-        nickname: userProfile.nickname,
-        profileImage: userProfile.profile_url || '/path/to/default-profile-image.jpg'
-      };
-
-      setNickname(data.nickname);
-      setHeight(data.height);
-      setWeight(data.weight);
-      setGoal(data.goal);
-      setProfileImage(data.profileImage);
+      setNickname(userProfile.nickname);
+      setHeight(userInfo.height);
+      setWeight(userInfo.weight);
+      setGoal(userInfo.purpose);
+      setProfileImage(userProfile.profile_url || '/path/to/default-profile-image.jpg');
     } catch (error) {
       console.error('Failed to fetch user data:', error);
       router.push('/login');
@@ -210,46 +200,57 @@ const ProfileEdit = ({
           <div className="mb-4">
             <label className="block text-left">나의 식단 목표</label>
             <div className="flex justify-center space-x-2">
-              <button
-                type="button"
-                className={`p-2 rounded w-32 h-12 border border-[#B7B9BD] text-[#404145] ${
-                  goal === '체중 감량' ? 'bg-[#FFF6F2] border-[#F5637C] font-bold' : 'bg-white'
-                }`}
+              <Button
+                buttonName="체중 감량"
+                bgColor={goal === '체중 감량' ? 'bg-[#FFF6F2]' : 'bg-white'}
+                textColor="text-[#404145]"
+                buttonWidth="w-32 h-12"
                 onClick={() => setGoal('체중 감량')}
-              >
-                체중 감량
-              </button>
-              <button
-                type="button"
-                className={`p-2 rounded w-32 h-12 border border-[#B7B9BD] text-[#404145] ${
-                  goal === '체중 증량' ? 'bg-[#FFF6F2] border-[#F5637C] font-bold' : 'bg-white'
-                }`}
+              />
+              <Button
+                buttonName="체중 증량"
+                bgColor={goal === '체중 증량' ? 'bg-[#FFF6F2]' : 'bg-white'}
+                textColor="text-[#404145]"
+                buttonWidth="w-32 h-12"
                 onClick={() => setGoal('체중 증량')}
-              >
-                체중 증량
-              </button>
-              <button
-                type="button"
-                className={`p-2 rounded w-32 h-12 border border-[#B7B9BD] text-[#404145] ${
-                  goal === '건강한 식사' ? 'bg-[#FFF6F2] border-[#F5637C] font-bold' : 'bg-white'
-                }`}
+              />
+              <Button
+                buttonName="건강한 식사"
+                bgColor={goal === '건강한 식사' ? 'bg-[#FFF6F2]' : 'bg-white'}
+                textColor="text-[#404145]"
+                buttonWidth="w-32 h-12"
                 onClick={() => setGoal('건강한 식사')}
-              >
-                건강한 식사
-              </button>
+              />
             </div>
           </div>
         </form>
         <div className="flex justify-between mb-20 w-full">
-          <button className="w-48 h-10 p-2 rounded border border-[#B7B9BD] text-[#27282A]" onClick={onCancel}>
-            취소
-          </button>
-          <button className="w-48 h-10 bg-[#FF7A85] text-white p-2 rounded" onClick={handleSave}>
-            저장
-          </button>
+          <Button
+            buttonName="취소"
+            bgColor="bg-white"
+            textColor="text-[#27282A]"
+            buttonWidth="w-48"
+            onClick={() => {
+              onCancel();
+              router.push('/my-page');
+            }}
+          />
+          <Button
+            buttonName="저장"
+            bgColor="bg-[#FF7A85]"
+            textColor="text-white"
+            buttonWidth="w-48"
+            onClick={handleSave}
+          />
         </div>
         <div>
-          <button className="text-[#76797F] underline p-2">탈퇴하기</button>
+          <Button
+            buttonName="탈퇴하기"
+            bgColor="bg-transparent"
+            textColor="text-[#76797F] underline"
+            buttonWidth="w-auto"
+            onClick={() => console.log('탈퇴하기 클릭됨')}
+          />
         </div>
       </div>
     </section>

@@ -34,13 +34,13 @@ const PostsSection = () => {
 
       const userId = sessionData.session.user.id;
 
-      const { data, error } = await supabase.from<PostData>('posts').select('*').eq('user_id', userId);
+      const { data, error } = await supabase.from('posts').select('*').eq('user_id', userId);
 
       if (error) {
         throw new Error(error.message);
       }
 
-      setPosts(data || []);
+      setPosts(data as PostData[]);
     } catch (error) {
       console.error('Failed to fetch posts:', error);
     }

@@ -29,7 +29,7 @@ export async function GET(request: Request) {
     .select('is_survey_done')
     .eq('user_id', user.id)
     .single();
-
+  console.log('data', data);
   if (userError || !data) {
     return NextResponse.redirect(`${origin}/auth/auth-code-error`);
   }
