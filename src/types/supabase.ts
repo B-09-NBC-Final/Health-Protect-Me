@@ -6,6 +6,7 @@ export type Json =
   | { [key: string]: Json | undefined }
   | Json[]
 
+
 export type Database = {
   public: {
     Tables: {
@@ -229,6 +230,7 @@ export type Database = {
   }
 }
 
+export type InfomationTable = Database['public']['Tables']['information']['Insert']
 type PublicSchema = Database[Extract<keyof Database, "public">]
 
 export type Tables<
@@ -310,3 +312,4 @@ export type Enums<
   : PublicEnumNameOrOptions extends keyof PublicSchema["Enums"]
     ? PublicSchema["Enums"][PublicEnumNameOrOptions]
     : never
+
