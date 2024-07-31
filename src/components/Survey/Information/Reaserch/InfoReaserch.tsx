@@ -15,8 +15,7 @@ const InfoResearch = (): JSX.Element => {
   const user = useUserStore((state) => state.user);
   const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
   const [surveyData, setSurveyData] = useState<SurveyData>({
-    user_id: '',
-    birthYear: '',
+    birthYear: 0,
     gender: null,
     height: '',
     weight: '',
@@ -31,7 +30,7 @@ const InfoResearch = (): JSX.Element => {
       setCurrentStepIndex(currentStepIndex + 1);
     }
   };
-
+  console.log(user);
   const preStep = (): void => {
     if (currentStepIndex > 0) {
       setCurrentStepIndex(currentStepIndex - 1);
@@ -61,16 +60,12 @@ const InfoResearch = (): JSX.Element => {
   console.log(user?.userId);
 
   const saveDataToSupabase = async () => {
-    const timestamp = dayjs().format('YYYY-MM-DD HH:mm:ss');
-
     try {
       const { data, error } = await supabase.from('information').insert({
-        user_id: user?.userId,
-        created_at: timestamp,
-        year_of_birth: surveyData.height,
+        year_of_birth: 1999,
+        weight: surveyData.weight,
         gender: surveyData.gender,
         height: surveyData.height,
-        weight: surveyData.weight,
         purpose: surveyData.purpose
       });
 

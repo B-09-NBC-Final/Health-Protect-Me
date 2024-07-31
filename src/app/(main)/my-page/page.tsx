@@ -1,13 +1,12 @@
-import MyPage from '@/components/MyPage/MyProfile';
-import ProfileEdit from '@/components/MyPage/ProfileEdit';
+import MyProfile from '@/components/MyPage/MyProfile';
 import React from 'react';
 
-const MyPageComponent = () => {
+const MyPage = () => {
   return (
     <>
-      <MyPage />;
+      <MyProfile />;
     </>
   );
 };
 
-export default MyPageComponent;
+export default MyPage;

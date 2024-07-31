@@ -1,58 +1,143 @@
-// import React from 'react';
-'use client';
+'use client'
+import React, { useState } from 'react';
+
 const InforDetailPage = () => {
+  const [dayData, setDayData] = useState(null);
+  const [error, setError] = useState(null);
+
   const handleClickAPICall = async () => {
-    const content = await fetch('/api').then((response) => response.json());
-    console.log('content', content);
+    try {
+      const response = await fetch("/api/gpt");
+      if (!response.ok) {
+        throw new Error('API 요청에 실패했습니다.');
+      }
+      const content = await response.json();
+      console.log("content", content);
+      return content.data; // API 응답 데이터가 content.data에 있다고 가정
+    } catch (error) {
+      console.error("API 호출 중 오류 발생:", error);
+      setError(error.message);
+    }
+  };
+
+  const fetchData = async () => {
+    const content = await handleClickAPICall();
+    if (content) {
+      const daysData = content.split('\n@');
+      const firstDayData = daysData[0]; // 첫 번째 일차 데이터만 가져옴
+      console.log("일주일치 데이터:", daysData);
+      console.log("첫날 데이터:", firstDayData);
+      if (!firstDayData) {
+        console.error("firstDayData가 정의되지 않았습니다.");
+        setError("첫 번째 일차 데이터가 없습니다.");
+        return;
+      }
+
+      const [mealsData, exerciseData] = firstDayData.split('~추천운동');
+      console.log("식단 데이터:", mealsData);
+      console.log("운동데이터:", exerciseData);
+      const mealDetails = parseMeals(mealsData.trim());
+
+      console.log("식단 디테일:", mealDetails);
+
+      setDayData({
+        meals: mealDetails,
+        exercise: exerciseData.trim()
+      });
+    }
+  };
+
+  const parseMeals = (mealsData) => {
+    const mealDetails = {
+      breakfast: { menu: '', ratio: '', calories: '' },
+      lunch: { menu: '', ratio: '', calories: '' },
+      dinner: { menu: '', ratio: '', calories: '' }
+    };
+
+    console.log("mealDetails:", mealDetails);
+
+    const sections = mealsData.split('\n');
+    console.log("섹션:", sections);
+    sections.forEach(section => {
+      if (section.startsWith('#')) {
+        if (section.includes('$')) {
+          const [menu, ratio] = section.split('$');
+          mealDetails.breakfast.menu += menu.replace(/^#[^\w]*|^[^#]/g, '').trim() + '\n';
+          mealDetails.breakfast.ratio += '$' + ratio.trim() + '\n';
+        } else if (section.includes('&')) {
+          const [menu, calories] = section.split('&');
+          mealDetails.breakfast.menu += menu.replace(/^#[^\w]*|^[^#]/g, '').trim() + '\n';
+          mealDetails.breakfast.calories += '&' + calories.trim() + '\n';
+        } else {
+          mealDetails.breakfast.menu += section.replace(/^#[^\w]*|^[^#]/g, '').trim() + '\n';
+        }
+      } else if (section.startsWith('^')) {
+        if (section.includes('$')) {
+          const [menu, ratio] = section.split('$');
+          mealDetails.lunch.menu += menu.replace(/^\^[^\w]*|^[^\^]/g, '').trim() + '\n';
+          mealDetails.lunch.ratio += '$' + ratio.trim() + '\n';
+        } else if (section.includes('&')) {
+          const [menu, calories] = section.split('&');
+          mealDetails.lunch.menu += menu.replace(/^\^[^\w]*|^[^\^]/g, '').trim() + '\n';
+          mealDetails.lunch.calories += '&' + calories.trim() + '\n';
+        } else {
+          mealDetails.lunch.menu += section.replace(/^\^[^\w]*|^[^\^]/g, '').trim() + '\n';
+        }
+      } else if (section.startsWith('!')) {
+        if (section.includes('$')) {
+          const [menu, ratio] = section.split('$');
+          mealDetails.dinner.menu += menu.replace(/^![^\w]*|^[^!]/g, '').trim() + '\n';
+          mealDetails.dinner.ratio += '$' + ratio.trim() + '\n';
+        } else if (section.includes('&')) {
+          const [menu, calories] = section.split('&');
+          mealDetails.dinner.menu += menu.replace(/^![^\w]*|^[^!]/g, '').trim() + '\n';
+          mealDetails.dinner.calories += '&' + calories.trim() + '\n';
+        } else {
+          mealDetails.dinner.menu += section.replace(/^![^\w]*|^[^!]/g, '').trim() + '\n';
+        }
+      }
+    });
+
+    return mealDetails;
   };
 
   return (
-    <div className="flex justify-center place-items-center h-screen">
-      <div className="items-center">
+    <div>
+      <button onClick={fetchData}>API 호출</button>
+      {error && (
+        <div style={{ color: 'red' }}>
+          <p>오류: {error}</p>
+        </div>
+      )}
+      {dayData && (
         <div>
-          {/* 데이터 호출을 위한 임시 버튼 */}
-          <div className="App">
-            <button onClick={handleClickAPICall}>GPT Call</button>
-          </div>
-          <h1>dd님을 위한 맞춤 식단</h1>
-          <p className="mb-4">AI를 통해 진단한 나의 정보에 맞춰 나만을 위한 식단을 매일 알려드려요</p>
-        </div>
-        <div className="flex">
-          <div className="flex items-center justify-center mb-4">
+          <div>
+            <h2>식단</h2>
             <div>
-              <p className="mr-4">이미지 들어감</p>
-              <h2 className="font-bold mb-2">아침 식단 제품</h2>
-              <p className="mb-2">단호박, 달걀, 치킨</p>
-              <p>Kcal</p>
+              <h3>아침</h3>
+              <pre>{dayData.meals.breakfast.menu}</pre>
+              <pre>{dayData.meals.breakfast.ratio}</pre>
+              <pre>{dayData.meals.breakfast.calories}</pre>
+            </div>
+            <div>
+              <h3>점심</h3>
+              <pre>{dayData.meals.lunch.menu}</pre>
+              <pre>{dayData.meals.lunch.ratio}</pre>
+              <pre>{dayData.meals.lunch.calories}</pre>
+            </div>
+            <div>
+              <h3>저녁</h3>
+              <pre>{dayData.meals.dinner.menu}</pre>
+              <pre>{dayData.meals.dinner.ratio}</pre>
+              <pre>{dayData.meals.dinner.calories}</pre>
             </div>
           </div>
-          <div className="flex items-center mb-4">
-            <div>
-              <p>이미지 들어감</p>
-              <h2 className="font-bold mb-2">점심 식단 제품</h2>
-              <p className="mb-2">단호박, 달걀, 치킨</p>
-              <p>Kcal</p>
-            </div>
-          </div>
-          <div className="flex items-center mb-4">
-            <div>
-              <p>이미지 들어감</p>
-              <h2 className="font-bold mb-2">저녁 식단 제품</h2>
-              <p className="mb-2">단호박, 달걀, 치킨</p>
-              <p>Kcal</p>
-            </div>
+          <div>
+            <h2>추천 운동</h2>
+            <pre>{dayData.exercise}</pre>
           </div>
         </div>
-        <hr />
-        <div>
-          <h3>함께하면 좋은 운동</h3>
-          <p>제공받은 식단과 함께 하면 더 건강한 방식으로 원하는 목표를 달성할 수 있어요</p>
-          <div className="border border-gray p-4">
-            <h4>ㅇㅇ운동</h4>
-            <p>ㄴ아ㅓ루ㅏㅁ우라ㅓㅇ문라ㅜㅁ</p>
-          </div>
-        </div>
-      </div>
+      )}
     </div>
   );
 };
