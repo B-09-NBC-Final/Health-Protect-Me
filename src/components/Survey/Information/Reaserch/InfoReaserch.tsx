@@ -14,7 +14,7 @@ const InfoResearch = (): JSX.Element => {
   const user = useUserStore((state) => state.user);
   const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
   const [surveyData, setSurveyData] = useState<SurveyData>({
-    birthYear: 0,
+    birthYear: '',
     gender: null,
     height: '',
     weight: '',
@@ -63,11 +63,11 @@ const InfoResearch = (): JSX.Element => {
       const { data, error } = await supabase
         .from('information')
         .insert({
-          "year_of_birth": surveyData,
-          "weight": surveyData.weight,
-          "gender": surveyData.gender,
-          "height": surveyData.height,
-          "purpose": surveyData.purpose,
+        year_of_birth: parseInt(surveyData.birthYear, 10),
+        weight: parseFloat(surveyData.weight), 
+        gender: surveyData.gender,
+        height: parseFloat(surveyData.height), 
+        purpose: surveyData.purpose,
         });
 
       if (error) throw error;
