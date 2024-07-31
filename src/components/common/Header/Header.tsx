@@ -9,7 +9,6 @@ import Dropdown from './Dropdown';
 const Header = () => {
   const { user, setUser } = useUserStore((state) => state);
   const supabase = createClient();
-  console.log(user)
 
   useEffect(() => {
     const getUser = async () => {
@@ -17,7 +16,6 @@ const Header = () => {
       if (error) {
         console.error('Error fetching user:', error);
       } else if (data) {
-        console.log('실행됨!!!!',data)
         setUser({
           userId: data.user?.id || '',
           email: data.user?.email,
