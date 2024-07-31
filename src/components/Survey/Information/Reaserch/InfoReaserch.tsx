@@ -15,7 +15,7 @@ const InfoResearch = (): JSX.Element => {
   const user = useUserStore((state) => state.user);
   const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
   const [surveyData, setSurveyData] = useState<SurveyData>({
-    birthYear: 0,
+    birthYear: '',
     gender: null,
     height: '',
     weight: '',
