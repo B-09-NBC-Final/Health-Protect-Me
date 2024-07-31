@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { createClient } from '@/supabase/client';
 import { Post, User } from '@/types';
+import Defaultimg from '@/assets/image/defaultimg.png';
 
 const PostingDetailPost = ({ params }: { params: { id: string } }) => {
   const { id } = params;
@@ -15,6 +16,7 @@ const PostingDetailPost = ({ params }: { params: { id: string } }) => {
   const postMonth = String(postDate.getMonth() + 1).padStart(2, '0');
   const postDay = String(postDate.getDate()).padStart(2, '0');
   const dateOnly = `${postYear}.${postMonth}.${postDay}`;
+  const defaultImageUrl = Defaultimg;
 
   const getPost = async () => {
     const { data: getPost, error } = await supabase.from('posts').select('*').eq('id', id).single();
@@ -61,7 +63,13 @@ const PostingDetailPost = ({ params }: { params: { id: string } }) => {
       </div>
 
       <div className="flex border-y-2 border-solid border-coral py-5 mt-5">
-        <Image src={user?.profile_url as string} alt="" width={50} height={50} className="rounded-full" />
+        <Image
+          src={user?.profile_url ? (user?.profile_url as string) : defaultImageUrl}
+          alt=""
+          width={50}
+          height={50}
+          className="rounded-full"
+        />
         <div className="flex flex-col ml-5">
           <strong>{user?.nickname}</strong>
           <span>{dateOnly}</span>
