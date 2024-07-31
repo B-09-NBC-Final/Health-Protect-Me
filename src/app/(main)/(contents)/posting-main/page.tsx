@@ -42,7 +42,7 @@ const PostingMainPage = () => {
     <main className="min-h-screen">
       <div className="flex justify-between mx-auto max-w-[1440px] p-[40px]">
         <div className="w-[248px]">
-          <PostingFilter setSelectedCategory={setSelectedCategory} />
+          <PostingFilter selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} />
           <div className="mt-5 text-right">
             <button type="button" className="p-3 bg-gray-200">
               <Link href={`/posting`}>글 작성</Link>
