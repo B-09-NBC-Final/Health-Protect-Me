@@ -15,7 +15,7 @@ const InfoResearch = (): JSX.Element => {
   const user = useUserStore((state) => state.user);
   const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
   const [surveyData, setSurveyData] = useState<SurveyData>({
-   user_id:'' ,
+    user_id:'' ,
     birthYear: '',
     gender: null,
     height: '',
@@ -62,20 +62,15 @@ console.log(user)
 
 
   const saveDataToSupabase = async () => {
-    const timestamp = dayjs().format('YYYY-MM-DD HH:mm:ss');
-
     try {
       const { data, error } = await supabase
         .from('information')
         .insert({
-          user_id: user?.userId,
-          created_at: timestamp,
-          year_of_birth: surveyData.height ,
-          gender: surveyData.gender,
-          height: surveyData.height,
-          weight: surveyData.weight,
-          purpose: surveyData.purpose,
-
+          "year_of_birth": 1999,
+          "weight": 80,
+          "gender": '',
+          "height": 180,
+          "purpose": '',
         });
 
       if (error) throw error;
