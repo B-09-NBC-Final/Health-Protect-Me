@@ -87,7 +87,7 @@ const Profile = () => {
       setBmiStatus(getBMIStatus(bmi));
     } catch (error) {
       console.error('Failed to fetch user data:', error);
-      // router.push('/login');
+      router.push('/login');
     }
   };
 

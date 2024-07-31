@@ -39,14 +39,13 @@ const ProfileEdit = ({
     try {
       const { data: sessionData } = await supabase.auth.getSession();
       const userId = sessionData.session.user.id;
-      // 기본 프로필 이미지라는 변수 안에 기본값이 문자열 / 이 아니면 사용자가 이미지 업로드를 먼저 해야함 업로드를 하면 퍼플릭 url이 생성, 43번에 퍼블릭 url를 작성
-      const { data: avatarData, error } = await supabase.storage
-        .from('avatars')
-        .upload(`public/${uuidv4()}.png`, imageFile);
-
-      if (error) {
-        console.log(error);
-        return;
+      if (imageFile) {
+        const { data: avatarData, error } = await supabase.storage
+          .from('avatars')
+          .upload(`public/${uuidv4()}.png`, imageFile);
+        if (error) {
+          console.error('Error uploading file:', error);
+        }
       }
 
       const { data } = supabase.storage.from('avatars').getPublicUrl(avatarData.path);
