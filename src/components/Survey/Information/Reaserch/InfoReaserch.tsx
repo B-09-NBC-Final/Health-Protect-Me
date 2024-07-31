@@ -15,8 +15,7 @@ const InfoResearch = (): JSX.Element => {
   const user = useUserStore((state) => state.user);
   const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
   const [surveyData, setSurveyData] = useState<SurveyData>({
-    user_id:'' ,
-    birthYear: '',
+    birthYear: 0,
     gender: null,
     height: '',
     weight: '',
@@ -67,10 +66,10 @@ console.log(user)
         .from('information')
         .insert({
           "year_of_birth": 1999,
-          "weight": 80,
-          "gender": '',
-          "height": 180,
-          "purpose": '',
+          "weight": surveyData.weight,
+          "gender": surveyData.gender,
+          "height": surveyData.height,
+          "purpose": surveyData.purpose,
         });
 
       if (error) throw error;

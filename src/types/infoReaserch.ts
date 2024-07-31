@@ -3,8 +3,7 @@ export type Gender = '남' | '여';
 export type DietGoal = '체중 감량' | '체중 유지' | '건강 식습관' | '체중 증량';
 
 export type SurveyData = {
-  user_id: string;
-  birthYear: string;
+  birthYear: number;
   gender: Gender | null;
   height: string;
   weight: string;
