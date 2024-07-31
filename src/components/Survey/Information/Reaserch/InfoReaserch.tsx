@@ -1,13 +1,13 @@
-'use client'
+'use client';
 import React, { useState, useRef, useEffect } from 'react';
 import { Step, Gender, DietGoal, SurveyData } from '@/types/infoReaserch';
 import { Button } from '@/components/ui/button';
 import { createClient } from '@/supabase/client';
 import { useRouter } from 'next/navigation';
-import {toast} from 'react-toastify'
+import { toast } from 'react-toastify';
 import { useUserStore } from '@/store/userStore';
 
-const supabase = createClient()
+const supabase = createClient();
 
 const InfoResearch = (): JSX.Element => {
   const router = useRouter();
@@ -55,23 +55,20 @@ const InfoResearch = (): JSX.Element => {
     });
   }, [currentStepIndex]);
 
-  console.log(user?.userId)
-
+  console.log(user?.userId);
 
   const saveDataToSupabase = async () => {
     try {
-      const { data, error } = await supabase
-        .from('information')
-        .insert({
+      const { data, error } = await supabase.from('information').insert({
         year_of_birth: parseInt(surveyData.birthYear, 10),
-        weight: parseFloat(surveyData.weight), 
+        weight: parseFloat(surveyData.weight),
         gender: surveyData.gender,
-        height: parseFloat(surveyData.height), 
-        purpose: surveyData.purpose,
-        });
+        height: parseFloat(surveyData.height),
+        purpose: surveyData.purpose
+      });
 
       if (error) throw error;
-      
+
       toast.success('데이터가 성공적으로 저장되었습니다!');
       router.push('/info-detail');
     } catch (error) {
@@ -217,7 +214,7 @@ const InfoResearch = (): JSX.Element => {
             다음
           </Button>
         ) : (
-          <Button 
+          <Button
             onClick={saveDataToSupabase}
             disabled={!isStepValid()}
             className="py-3 px-6 text-lg bg-red-400 text-white rounded-lg hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-400 transition duration-200 disabled:bg-gray-300 disabled:cursor-not-allowed"
