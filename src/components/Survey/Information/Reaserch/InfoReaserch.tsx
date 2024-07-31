@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button';
 import { createClient } from '@/supabase/client';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
-import dayjs from 'dayjs';
 import { useUserStore } from '@/store/userStore';
 
 const supabase = createClient();
@@ -30,7 +29,6 @@ const InfoResearch = (): JSX.Element => {
       setCurrentStepIndex(currentStepIndex + 1);
     }
   };
-  console.log(user);
   const preStep = (): void => {
     if (currentStepIndex > 0) {
       setCurrentStepIndex(currentStepIndex - 1);
@@ -62,10 +60,10 @@ const InfoResearch = (): JSX.Element => {
   const saveDataToSupabase = async () => {
     try {
       const { data, error } = await supabase.from('information').insert({
-        year_of_birth: 1999,
-        weight: surveyData.weight,
+        year_of_birth: parseInt(surveyData.birthYear, 10),
+        weight: parseFloat(surveyData.weight),
         gender: surveyData.gender,
-        height: surveyData.height,
+        height: parseFloat(surveyData.height),
         purpose: surveyData.purpose
       });
 
