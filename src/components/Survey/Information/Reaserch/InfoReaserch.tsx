@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button';
 import { createClient } from '@/supabase/client';
 import { useRouter } from 'next/navigation';
 import {toast} from 'react-toastify'
-import dayjs from 'dayjs';
 import { useUserStore } from '@/store/userStore';
 
 const supabase = createClient()

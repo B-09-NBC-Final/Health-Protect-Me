@@ -1,6 +1,7 @@
 // import React from 'react';
 'use client';
 const InforDetailPage = () => {
+  
   const handleClickAPICall = async () => {
     const content = await fetch('/api').then((response) => response.json());
     console.log('content', content);
