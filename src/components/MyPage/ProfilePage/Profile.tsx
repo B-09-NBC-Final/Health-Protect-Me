@@ -46,14 +46,12 @@ const Profile = () => {
     const { data: sessionData } = await supabase.auth.getSession();
     const isSignIn = !!sessionData.session;
     if (!isSignIn) {
-      console.log('로그인 상태 아님');
       router.push('/login');
       return;
     }
 
-    console.log('세션 데이터', sessionData);
     const userId = sessionData.session.user.id;
-    console.log('유저 아이디', userId);
+
     try {
       const { data: userProfile, error: userError } = await supabase
         .from('users')
@@ -110,16 +108,16 @@ const Profile = () => {
     <div className="w-full max-w-6xl mx-auto pt-4 pb-6 px-10 rounded-2xl border border-gray-300 flex flex-col items-center">
       <div className="w-24 h-24 rounded-full bg-gray-300 flex items-center justify-center mb-4">
         <Image
-          className="rounded-full cursor-pointer"
+          className="rounded-full"
           src={userData.profileImage || DEFAULT_PROFILE_IMAGE}
           alt="Profile"
-          layout="fill"
-          objectFit="cover"
+          width={'120'}
+          height={'120'}
         />
       </div>
       <h1 className="text-sm font-bold mb-6 text-center">{userData.nickname || '사용자'}</h1>
-      <div className="py-4 px-10 text-center w-[320px] bg-[#FAFAFA] shadow-md rounded-2xl flex flex-col items-center justify-center">
-        <div className="flex items-center justify-center w-[240px] h-[40px] bg-[#EAF3EC] text-[#257D1D] rounded-2xl mb-2">
+      <div className="py-4 px-10 text-center w-80 bg-[#FAFAFA] shadow-md rounded-2xl flex flex-col items-center justify-center">
+        <div className="flex items-center justify-center w-60 h-10 bg-[#EAF3EC] text-[#257D1D] rounded-2xl mb-2">
           <h2 className="text-sm font-bold">{userData.goal}</h2>
         </div>
         <p className="text-gray-500 text-sm mt-2">헬프미와 함께 목표를 달성</p>
@@ -142,7 +140,7 @@ const Profile = () => {
       </div>
       <div className="flex justify-center mt-8">
         <button
-          className="w-[320px] h-[40px] text-sm font-bold border border-[#B7B9BD] rounded-xl"
+          className="w-80 h-10 text-sm font-bold border border-[#B7B9BD] rounded-xl"
           onClick={handleNavigateToEdit}
         >
           프로필 수정
