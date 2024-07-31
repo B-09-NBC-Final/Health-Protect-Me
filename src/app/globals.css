@@ -82,6 +82,7 @@
   overflow: hidden;
   background-color: #2c3038;
 }
+
 .swiper-wrapper {
   transition-timing-function: linear !important;
   width: 480px;

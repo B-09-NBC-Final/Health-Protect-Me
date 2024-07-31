@@ -9,9 +9,9 @@ const MainPage = () => {
     <main>
       <MainContent />
       <section className="swiper-area">
-        <div className="inner_wrap flex justify-between items-center">
+        <div className="inner_wrap flex justify-between">
           <MainSwiper reverseDirection={true} />
-          <p className="text-white text-2xl font-medium">사용자들의 이야기</p>
+          <p className="text-white text-2xl font-medium flex items-center">사용자들의 이야기</p>
           <MainSwiper reverseDirection={false} />
         </div>
       </section>

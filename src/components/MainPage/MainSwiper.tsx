@@ -14,8 +14,8 @@ const MainSwiper = ({ reverseDirection }: { reverseDirection: boolean }) => {
   return (
     <Swiper
       className="text-white max-h-screen"
-      spaceBetween={58}
-      slidesPerView={'auto'}
+      spaceBetween={40}
+      slidesPerView={3.5}
       direction={'vertical'}
       loop={true}
       speed={3000}
@@ -25,8 +25,8 @@ const MainSwiper = ({ reverseDirection }: { reverseDirection: boolean }) => {
         reverseDirection: reverseDirection
       }}
     >
-      <SwiperSlide className="relative cursor-pointer">
-        <Image src={Card01} alt="" width={480} height={270} />
+      <SwiperSlide className="relative cursor-pointer !h-[260px]">
+        <Image src={Card01} alt="" width={480} height={260} />
         <div className="text-area">
           <div>
             <strong className="text-lg font-semibold mb-2">헬프미가 추천해준 햄버거</strong>
@@ -38,8 +38,8 @@ const MainSwiper = ({ reverseDirection }: { reverseDirection: boolean }) => {
           </div>
         </div>
       </SwiperSlide>
-      <SwiperSlide className="relative cursor-pointer">
-        <Image src={Card01} alt="" width={480} height={270} />
+      <SwiperSlide className="relative cursor-pointer !h-[260px]">
+        <Image src={Card01} alt="" width={480} height={260} />
         <div className="text-area">
           <div>
             <strong className="text-lg font-semibold mb-2">두부 파스타를 만들었어요 </strong>
@@ -51,8 +51,8 @@ const MainSwiper = ({ reverseDirection }: { reverseDirection: boolean }) => {
           </div>
         </div>
       </SwiperSlide>
-      <SwiperSlide className="relative cursor-pointer">
-        <Image src={Card02} alt="" width={480} height={270} />
+      <SwiperSlide className="relative cursor-pointer !h-[260px]">
+        <Image src={Card02} alt="" width={480} height={260} />
         <div className="text-area">
           <div>
             <strong className="text-lg font-semibold mb-2">제목입니다</strong>
@@ -64,8 +64,8 @@ const MainSwiper = ({ reverseDirection }: { reverseDirection: boolean }) => {
           </div>
         </div>
       </SwiperSlide>
-      <SwiperSlide className="relative cursor-pointer">
-        <Image src={Card01} alt="" width={480} height={270} />
+      <SwiperSlide className="relative cursor-pointer !h-[260px]">
+        <Image src={Card01} alt="" width={480} height={260} />
         <div className="text-area">
           <div>
             <strong className="text-lg font-semibold mb-2">제목입니다</strong>
@@ -77,8 +77,8 @@ const MainSwiper = ({ reverseDirection }: { reverseDirection: boolean }) => {
           </div>
         </div>
       </SwiperSlide>
-      <SwiperSlide className="relative cursor-pointer">
-        <Image src={Card02} alt="" width={480} height={270} />
+      <SwiperSlide className="relative cursor-pointer !h-[260px]">
+        <Image src={Card02} alt="" width={480} height={260} />
         <div className="text-area">
           <div>
             <strong className="text-lg font-semibold mb-2">제목입니다</strong>
