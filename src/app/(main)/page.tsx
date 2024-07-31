@@ -1,12 +1,17 @@
+
+import Header from '@/components/common/Header/Header';
+import UserProfile from '@/components/UserProfile';
 import MainContent from '@/components/MainPage/MainContent';
 import MainSwiper from '@/components/MainPage/MainSwiper';
 import Image from 'next/image';
 import Thumbnail from '@/assets/image/img_thumbnail.svg';
 import MainBanner from '@/components/MainPage/MainBanner';
 
+
 const MainPage = () => {
   return (
     <main>
+
       <MainContent />
       <section className="swiper-area">
         <div className="inner_wrap flex justify-between">
@@ -61,6 +66,7 @@ const MainPage = () => {
       <section className="bg-gray-100">
         <MainBanner />
       </section>
+
     </main>
   );
 };
