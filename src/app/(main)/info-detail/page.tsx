@@ -2,10 +2,17 @@
 // import React, { useState, useEffect } from 'react';
 // import { createClient } from '@/supabase/client';
 
+<<<<<<< HEAD
 // const InforDetailPage = () => {
 //   const [resultDiet, setResultDiet] = useState('');
 //   const [resultExercise, setResultExercise] = useState('');
 //   const [error, setError] = useState(null);
+=======
+const InforDetailPage = () => {
+  
+  const [dayData, setDayData] = useState(null);
+  const [error, setError] = useState(null);
+>>>>>>> 61e593a2a954b3f801fb84146e1db1829d95fb27
 
 //   useEffect(() => {
 //     const fetchData = async () => {
