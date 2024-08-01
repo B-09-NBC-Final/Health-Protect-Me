@@ -10,7 +10,7 @@ type FileInfo = {
   url: string;
 };
 
-type ImageUploadProps = {
+export type ImageUploadProps = {
   fileInfos: FileInfo[];
   setFileInfos: React.Dispatch<React.SetStateAction<FileInfo[]>>;
   setImageError: React.Dispatch<React.SetStateAction<string | null>>;
@@ -18,7 +18,7 @@ type ImageUploadProps = {
 
 const supabase = createClient();
 
-const ImageUpload: React.FC<ImageUploadProps> = ({ fileInfos, setFileInfos, setImageError }) => {
+const ImageUpload = ({ fileInfos, setFileInfos, setImageError }: ImageUploadProps) => {
   const handleUploadFiles = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const fileList = e.target.files;
     if (fileList) {

@@ -1,5 +1,6 @@
 'use client';
-import { useEffect, useState } from 'react';
+
+import { useState } from 'react';
 import { createClient } from '@/supabase/client';
 import dayjs from 'dayjs';
 import { useUserStore } from '@/store/userStore';
@@ -10,6 +11,12 @@ import { Button } from '@/components/ui/button';
 import { Category } from '@/types/tags';
 import ImageUpload from '../ImageUpload/ImageUpload';
 import CategoryMain from '../Category/Categories';
+
+type FileInfo = {
+  url: string;
+};
+
+
 
 const supabase = createClient();
 
@@ -25,7 +32,7 @@ const TextareaPage = () => {
   const [imageError, setImageError] = useState<string | null>(null);
   const user = useUserStore((state) => state.user);
   const router = useRouter();
-  
+
   const categories: Category[] = [
     { id: '잡담', name: '잡담' },
     { id: '질문', name: '질문' },
@@ -83,7 +90,7 @@ const TextareaPage = () => {
       }
 
       const timestamp = dayjs().format('YYYY-MM-DD HH:mm:ss');
-      const imageUrls = fileInfos.map(info => info.url)
+      const imageUrls = fileInfos.map((info) => info.url);
       const { data: postData, error } = await supabase.from('posts').insert({
         user_id: user.userId,
         title,
@@ -132,10 +139,10 @@ const TextareaPage = () => {
         </div>
       </div>
       <ImageUpload
-        fileInfos={fileInfos}
-        setFileInfos={setFileInfos}
-        setImageError={setImageError}
-      />
+      fileInfos={fileInfos}
+      setFileInfos={setFileInfos}
+      setImageError={setImageError}
+    />  
       {imageError && <div className="text-red-500 mt-2">{imageError}</div>}
       {error && <div className="text-red-500 mt-4">{error}</div>}
       <div className="mt-8 flex justify-center">
@@ -146,7 +153,7 @@ const TextareaPage = () => {
           >
             등록하기
           </Button>
-          <Button 
+          <Button
             className="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition duration-300"
             onClick={() => router.push('/posting-main')}
           >

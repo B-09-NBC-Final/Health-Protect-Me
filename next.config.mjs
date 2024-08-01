@@ -13,15 +13,10 @@ const nextConfig = {
         hostname: 'qdtbndpvityeryaniyfj.supabase.co',
         pathname: '/**'
       },
-      
+
       {
         hostname: 'lh3.googleusercontent.com'
       }
-
-      // {
-      //   hostname: 'lh3.googleusercontent.com'
-      // }
-
     ]
   },
   env: {
