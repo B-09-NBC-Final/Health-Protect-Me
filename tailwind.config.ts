@@ -48,6 +48,7 @@ const config = {
           foreground: 'hsl(var(--card-foreground))'
         },
         primary600: '#F5637C',
+        gray600: '#76797F',
         gray900: '#27282A'
       },
       fontSize: {
