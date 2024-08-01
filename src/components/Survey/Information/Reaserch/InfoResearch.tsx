@@ -80,21 +80,37 @@ const InfoResearch = (): JSX.Element => {
         throw new Error('Api 요청에 실패하였습니다..')
       }
       const content = await response.json()
-      console.log(22, content)
-      setAiResults({
-        result_diet: content.data.diet,
-        result_exercise: content.data.exercise
-      })
       return content.data
     } catch (error) {
       console.error('Api 요청 중 오류:', error)
       toast.error('분석 중 오류가 발생했습니다. 다시 시도해주세요!') 
     }
   }
+
+  const parseAiResults = (result: string) => {
+    const dietResult = result.split('@').slice(1)
+    
+    const dietPlan = dietResult.map((day) => {
+        const [morning, lunch, dinner, totalCalories, exercise] = day.split(/[#^!*~]/)
+        return {
+            morning: morning.replace(/\?메뉴:|\$탄수화물, 단백질, 지방 비율:|\&칼로리:/g, '').trim(),
+            lunch: lunch.replace(/\?메뉴:|\$탄수화물, 단백질, 지방 비율:|\&칼로리:/g, '').trim(),
+            dinner: dinner.replace(/\?메뉴:|\$탄수화물, 단백질, 지방 비율:|\&칼로리:/g, '').trim(),
+            totalCalories: totalCalories.replace('총 칼로리:', '').trim(),
+            exercise: exercise.trim()
+        };
+    });
+
+    return {
+        result_diet: JSON.stringify(dietPlan),
+        result_exercise: dietPlan[0].exercise
+    }
+  }
  
   const saveDataToSupabase = async () => {
     try {
-      await handleClickAPICall()
+    const aiResults =  await handleClickAPICall()
+    const parsedResults  = parseAiResults(aiResults)
 
       const { data, error } = await supabase.from('information').insert({
         year_of_birth: surveyData.year_of_birth,
@@ -102,8 +118,8 @@ const InfoResearch = (): JSX.Element => {
         gender: surveyData.gender,
         height:surveyData.height,
         purpose: surveyData.purpose,
-        result_diet: aiResults.result_diet,
-        result_exercise: aiResults.result_exercise
+        result_diet: parsedResults.result_diet,
+        result_exercise: parsedResults.result_exercise
       });
 
       if (error) throw error;

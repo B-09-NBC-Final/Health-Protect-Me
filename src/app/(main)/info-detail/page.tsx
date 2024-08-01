@@ -20,16 +20,13 @@ const InforDetailPage = () => {
         .from('information')
         .select('result_diet')
         .eq('user_id', userId)
-        .single()
 
-      // Assuming you want a single row
       console.log(22, dietData);
 
       const { data: exerciseData, error: exerciseError } = await supabase
         .from('information')
         .select('result_exercise')
         .eq('user_id', userId)
-        .single(); // Assuming you want a single row
       console.log(33, exerciseData);
 
       if (userData) setError(userError);
