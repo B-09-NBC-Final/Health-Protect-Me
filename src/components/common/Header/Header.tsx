@@ -5,6 +5,8 @@ import { useUserStore } from '@/store/userStore';
 import { createClient } from '@/supabase/client';
 import { useEffect } from 'react';
 import Dropdown from './Dropdown';
+import Image from 'next/image';
+import logo from '@/assets/icons/Vector.svg';
 
 const Header = () => {
   const { user, setUser } = useUserStore((state) => state);
@@ -27,34 +29,38 @@ const Header = () => {
   }, []);
 
   return (
-    <header className="flex justify-between items-center p-4 bg-gray-100">
-      <Link href={'/'}>
-        <div className="text-lg font-bold">Logo</div>
-      </Link>
-      <nav>
-        {user ? (
-          <ul className="flex space-x-4">
-            <li>
-              <Link href={'/info-detail'}>나만의 식단</Link>
-            </li>
-            <li>
-              <Link href={'/posting-main'}>커뮤니티</Link>
-            </li>
-            <li>
-              <Dropdown />
-            </li>
-          </ul>
-        ) : (
-          <ul className="flex space-x-4">
-            <li>
-              <Link href={'/posting-main'}>커뮤니티</Link>
-            </li>
-            <li>
-              <Link href={'/login'}>로그인</Link>
-            </li>
-          </ul>
-        )}
-      </nav>
+    <header className="bg-white py-4">
+      <div className="container mx-auto flex justify-between items-center">
+        <div className="flex items-center">
+          <Link href={'/'}>
+            <Image src={logo} alt="logo" width={100} height={28} />
+          </Link>
+        </div>
+        <nav>
+          {user ? (
+            <ul className="flex space-x-14 items-center">
+              <li>
+                <Link href={'/info-detail'}>나만의 식단</Link>
+              </li>
+              <li>
+                <Link href={'/posting-main'}>커뮤니티</Link>
+              </li>
+              <li>
+                <Dropdown />
+              </li>
+            </ul>
+          ) : (
+            <ul className="flex space-x-14 items-center">
+              <li>
+                <Link href={'/posting-main'}>커뮤니티</Link>
+              </li>
+              <li>
+                <Link href={'/login'}>로그인</Link>
+              </li>
+            </ul>
+          )}
+        </nav>
+      </div>
     </header>
   );
 };
