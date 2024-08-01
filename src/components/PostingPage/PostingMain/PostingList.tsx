@@ -6,17 +6,21 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
+type MyPost = Post & { users: { nickname: string } | null };
+
 const PostingList = ({
   selectedCategory
 }: {
   selectedCategory: string;
   setSelectedCategory: (category: string) => void;
 }) => {
-  const [posts, setPosts] = useState<Post[]>();
+  const [posts, setPosts] = useState<MyPost[]>();
   const supabase = createClient();
+  const dayjs = require('dayjs');
+  const formatDate = (dateString: string) => dayjs(dateString).format('YY.MM.DD');
 
   const getPosts = async () => {
-    const { data: posts, error } = await supabase.from('posts').select('*');
+    const { data: posts, error } = await supabase.from('posts').select('*, users(nickname)');
     if (error) {
       console.log('getPost error', error);
       return;
@@ -55,16 +59,16 @@ const PostingList = ({
                   height={128}
                   className="!w-[128px] !h-[128px] rounded-lg"
                 />
-                <div className="flex flex-col justify-between ml-5">
+                <div className="flex flex-col justify-between ml-5 w-full">
                   <div>
                     <span className="text-sm font-semibold text-primary600 mb-2">{item.category}</span>
                     <p className="text-gray900 font-semibold">{item.title}</p>
                     <p className="line-clamp-2">{item.content}</p>
                   </div>
-                  {/* <div className="flex justify-between">
-                    <p>{item?.user_id === user?.userId ? user?.n}</p>
-                    <p>{item.date}</p>
-                  </div> */}
+                  <div className="flex justify-between w-full">
+                    <p className="text-xs text-gray600">{item.users?.nickname}</p>
+                    <p className="text-xs text-gray600 pr-3">{formatDate(item.created_at)}</p>
+                  </div>
                 </div>
               </Link>
             </li>
