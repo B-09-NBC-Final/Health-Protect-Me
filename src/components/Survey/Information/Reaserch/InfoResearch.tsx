@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useRef, useEffect } from 'react';
-import { Step, Gender, DietGoal, SurveyData, InformationInsertDataType } from '@/types/infoReaserch';
+import { Step, Gender, DietGoal, InformationInsertDataType } from '@/types/infoReaserch';
 import { Button } from '@/components/ui/button';
 import { createClient } from '@/supabase/client';
 import { useRouter } from 'next/navigation';
