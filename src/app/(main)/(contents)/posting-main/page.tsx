@@ -1,13 +1,16 @@
 'use client';
-import { createClient } from '@/supabase/client';
-import { Post } from '@/types';
-import Image from 'next/image';
-import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import Button from '@/components/common/Button';
+import PostingFilter from '@/components/PostingPage/PostingMain/PostingFilter';
+import PostingList from '@/components/PostingPage/PostingMain/PostingList';
+import { useUserStore } from '@/store/userStore';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 const PostingMainPage = () => {
-  const [posts, setPosts] = useState<Post | null>(null);
-  const supabase = createClient();
+  // const [user, setUser] = useState<User[]>();
+  const [selectedCategory, setSelectedCategory] = useState('전체 글 보기');
+  // const { user, setUser } = useUserStore((state) => state);
+  const router = useRouter();
   // const [currentPage, setCurrentPage] = useState(1);
   // const [postsPerPage] = useState(4);
 
@@ -17,41 +20,29 @@ const PostingMainPage = () => {
 
   // const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
-  const getPosts = async () => {
-    const { data: post, error } = await supabase.from('posts').select('*');
-    setPosts(post);
+  const writePost = () => {
+    router.push('/posting');
   };
-
-  useEffect(() => {
-    getPosts();
-  }, []);
 
   return (
     <main className="min-h-screen">
-      <div className="mx-auto max-w-[1280px] p-[100px]">
-        <ul>
-          {posts?.map((item, index: number) => (
-            <li key={index} className="border-b pb-4 mb-4 cursor-pointer">
-              <Link href={`/posting-detail/${item?.id}`} className="flex">
-                <Image src={item.image_url[0]} alt="" width={144} height={144} className="!w-[144px] !h-[144px]" />
-                <div className="flex flex-col justify-between ml-5">
-                  <div>
-                    <h2 className="font-bold mb-2">{item.title}</h2>
-                    <p className="mb-2">{item.content}</p>
-                  </div>
-                  {/* <div className="flex justify-between">
-                    <p>{item.nickname}</p>
-                    <p>{item.date}</p>
-                  </div> */}
-                </div>
-              </Link>
-            </li>
-          ))}
-        </ul>
-        <div className="mt-5 text-right">
-          <button type="button" className="p-3 bg-gray-200">
-            <Link href={`/posting`}>글 작성</Link>
-          </button>
+      <div className="flex justify-between mx-auto max-w-[1440px] p-[40px]">
+        <div className="w-[248px]">
+          <PostingFilter selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} />
+          <Button
+            buttonName="글 작성하기"
+            onClick={writePost}
+            bgColor="#FFFFFF"
+            boxShadow="none"
+            textColor="text-primary600"
+            marginX="mt-10"
+            paddingY="py-2"
+            border="border-pramary500"
+          ></Button>
+        </div>
+        <div className="border border-solid rounded-xl border-gray300 w-[1032px] ml-20 px-10 py-6">
+          <h2 className="mb-4 text-2xl text-gray900 font-medium">건강한 식단 이야기</h2>
+          <PostingList selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} />
         </div>
         {/* <div className="flex justify-center mt-4">
           <button className={`px-3 py-1`} onClick={() => paginate(currentPage - 1)}>

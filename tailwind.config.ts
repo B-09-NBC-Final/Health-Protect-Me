@@ -46,13 +46,17 @@ const config = {
         card: {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))'
-        }
+        },
+        primary600: '#F5637C',
+        gray600: '#76797F',
+        gray900: '#27282A'
       },
       fontSize: {
         'sub-title': '18px',
         'main-title2': '40px'
       },
       borderRadius: {
+        xl: '20px',
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)'
@@ -72,7 +76,14 @@ const config = {
         'accordion-up': 'accordion-up 0.2s ease-out'
       },
       backgroundColor: {
-        'gray-100': '#F1F2F2'
+        gray100: '#F1F2F2',
+        pramary500: '#FF7A85',
+        pramary600: '#F5637C'
+      },
+      borderColor: {
+        gray200: '#E4E5E7',
+        gray300: '#D5D6D8',
+        pramary500: '#FF7A85'
       },
       boxShadow: {
         'main-btn': '0px 8px 16px 0px rgba(255, 122, 133, 0.40)'
