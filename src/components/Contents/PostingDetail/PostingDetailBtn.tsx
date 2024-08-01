@@ -2,6 +2,8 @@
 
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/supabase/client';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 
 const PostingDetailBtn = ({ params }: { params: { id: string } }) => {
   const { id } = params;
@@ -31,6 +33,9 @@ const PostingDetailBtn = ({ params }: { params: { id: string } }) => {
       <button onClick={handleDelete} type="button" className="p-3 bg-gray-200 ml-5">
         삭제하기
       </button>
+      <Button>
+        <Link href="/posting-main">취소하기 </Link>
+      </Button>
     </div>
   );
 };
