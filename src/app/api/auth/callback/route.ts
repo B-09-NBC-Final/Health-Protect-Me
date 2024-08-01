@@ -31,7 +31,7 @@ export async function GET(request: Request) {
     .single();
 
   if (userError || !data) {
-    return NextResponse.redirect(`${origin}/auth/auth-code-error`);
+    return NextResponse.redirect(`${origin}/info`);
   }
 
   const isSurveyDone = data.is_survey_done;
