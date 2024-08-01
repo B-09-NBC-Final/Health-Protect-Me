@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { createClient } from '@/supabase/client';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 type PostData = {
   id: string;
@@ -51,24 +52,26 @@ const PostsSection = () => {
   }, []);
 
   return (
-    <section className="w-[880px] mx-20">
+    <section className="w-[880px] px-10 py-6 border border-[#D5D6D8] rounded-2xl">
       <h2 className="text-xl font-semibold ml-5 mb-4">내가 작성한 글</h2>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
         {posts.length > 0 ? (
           posts.map((post) => (
-            <article key={post.id} className="p-4">
-              <div className="w-full h-48 bg-gray-200 mb-4 relative">
-                <Image
-                  className="object-cover"
-                  src={post.image_url[0] || '/path/to/default-image.jpg'}
-                  alt={`Post ${post.id}`}
-                  layout="fill"
-                />
-              </div>
-              <h3 className="text-[#F5637C] font-semibold mb-2 truncate">{post.category}</h3>
-              <p className="text-[#27282A] font-semibold mb-2 truncate">{post.title}</p>
-              <p className="text-[#404145] mb-2 line-clamp-2">{post.content}</p>
-              <time className="text-[#76797F]">{new Date(post.created_at).toLocaleDateString('ko-KR')}</time>
+            <article key={post.id}>
+              <Link href={`/posting-detail/${post?.id}`}>
+                <div className="w-60 h-48 bg-gray-200 mb-4 relative">
+                  <Image
+                    className="object-cover"
+                    src={post.image_url[0] || '/path/to/default-image.jpg'}
+                    alt={`Post ${post.id}`}
+                    layout="fill"
+                  />
+                </div>
+                <h3 className="text-[#F5637C] font-semibold mb-2 truncate">{post.category}</h3>
+                <p className="text-[#27282A] font-semibold mb-2 truncate">{post.title}</p>
+                <p className="text-[#404145] mb-2 line-clamp-2">{post.content}</p>
+                <time className="text-[#76797F]">{new Date(post.created_at).toLocaleDateString('ko-KR')}</time>
+              </Link>
             </article>
           ))
         ) : (
