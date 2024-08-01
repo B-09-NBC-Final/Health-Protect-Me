@@ -7,6 +7,59 @@ import { createClient } from '@/supabase/client';
 import { v4 as uuidv4 } from 'uuid';
 import Button from '@/components/common/Button';
 
+type ModalProps = {
+  show: boolean;
+  title: string;
+  description: string;
+  onConfirm: () => void;
+  onCancel: () => void;
+};
+
+const Modal = ({ show, title, description, onConfirm, onCancel }: ModalProps) => {
+  if (!show) return null;
+
+  return (
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+      <div className="bg-white p-5 rounded shadow-lg">
+        <h2 className="text-xl font-bold">{title}</h2>
+        <p className="mt-2">{description}</p>
+        <div className="flex justify-end mt-4">
+          <button onClick={onCancel} className="mr-2">
+            취소
+          </button>
+          <button onClick={onConfirm} className="bg-red-500 text-white p-2 rounded">
+            확인
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export const deleteUser = async () => {
+  const supabase = createClient();
+  try {
+    const { data: sessionData } = await supabase.auth.getSession();
+    const userId = sessionData.session?.user.id;
+
+    if (!userId) {
+      throw new Error('유저 아이디를 찾을 수 없습니다.');
+    }
+
+    const { data, error } = await supabase.rpc('delete_user', { user_id: userId });
+    if (error) {
+      console.error('Error', error.message);
+      throw error;
+    }
+    console.log(data);
+
+    await supabase.auth.signOut();
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
 type ProfileEditProps = {
   currentHeight: number;
   currentWeight: number;
@@ -33,12 +86,17 @@ const ProfileEdit = ({
   const [goal, setGoal] = useState<string>(currentGoal);
   const [profileImage, setProfileImage] = useState<string>(currentProfileImage);
   const [imageFile, setImageFile] = useState<null | File>(null);
+  const [showModal, setShowModal] = useState<boolean>(false);
   const router = useRouter();
 
   const handleSave = async () => {
     try {
       const { data: sessionData } = await supabase.auth.getSession();
-      const userId = sessionData.session.user.id;
+      const userId = sessionData.session?.user.id;
+
+      if (!userId) {
+        throw new Error('사용자 ID를 찾을 수 없습니다.');
+      }
 
       let avatarUrl = profileImage;
 
@@ -62,7 +120,7 @@ const ProfileEdit = ({
         throw new Error(userUpdateError.message);
       }
 
-      const { error: infoUpdateError } = await supabase
+      const { data: aa, error: infoUpdateError } = await supabase
         .from('information')
         .update({ height, weight, purpose: goal })
         .eq('user_id', userId);
@@ -71,10 +129,18 @@ const ProfileEdit = ({
         throw new Error(infoUpdateError.message);
       }
 
-      onSave(height, weight, goal, nickname, avatarUrl);
       router.push('/my-page');
     } catch (error) {
       console.error('Failed to save user data:', error);
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    try {
+      await deleteUser();
+      router.replace('/');
+    } catch (error) {
+      console.error('Failed to delete user account:', error);
     }
   };
 
@@ -87,7 +153,12 @@ const ProfileEdit = ({
       return;
     }
 
-    const userId = sessionData.session.user.id;
+    const userId = sessionData.session?.user.id;
+    if (!userId) {
+      console.error('사용자 ID를 찾을 수 없습니다.');
+      return;
+    }
+
     try {
       const { data: userProfile, error: userError } = await supabase
         .from('users')
@@ -134,6 +205,14 @@ const ProfileEdit = ({
       };
       reader.readAsDataURL(file);
     }
+  };
+
+  const openDeleteModal = () => {
+    setShowModal(true);
+  };
+
+  const closeDeleteModal = () => {
+    setShowModal(false);
   };
 
   return (
@@ -202,57 +281,61 @@ const ProfileEdit = ({
             <div className="flex justify-center space-x-2">
               <Button
                 buttonName="체중 감량"
-                bgColor={goal === '체중 감량' ? 'bg-[#FFF6F2]' : 'bg-white'}
-                textColor="text-[#404145]"
-                buttonWidth="w-32 h-12"
+                bgColor={goal === '체중 감량' ? 'bg-blue-500' : 'bg-gray-300'}
+                textColor="text-white"
                 onClick={() => setGoal('체중 감량')}
               />
               <Button
-                buttonName="체중 증량"
-                bgColor={goal === '체중 증량' ? 'bg-[#FFF6F2]' : 'bg-white'}
-                textColor="text-[#404145]"
-                buttonWidth="w-32 h-12"
-                onClick={() => setGoal('체중 증량')}
+                buttonName="체중 유지"
+                bgColor={goal === '체중 유지' ? 'bg-blue-500' : 'bg-gray-300'}
+                textColor="text-white"
+                onClick={() => setGoal('체중 유지')}
               />
               <Button
-                buttonName="건강한 식사"
-                bgColor={goal === '건강한 식사' ? 'bg-[#FFF6F2]' : 'bg-white'}
-                textColor="text-[#404145]"
-                buttonWidth="w-32 h-12"
-                onClick={() => setGoal('건강한 식사')}
+                buttonName="체중 증가"
+                bgColor={goal === '체중 증가' ? 'bg-blue-500' : 'bg-gray-300'}
+                textColor="text-white"
+                onClick={() => setGoal('체중 증가')}
               />
             </div>
           </div>
+          <div className="flex justify-between mt-8">
+            <Button
+              buttonName="취소"
+              bgColor="bg-white"
+              textColor="text-[#27282A]"
+              buttonWidth="w-48"
+              onClick={() => {
+                onCancel();
+                router.push('/my-page');
+              }}
+            />
+            <Button
+              buttonName="저장"
+              bgColor="bg-[#FF7A85]"
+              textColor="text-white"
+              buttonWidth="w-48"
+              onClick={handleSave}
+            />
+          </div>
         </form>
-        <div className="flex justify-between mb-20 w-full">
-          <Button
-            buttonName="취소"
-            bgColor="bg-white"
-            textColor="text-[#27282A]"
-            buttonWidth="w-48"
-            onClick={() => {
-              onCancel();
-              router.push('/my-page');
-            }}
-          />
-          <Button
-            buttonName="저장"
-            bgColor="bg-[#FF7A85]"
-            textColor="text-white"
-            buttonWidth="w-48"
-            onClick={handleSave}
-          />
-        </div>
         <div>
           <Button
             buttonName="탈퇴하기"
             bgColor="bg-transparent"
             textColor="text-[#76797F] underline"
             buttonWidth="w-auto"
-            onClick={() => console.log('탈퇴하기 클릭됨')}
+            onClick={openDeleteModal}
           />
         </div>
       </div>
+      <Modal
+        show={showModal}
+        title="계정 탈퇴"
+        description="정말 탈퇴하시겠습니까?"
+        onConfirm={handleDeleteAccount}
+        onCancel={closeDeleteModal}
+      />
     </section>
   );
 };
