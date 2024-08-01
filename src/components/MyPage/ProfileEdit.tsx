@@ -36,6 +36,30 @@ const Modal = ({ show, title, description, onConfirm, onCancel }: ModalProps) =>
   );
 };
 
+export const deleteUser = async () => {
+  const supabase = createClient();
+  try {
+    const { data: sessionData } = await supabase.auth.getSession();
+    const userId = sessionData.session?.user.id;
+
+    if (!userId) {
+      throw new Error('유저 아이디를 찾을 수 없습니다.');
+    }
+
+    const { data, error } = await supabase.rpc('delete_user', { user_id: userId });
+    if (error) {
+      console.error('Error', error.message);
+      throw error;
+    }
+    console.log(data);
+
+    await supabase.auth.signOut();
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
 type ProfileEditProps = {
   currentHeight: number;
   currentWeight: number;
@@ -96,7 +120,7 @@ const ProfileEdit = ({
         throw new Error(userUpdateError.message);
       }
 
-      const { error: infoUpdateError } = await supabase
+      const { data: aa, error: infoUpdateError } = await supabase
         .from('information')
         .update({ height, weight, purpose: goal })
         .eq('user_id', userId);
@@ -105,7 +129,6 @@ const ProfileEdit = ({
         throw new Error(infoUpdateError.message);
       }
 
-      onSave(height, weight, goal, nickname, avatarUrl);
       router.push('/my-page');
     } catch (error) {
       console.error('Failed to save user data:', error);
@@ -114,31 +137,7 @@ const ProfileEdit = ({
 
   const handleDeleteAccount = async () => {
     try {
-      const { data: sessionData } = await supabase.auth.getSession();
-      const userId = sessionData.session?.user.id;
-
-      if (!userId) {
-        throw new Error('사용자 ID를 찾을 수 없습니다.');
-      }
-
-      // const { error: infoDeleteError } = await supabase.from('information').delete().eq('user_id', userId);
-
-      // if (infoDeleteError) {
-      //   throw new Error(infoDeleteError.message);
-      // }
-
-      // // const { error: userDeleteError } = await supabase.from('users').delete().eq('user_id', userId);
-
-      // if (userDeleteError) {
-      //   throw new Error(userDeleteError.message);
-      // }
-
-      const { error: authDeleteError } = await supabase.auth.admin.deleteUser(userId);
-
-      if (authDeleteError) {
-        throw new Error(authDeleteError.message);
-      }
-
+      await deleteUser();
       router.replace('/');
     } catch (error) {
       console.error('Failed to delete user account:', error);
