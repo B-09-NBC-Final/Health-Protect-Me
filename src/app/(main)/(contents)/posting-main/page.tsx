@@ -1,7 +1,7 @@
 'use client';
 import Button from '@/components/common/Button';
-import PostingFilter from '@/components/PostingPage/PostingMain/PostingFilter';
-import PostingList from '@/components/PostingPage/PostingMain/PostingList';
+import PostingFilter from '@/components/Contents/PostingMain/PostingFilter';
+import PostingList from '@/components/Contents/PostingMain/PostingList';
 import { useUserStore } from '@/store/userStore';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';

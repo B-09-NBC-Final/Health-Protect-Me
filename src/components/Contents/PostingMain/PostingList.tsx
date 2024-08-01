@@ -1,7 +1,7 @@
 'use client';
 
 import { createClient } from '@/supabase/client';
-import { Post, User } from '@/types';
+import { Post } from '@/types';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -50,7 +50,6 @@ const PostingList = ({
                 index < filteredPosts.length - 1 ? 'border-b' : ''
               }   border-gray200 pb-4 mb-4 cursor-pointer`}
             >
-              {' '}
               <Link href={`/posting-detail/${item?.id}`} className="flex">
                 <Image
                   src={item.image_url[0]}

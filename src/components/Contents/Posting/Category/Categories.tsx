@@ -1,4 +1,3 @@
-'use client'
 import React, { useState, useEffect } from 'react';
 import { Category } from '@/types/tags';
 
@@ -33,9 +32,6 @@ const CategoryMain = ({ categories, selectedCategories, onSelectCategory }: Cate
           </button>
         ))}
       </div>
-      {showError && (
-        <p className="text-red-500 mt-2">카테고리를 선택해주세요.</p>
-      )}
     </div>
   );
 };
