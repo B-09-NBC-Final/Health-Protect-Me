@@ -11,6 +11,17 @@ export type SurveyData = {
   weight: string;
   purpose: DietGoal;
 };
-// pick
+
 export type FullSurveyData = Pick<SurveyData, 'birthYear' | 'gender' | 'height' | 'weight' | 'purpose'>;
-export type InformationInsertDataType = Pick<InfomationTable, 'year_of_birth' | 'gender' | 'height' | 'purpose' |'weight'>
+export type InformationInsertDataType = Pick<InfomationTable, 'year_of_birth' | 'gender' | 'height' | 'purpose' | 'weight'>;
+
+export type UserType = {
+  userId?: string;
+  is_survey_done?: boolean;
+  // 필요한 다른 사용자 속성들...
+}
+
+export type UserStore = {
+  user: UserType | null;
+  setUser: (user: UserType | null) => void;
+}

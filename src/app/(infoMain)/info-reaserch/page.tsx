@@ -1,10 +1,10 @@
-import InfoReaserch from '@/components/Survey/Information/Reaserch/InfoReaserch';
+import InfoResearch from '@/components/Survey/Information/Reaserch/InfoResearch';
 import React from 'react';
 
 const InfoReaserchPage = () => {
   return (
     <div>
-      <InfoReaserch />
+      <InfoResearch />
     </div>
   );
 };
