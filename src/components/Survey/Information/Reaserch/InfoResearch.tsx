@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useRef, useEffect } from 'react';
-import { Step, Gender, DietGoal, SurveyData, InformationInsertDataType } from '@/types/infoReaserch';
+import { Step, Gender, DietGoal, InformationInsertDataType } from '@/types/infoReaserch';
 import { Button } from '@/components/ui/button';
 import { createClient } from '@/supabase/client';
 import { useRouter } from 'next/navigation';
@@ -12,6 +12,7 @@ const supabase = createClient();
 const InfoResearch = (): JSX.Element => {
   const router = useRouter();
   const user = useUserStore((state) => state.user);
+  const setUser = useUserStore((state) => state.setUser)
   const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
   const [surveyData, setSurveyData] = useState<InformationInsertDataType>({
     gender: '',
@@ -63,6 +64,7 @@ const InfoResearch = (): JSX.Element => {
   }, [currentStepIndex]);
 
   console.log(user?.userId);
+
 // ai API 호출 함수 // 
   const handleClickAPICall = async () => {
     try {
@@ -105,6 +107,18 @@ const InfoResearch = (): JSX.Element => {
       });
 
       if (error) throw error;
+
+      const {data: userData, error: userError} = await supabase
+      .from('users') 
+      .update({is_survey_done: true})
+      .eq('user_id', user?.userId)
+      .select()
+
+      if(userError) throw userError
+
+      if (userData && userData.length > 0) {
+        setUser({...user, is_survey_done: true})
+      }
 
       toast.success('데이터가 성공적으로 저장되었습니다!');
       router.push('/info-detail');

@@ -36,7 +36,7 @@ const TextareaPage = () => {
   const categories: Category[] = [
     { id: '잡담', name: '잡담' },
     { id: '질문', name: '질문' },
-    { id: '후기', name: '후기' }
+    { id: '정보', name: '정보' }
   ];
 
   useEffect(() => {
