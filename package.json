@@ -27,10 +27,9 @@
     "react-dom": "^18.3.1",
     "react-router": "^6.25.1",
     "react-router-dom": "^6.25.1",
+    "react-toastify": "^10.0.5",
     "supabase": "^1.187.10",
     "swiper": "^11.1.8",
-    "react-toastify": "^10.0.5",
-  
     "tailwind-merge": "^2.4.0",
     "tailwindcss-animate": "^1.0.7",
     "toastify-react": "^4.3.1",
