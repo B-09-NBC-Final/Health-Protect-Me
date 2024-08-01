@@ -12,7 +12,10 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'qdtbndpvityeryaniyfj.supabase.co',
         pathname: '/**'
-      }
+      },
+      // {
+      //   hostname: 'lh3.googleusercontent.com'
+      // }
     ]
   },
   env: {
