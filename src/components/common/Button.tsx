@@ -33,6 +33,7 @@ const Button = ({
         ${boxShadow ? boxShadow : 'shadow-main-btn'}
         ${border ? `${border} border border-solid` : ''} `}
       onClick={onClick}
+      type="button"
     >
       {buttonName}
     </button>
