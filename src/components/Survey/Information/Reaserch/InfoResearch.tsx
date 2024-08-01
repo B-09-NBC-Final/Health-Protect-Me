@@ -12,7 +12,7 @@ const supabase = createClient();
 const InfoResearch = (): JSX.Element => {
   const router = useRouter();
   const user = useUserStore((state) => state.user);
-  const setUser = useUserStore((state) => state.setUser)
+  const setUser = useUserStore((state) => state.setUser);
   const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
   const [surveyData, setSurveyData] = useState<InformationInsertDataType>({
     gender: '',
@@ -22,10 +22,10 @@ const InfoResearch = (): JSX.Element => {
     year_of_birth: 0
   });
 
-  const [aiResults, setAiResults] =useState<{result_diet: string, result_exercise: string}>({
+  const [aiResults, setAiResults] = useState<{ result_diet: string; result_exercise: string }>({
     result_diet: '',
     result_exercise: ''
-  })
+  });
 
   const steps: Step[] = ['출생년도', '성별', '신장', '체중', '식단 목적'];
   const stepRefs = useRef<React.RefObject<HTMLDivElement>[]>(steps.map(() => React.createRef()));
@@ -65,7 +65,7 @@ const InfoResearch = (): JSX.Element => {
 
   console.log(user?.userId);
 
-// ai API 호출 함수 // 
+  // ai API 호출 함수 //
   const handleClickAPICall = async () => {
     try {
       const response = await fetch('/api/gpt', {
@@ -74,50 +74,121 @@ const InfoResearch = (): JSX.Element => {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(surveyData)
-      })
-      console.log(response)
+      });
+      console.log(response);
       if (!response.ok) {
-        throw new Error('Api 요청에 실패하였습니다..')
+        throw new Error('Api 요청에 실패하였습니다..');
       }
-      const content = await response.json()
-      console.log(22, content)
-      setAiResults({
-        result_diet: content.data.diet,
-        result_exercise: content.data.exercise
-      })
-      return content.data
+      const content = await response.json();
+      return content.data;
     } catch (error) {
-      console.error('Api 요청 중 오류:', error)
-      toast.error('분석 중 오류가 발생했습니다. 다시 시도해주세요!') 
+      console.error('Api 요청 중 오류:', error);
+      toast.error('분석 중 오류가 발생했습니다. 다시 시도해주세요!');
     }
-  }
- 
+  };
+
+  const parseAiResults = (result: string) => {
+    if (!result) return null;
+
+    const days = result.split('@').slice(1);
+    const dietPlans = days.map((day) => parseDiet(day));
+    const exercise = parseExercise(days[0].split('~추천운동')[1]);
+
+    return {
+      result_diet: JSON.stringify(dietPlans),
+      result_exercise: JSON.stringify(exercise)
+    };
+  };
+
+  const parseDiet = (dayString: string) => {
+    const sections = dayString.split('\n');
+    const diet = {
+      day: '',
+      breakfast: { menu: '', ratio: '', calories: '' },
+      lunch: { menu: '', ratio: '', calories: '' },
+      dinner: { menu: '', ratio: '', calories: '' },
+      totalCalories: ''
+    };
+
+    let currentMeal = null;
+
+    sections.forEach((line) => {
+      if (line.startsWith('@')) diet.day = line.substring(1).trim();
+      else if (line.startsWith('#')) {
+        currentMeal = diet.breakfast;
+        if (line.startsWith('#?메뉴:')) currentMeal.menu += line.substring(7).trim() + '\n';
+        else if (line.startsWith('#-')) currentMeal.menu += line.substring(1).trim() + '\n';
+        else if (line.startsWith('#$')) currentMeal.ratio = line.substring(1).trim();
+        else if (line.startsWith('#&')) currentMeal.calories = line.substring(1).trim();
+      } else if (line.startsWith('^')) {
+        currentMeal = diet.lunch;
+        if (line.startsWith('^?메뉴:')) currentMeal.menu += line.substring(7).trim() + '\n';
+        else if (line.startsWith('^-')) currentMeal.menu += line.substring(1).trim() + '\n';
+        else if (line.startsWith('^$')) currentMeal.ratio = line.substring(1).trim();
+        else if (line.startsWith('^&')) currentMeal.calories = line.substring(1).trim();
+      } else if (line.startsWith('!')) {
+        currentMeal = diet.dinner;
+        if (line.startsWith('!?메뉴:')) currentMeal.menu += line.substring(7).trim() + '\n';
+        else if (line.startsWith('!-')) currentMeal.menu += line.substring(1).trim() + '\n';
+        else if (line.startsWith('!$')) currentMeal.ratio = line.substring(1).trim();
+        else if (line.startsWith('!&')) currentMeal.calories = line.substring(1).trim();
+      } else if (line.startsWith('*')) diet.totalCalories = line.substring(1).trim();
+    });
+
+    return diet;
+  };
+
+  const parseExercise = (exerciseString: string) => {
+    if (!exerciseString) return null;
+    const lines = exerciseString.split('\n');
+    const exercise = {
+      type: '',
+      method: '',
+      tip: '',
+      duration: '',
+      effect: '',
+      caution: ''
+    };
+
+    lines.forEach((line) => {
+      if (line.startsWith('운동종류:')) exercise.type = line.substring(5).trim();
+      else if (line.startsWith('운동방법:')) exercise.method = line.substring(5).trim();
+      else if (line.startsWith('운동 팁:')) exercise.tip = line.substring(5).trim();
+      else if (line.startsWith('운동 횟수 및 시간:')) exercise.duration = line.substring(11).trim();
+      else if (line.startsWith('운동의 영향:')) exercise.effect = line.substring(7).trim();
+      else if (line.startsWith('주의사항:')) exercise.caution = line.substring(5).trim();
+    });
+
+    return exercise;
+  };
+
   const saveDataToSupabase = async () => {
     try {
-      await handleClickAPICall()
+      const aiResults = await handleClickAPICall();
+      const parsedResults = parseAiResults(aiResults);
 
       const { data, error } = await supabase.from('information').insert({
         year_of_birth: surveyData.year_of_birth,
         weight: surveyData.weight,
         gender: surveyData.gender,
-        height:surveyData.height,
+        height: surveyData.height,
         purpose: surveyData.purpose,
-        result_diet: aiResults.result_diet,
-        result_exercise: aiResults.result_exercise
+        result_diet: parsedResults?.result_diet,
+        result_exercise: parsedResults?.result_exercise
       });
 
       if (error) throw error;
 
-      const {data: userData, error: userError} = await supabase
-      .from('users') 
-      .update({is_survey_done: true})
-      .eq('user_id', user?.userId)
-      .select()
+      const { data: userData, error: userError } = await supabase
+        .from('users')
+        .update({ is_survey_done: true })
+        .eq('user_id', user?.userId)
+        .select();
 
-      if(userError) throw userError
+      if (userError) throw userError;
 
       if (userData && userData.length > 0) {
-        setUser({...user, is_survey_done: true})
+        setUser({ ...user, is_survey_done: true });
       }
 
       toast.success('데이터가 성공적으로 저장되었습니다!');
