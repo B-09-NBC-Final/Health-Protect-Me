@@ -76,10 +76,13 @@ const config = {
       },
       backgroundColor: {
         gray100: '#F1F2F2',
-        pramary600: '#FF7A85'
+        pramary500: '#FF7A85',
+        pramary600: '#F5637C'
       },
       borderColor: {
-        gray300: '#D5D6D8'
+        gray200: '#E4E5E7',
+        gray300: '#D5D6D8',
+        pramary500: '#FF7A85'
       },
       boxShadow: {
         'main-btn': '0px 8px 16px 0px rgba(255, 122, 133, 0.40)'
