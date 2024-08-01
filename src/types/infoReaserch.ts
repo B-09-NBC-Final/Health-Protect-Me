@@ -18,7 +18,6 @@ export type InformationInsertDataType = Pick<InfomationTable, 'year_of_birth' | 
 export type UserType = {
   userId?: string;
   is_survey_done?: boolean;
-  // 필요한 다른 사용자 속성들...
 }
 
 export type UserStore = {
