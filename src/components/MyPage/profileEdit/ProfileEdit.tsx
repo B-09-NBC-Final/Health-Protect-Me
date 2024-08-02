@@ -1,11 +1,11 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/supabase/client';
 import { v4 as uuidv4 } from 'uuid';
 import Button from '@/components/common/Button';
+import ProfileImage from './ProfileImg';
 
 type ModalProps = {
   show: boolean;
@@ -195,16 +195,13 @@ const ProfileEdit = ({
     fetchUserData();
   }, []);
 
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files[0]) {
-      const file = event.target.files[0];
-      setImageFile(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setProfileImage(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
+  const handleImageChange = (file: File) => {
+    setImageFile(file);
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setProfileImage(reader.result as string);
+    };
+    reader.readAsDataURL(file);
   };
 
   const openDeleteModal = () => {
@@ -219,23 +216,7 @@ const ProfileEdit = ({
     <section className="w-[1360px] max-w-md mx-auto mt-10">
       <h1 className="text-xl font-bold m-5">프로필 수정</h1>
       <div className="flex flex-col items-center text-center mb-8 w-full px-4">
-        <div className="flex justify-between items-center w-full mb-4">
-          <div className="w-24 h-24 rounded-full bg-gray-300 flex items-center justify-center relative">
-            <Image
-              className="rounded-full cursor-pointer"
-              src={profileImage || '/path/to/default-profile-image.jpg'}
-              alt="Profile"
-              width={120}
-              height={120}
-              onClick={() => document.getElementById('fileInput')?.click()}
-            />
-            <input type="file" accept="image/*" id="fileInput" className="hidden" onChange={handleImageUpload} />
-          </div>
-          <div className="flex flex-col text-left">
-            <div className="font-semibold">프로필 사진</div>
-            <div className="text-[#76797F]">5MB 이하의 PNG, JPG 파일을 올려주세요.</div>
-          </div>
-        </div>
+        <ProfileImage profileImage={profileImage} onImageChange={handleImageChange} />
         <form className="w-[400px] mb-10">
           <div className="mb-6">
             <label className="block text-left" htmlFor="nickname">
