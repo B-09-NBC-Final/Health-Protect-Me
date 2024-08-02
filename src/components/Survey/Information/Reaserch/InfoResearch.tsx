@@ -187,14 +187,13 @@ const InfoResearch = (): JSX.Element => {
       const { data: userData, error: userError } = await supabase
         .from('users')
         .update({ is_survey_done: true })
-        .eq('user_id', user?.userId)
+        .eq('user_id', user!.userId)
         .select();
 
       if (userError) throw userError;
 
       if (userData && userData.length > 0) {
-        setUser({ ...user, is_survey_done: true });
-      }
+        setUser({ is_survey_done: true });      }
 
       toast.success('데이터가 성공적으로 저장되었습니다!');
       router.push('/info-detail');
