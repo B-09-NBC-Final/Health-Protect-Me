@@ -29,8 +29,8 @@ const Header = () => {
   }, []);
 
   return (
-    <header className="bg-white py-4">
-      <div className="container mx-auto flex justify-between items-center">
+    <header className="inner_wrap px-10">
+      <div className="flex justify-between items-center bg-white py-4">
         <div className="flex items-center">
           <Link href={'/'}>
             <Image src={logo} alt="logo" width={100} height={28} />
@@ -38,7 +38,7 @@ const Header = () => {
         </div>
         <nav>
           {user ? (
-            <ul className="flex space-x-14 items-center">
+            <ul className="flex items-center px-2 gap-10">
               <li>
                 <Link href={'/info-detail'}>나만의 식단</Link>
               </li>
@@ -50,7 +50,7 @@ const Header = () => {
               </li>
             </ul>
           ) : (
-            <ul className="flex space-x-14 items-center">
+            <ul className="flex items-center px-2 gap-10">
               <li>
                 <Link href={'/posting-main'}>커뮤니티</Link>
               </li>
