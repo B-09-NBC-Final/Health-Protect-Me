@@ -11,16 +11,19 @@ import iconCamera from '@/assets/icons/icon_camera.svg';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { url } from 'inspector';
 
 const PostingUpdateForm = ({ params }: { params: { id: string } }) => {
   const { id } = params;
   const supabase = createClient();
   const [title, setTitle] = useState<string>('');
+  const [titleError, setTitleError] = useState<string | null>(null);
   const [content, setContent] = useState<string>('');
+  const [contentError, setContentError] = useState<string | null>(null);
   const [fileUrl, setFileUrl] = useState<string[]>([]);
   const [uploadFile, setUploadFile] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
+  const [imageError, setImageError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
   const getPost = async () => {
@@ -82,9 +85,24 @@ const PostingUpdateForm = ({ params }: { params: { id: string } }) => {
   };
 
   const handleSubmit = async () => {
-    const checkConfirm = confirm('등록 하시겠습니까?');
-    if (checkConfirm) {
-      try {
+    try {
+      if (title.length < 2) {
+        setTitleError('제목은 최소 2자 이상이어야 합니다.');
+        return;
+      }
+
+      if (content.length > 500) {
+        setContentError('내용은 최대 500자까지 입력 가능합니다.');
+        return;
+      }
+
+      if (fileUrl.length === 0) {
+        setImageError('최소 1개의 이미지를 업로드해주세요.');
+        return;
+      }
+
+      const checkConfirm = confirm('등록 하시겠습니까?');
+      if (checkConfirm) {
         await supabase
           .from('posts')
           .update({
@@ -96,12 +114,31 @@ const PostingUpdateForm = ({ params }: { params: { id: string } }) => {
           .select('*');
         alert('등록 되었습니다.');
         router.push(`/posting-detail/${id}`);
-      } catch (error) {
-        console.log(error);
+      } else {
+        alert('취소되었습니다.');
       }
-    } else {
-      alert('취소되었습니다.');
+    } catch (error) {
+      setError('게시글 등록 중 문제가 발생했습니다. 다시 시도해주세요.');
+      console.error(error);
     }
+  };
+
+  const validateTitle = (value: string) => {
+    if (value.length < 2) {
+      setTitleError('최소 2자 이상이어야 합니다.');
+    } else {
+      setTitleError(null);
+    }
+    setTitle(value);
+  };
+
+  const validateContent = (value: string) => {
+    if (value.length > 500) {
+      setContentError('내용은 최대 500자까지 입력 가능합니다.');
+    } else {
+      setContentError(null);
+    }
+    setContent(value);
   };
 
   useEffect(() => {
@@ -109,23 +146,25 @@ const PostingUpdateForm = ({ params }: { params: { id: string } }) => {
   }, []);
 
   return (
-    <div className="mb-12">
-      <h1 className="text-4xl font-bold mb-6">게시글 수정</h1>
+    <div className="w-[800px] mx-auto">
+      <h2 className="text-lg font-semibold mb-4">포스트 수정</h2>
       <div className="border-t border-gray-200 pt-8">
         <Input
           type="text"
           placeholder="제목을 입력 해주세요."
           className="w-full p-2 mb-4 border-b border-transparent focus:border-[#FF7A85] focus:outline-none transition-colors duration-300 placeholder-gray-400 text-black"
           value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          onChange={(e) => validateTitle(e.target.value)}
         />
+        {titleError && <p className="text-red-500 mb-2">{titleError}</p>}
         <Textarea
           placeholder="내용을 적어주세요."
           id="content"
           className="mt-4 w-full h-64 p-4 mb-5 border-transparent rounded-lg focus:ring-2 focus:ring-[#FF7A85] focus:border-[#FF7A85] outline-none transition-all duration-300 resize-none placeholder-gray-400 text-black"
           value={content}
-          onChange={(e) => setContent(e.target.value)}
+          onChange={(e) => validateContent(e.target.value)}
         />
+        {contentError && <p className="text-red-500 mt-2">{contentError}</p>}
       </div>
 
       <div className="flex">
@@ -149,6 +188,7 @@ const PostingUpdateForm = ({ params }: { params: { id: string } }) => {
           <input type="file" multiple accept="image/*" className="hidden" onChange={handleUploadFiles} />
         </label>
       </div>
+      {imageError && <p className="text-red-500 mt-2">{imageError}</p>}
 
       <div className="mt-8">
         <div className="flex justify-end space-x-4">
