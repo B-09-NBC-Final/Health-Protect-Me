@@ -49,11 +49,17 @@ const config = {
         },
         primary600: '#F5637C',
         gray600: '#76797F',
-        gray900: '#27282A'
+        gray900: '#27282A',
+        backgroundInfo: '#1E87FF'
       },
       fontSize: {
         'sub-title': '18px',
         'main-title2': '40px'
+      },
+      borderColor: {
+        gray100: '#F1F2F2',
+        gray200: '#E4E5E7',
+        primary500: '#FF7A85'
       },
       borderRadius: {
         xl: '20px',
@@ -79,11 +85,6 @@ const config = {
         gray100: '#F1F2F2',
         pramary500: '#FF7A85',
         pramary600: '#F5637C'
-      },
-      borderColor: {
-        gray200: '#E4E5E7',
-        gray300: '#D5D6D8',
-        pramary500: '#FF7A85'
       },
       boxShadow: {
         'main-btn': '0px 8px 16px 0px rgba(255, 122, 133, 0.40)'
