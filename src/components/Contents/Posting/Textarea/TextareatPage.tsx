@@ -1,24 +1,22 @@
 'use client';
-import { Textarea } from '@/components/ui/textarea';
-import { Input } from '@/components/ui/input';
-import { useEffect, useState } from 'react';
+
+import { useState } from 'react';
 import { createClient } from '@/supabase/client';
-import { v4 as uuidv4 } from 'uuid';
-import Image from 'next/image';
-import CategoryMain from '../Category/Categories';
 import dayjs from 'dayjs';
-import { Category } from '@/types/tags';
-import { Button } from '@/components/ui/button';
-import Link from 'next/link';
 import { useUserStore } from '@/store/userStore';
 import { useRouter } from 'next/navigation';
-import imageUploadBtn from '@/assets/image/imageUploadBtn.png'
+import { Textarea } from '@/components/ui/textarea';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Category } from '@/types/tags';
+import ImageUpload from '../ImageUpload/ImageUpload';
+import CategoryMain from '../Category/Categories';
 
 type FileInfo = {
-  file: File;
-  preview: string;
   url: string;
 };
+
+
 
 const supabase = createClient();
 
@@ -30,68 +28,20 @@ const TextareaPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [titleError, setTitleError] = useState<string | null>(null);
   const [contentError, setContentError] = useState<string | null>(null);
+  const [categoryError, setCategoryError] = useState<string | null>(null);
+  const [imageError, setImageError] = useState<string | null>(null);
   const user = useUserStore((state) => state.user);
   const router = useRouter();
-  
+
   const categories: Category[] = [
     { id: '잡담', name: '잡담' },
     { id: '질문', name: '질문' },
     { id: '정보', name: '정보' }
   ];
 
-  useEffect(() => {
-    return () => fileInfos.forEach((info) => URL.revokeObjectURL(info.preview));
-  }, [fileInfos]);
-
-  const handleUploadFiles = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const fileList = e.target.files;
-    if (fileList) {
-      const fileArray = Array.from(fileList);
-      for (const file of fileArray) {
-        if (fileInfos.length < 3) {
-          await addImgFile(file);
-        } else {
-          setError('최대 3개의 이미지만 업로드할 수 있습니다.');
-          break;
-        }
-      }
-    }
-  };
-
-  const addImgFile = async (file: File) => {
-    try {
-      const newFileName = uuidv4();
-      const { data, error } = await supabase.storage.from('images').upload(`${newFileName}`, file);
-      if (error) {
-        throw error;
-      }
-      const response = supabase.storage.from('images').getPublicUrl(data.path);
-      const publicUrl = response.data.publicUrl;
-
-      setFileInfos((prev) => [
-        ...prev,
-        {
-          file,
-          preview: URL.createObjectURL(file),
-          url: publicUrl
-        }
-      ]);
-    } catch (error) {
-      setError('이미지 업로드 중 문제가 발생했습니다. 다시 시도해주세요.');
-      console.error(error);
-    }
-  };
-
-  const handleRemovePrevFile = (index: number) => {
-    setFileInfos((prev) => {
-      const newFileInfos = prev.filter((_, i) => i !== index);
-      URL.revokeObjectURL(prev[index].preview);
-      return newFileInfos;
-    });
-  };
-
   const handleCategorySelect = (categoryId: string) => {
     setSelectedCategory(categoryId === selectedCategory ? '' : categoryId);
+    setCategoryError(null);
   };
 
   const validateTitle = (value: string) => {
@@ -119,14 +69,28 @@ const TextareaPage = () => {
         return;
       }
 
-      if (title.length < 2 || content.length > 500) {
-        setError('제목 또는 내용의 길이가 올바르지 않습니다.');
+      if (title.length < 2) {
+        setTitleError('제목은 최소 2자 이상이어야 합니다.');
         return;
       }
 
-      console.log(user.userId)
+      if (content.length > 500) {
+        setContentError('내용은 최대 500자까지 입력 가능합니다.');
+        return;
+      }
+
+      if (!selectedCategory) {
+        setCategoryError('카테고리를 선택해주세요.');
+        return;
+      }
+
+      if (fileInfos.length === 0) {
+        setImageError('최소 1개의 이미지를 업로드해주세요.');
+        return;
+      }
+
       const timestamp = dayjs().format('YYYY-MM-DD HH:mm:ss');
-      const imageUrls = fileInfos.map(info => info.url)
+      const imageUrls = fileInfos.map((info) => info.url);
       const { data: postData, error } = await supabase.from('posts').insert({
         user_id: user.userId,
         title,
@@ -137,6 +101,8 @@ const TextareaPage = () => {
       });
 
       if (error) throw error;
+
+      router.push('/posting-main');
     } catch (error) {
       setError('게시글 등록 중 문제가 발생했습니다. 다시 시도해주세요.');
       console.error(error);
@@ -152,6 +118,7 @@ const TextareaPage = () => {
           selectedCategories={selectedCategory}
           onSelectCategory={handleCategorySelect}
         />
+        {categoryError && <div className="text-red-500 mb-2">{categoryError}</div>}
         <div className="border-t border-gray-200 pt-8">
           <Input
             type="text"
@@ -171,52 +138,27 @@ const TextareaPage = () => {
           {contentError && <div className="text-red-500 mt-2">{contentError}</div>}
         </div>
       </div>
-      <div className="mt-8">
-        <div className="flex flex-wrap gap-4 mb-4">
-          {fileInfos.map((info, index) => (
-            <div key={index} className="relative">
-              <div className="relative w-[120px] h-[120px]">
-                <Image
-                  src={info.preview}
-                  alt={`preview-${index}`}
-                  layout="fill"
-                  objectFit="cover"
-                  className="rounded-lg"
-                />
-                <button
-                  className="absolute -top-2 -right-2 bg-[#FF7A85] text-white font-bold rounded-full w-6 h-6 flex items-center justify-center text-xs"
-                  onClick={() => handleRemovePrevFile(index)}
-                >
-                  X
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-        {fileInfos.length < 3 && (
-          <label className="flex items-center cursor-pointer">
-            <Image src={imageUploadBtn} alt="addImg" width={50} height={50} className="mr-2" />
-            <span className="text-sm text-blue-500">최대 3개</span>
-            <input type="file" id="test" multiple accept="image/*" className="hidden" onChange={handleUploadFiles} />
-          </label>
-        )}
-      </div>
+      <ImageUpload
+      fileInfos={fileInfos}
+      setFileInfos={setFileInfos}
+      setImageError={setImageError}
+    />  
+      {imageError && <div className="text-red-500 mt-2">{imageError}</div>}
       {error && <div className="text-red-500 mt-4">{error}</div>}
       <div className="mt-8 flex justify-center">
         <div className="space-x-4">
-          <Link href="/posting-main">
           <Button
             className="px-6 py-2 bg-[#FF848F] text-white rounded-lg hover:bg-[#FF7A85] transition duration-300"
             onClick={handlePostRegist}
           >
             등록하기
           </Button>
-          </Link>
-            <Button className="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition duration-300"
+          <Button
+            className="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition duration-300"
             onClick={() => router.push('/posting-main')}
-            >
-              취소하기
-            </Button>
+          >
+            취소하기
+          </Button>
         </div>
       </div>
     </div>

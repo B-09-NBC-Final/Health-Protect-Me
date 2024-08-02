@@ -16,10 +16,10 @@ const InfoResearch = (): JSX.Element => {
   const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
   const [surveyData, setSurveyData] = useState<InformationInsertDataType>({
     gender: '',
-    height: 0,
-    weight: 0,
+    height: null,
+    weight: null,
     purpose: '',
-    year_of_birth: 0
+    year_of_birth: null
   });
 
   const [aiResults, setAiResults] = useState<{ result_diet: string; result_exercise: string }>({
@@ -35,15 +35,19 @@ const InfoResearch = (): JSX.Element => {
       setCurrentStepIndex(currentStepIndex + 1);
     }
   };
+
   const preStep = (): void => {
     if (currentStepIndex > 0) {
       setCurrentStepIndex(currentStepIndex - 1);
     }
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setSurveyData((prevData) => ({ ...prevData, [name]: value }));
+    setSurveyData((prevData) => ({
+      ...prevData,
+      [name]: ['height', 'weight', 'year_of_birth'].includes(name) ? (value === '' ? null : Number(value)) : value
+    }));
   };
 
   const handleGenderSelect = (gender: Gender): void => {
@@ -63,9 +67,6 @@ const InfoResearch = (): JSX.Element => {
     });
   }, [currentStepIndex]);
 
-  console.log(user?.userId);
-
-  // ai API 호출 함수 //
   const handleClickAPICall = async () => {
     try {
       const response = await fetch('/api/gpt', {
@@ -75,15 +76,15 @@ const InfoResearch = (): JSX.Element => {
         },
         body: JSON.stringify(surveyData)
       });
-      console.log(response);
       if (!response.ok) {
-        throw new Error('Api 요청에 실패하였습니다..');
+        throw new Error('Api 요청에 실패하였습니다.');
       }
       const content = await response.json();
       return content.data;
     } catch (error) {
       console.error('Api 요청 중 오류:', error);
-      toast.error('분석 중 오류가 발생했습니다. 다시 시도해주세요!');
+      toast.error('오류가 발생했습니다. 다시 시도해주세요!');
+      throw error;  // 에러를 다시 throw하여 상위에서 처리할 수 있게 함
     }
   };
 
@@ -166,17 +167,21 @@ const InfoResearch = (): JSX.Element => {
     try {
       const aiResults = await handleClickAPICall();
       const parsedResults = parseAiResults(aiResults);
-
+  
+      if (!parsedResults) {
+        throw new Error('AI 결과 파싱에 실패했습니다.');
+      }
+  
       const { data, error } = await supabase.from('information').insert({
         year_of_birth: surveyData.year_of_birth,
         weight: surveyData.weight,
         gender: surveyData.gender,
         height: surveyData.height,
         purpose: surveyData.purpose,
-        result_diet: parsedResults?.result_diet,
-        result_exercise: parsedResults?.result_exercise
+        result_diet: parsedResults.result_diet,
+        result_exercise: parsedResults.result_exercise
       });
-
+  
       if (error) throw error;
 
       const { data: userData, error: userError } = await supabase
@@ -202,13 +207,13 @@ const InfoResearch = (): JSX.Element => {
   const isStepValid = (): boolean => {
     switch (steps[currentStepIndex]) {
       case '출생년도':
-        return !!surveyData.year_of_birth;
+        return surveyData.year_of_birth !== null && /^19\d{2}$/.test(surveyData.year_of_birth.toString());
       case '성별':
         return !!surveyData.gender;
       case '신장':
-        return !!surveyData.height;
+        return surveyData.height !== null && /^1\d{2}$/.test(surveyData.height.toString());
       case '체중':
-        return !!surveyData.weight;
+        return surveyData.weight !== null && /^\d{2,3}$/.test(surveyData.weight.toString());
       case '식단 목적':
         return !!surveyData.purpose;
       default:
@@ -225,11 +230,14 @@ const InfoResearch = (): JSX.Element => {
             <input
               type="text"
               name="year_of_birth"
-              placeholder="예) 19xx "
-              value={surveyData.year_of_birth}
+              placeholder="예) 1990"
+              value={surveyData.year_of_birth ?? ''}
               onChange={handleInputChange}
               className="w-full p-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400 focus:border-transparent"
             />
+            {surveyData.year_of_birth && !/^19\d{2}$/.test(surveyData.year_of_birth.toString()) && (
+              <p className="text-red-500 text-sm mt-1">19xx 형식으로 입력해주세요.</p>
+            )}
           </div>
         );
       case '성별':
@@ -239,16 +247,16 @@ const InfoResearch = (): JSX.Element => {
             <div className="flex space-x-4">
               <button
                 onClick={() => handleGenderSelect('남')}
-                className={`flex-1 py-2 px-4 text-sm bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-red-400 transition duration-200 ${
-                  surveyData.gender === '남' ? 'bg-red-100' : ''
+                className={`flex-1 py-2 px-4 text-sm border border-gray-300 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-red-400 transition duration-200 ${
+                  surveyData.gender === '남' ? 'bg-red-400 text-white' : 'bg-white text-gray-700'
                 }`}
               >
                 남자
               </button>
               <button
                 onClick={() => handleGenderSelect('여')}
-                className={`flex-1 py-2 px-4 text-sm bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-red-400 transition duration-200 ${
-                  surveyData.gender === '여' ? 'bg-red-100' : ''
+                className={`flex-1 py-2 px-4 text-sm border border-gray-300 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-red-400 transition duration-200 ${
+                  surveyData.gender === '여' ? 'bg-red-400 text-white' : 'bg-white text-gray-700'
                 }`}
               >
                 여자
@@ -263,11 +271,14 @@ const InfoResearch = (): JSX.Element => {
             <input
               type="text"
               name="height"
-              placeholder="cm"
-              value={surveyData.height}
+              placeholder="cm (예: 170)"
+              value={surveyData.height ?? ''}
               onChange={handleInputChange}
               className="w-full p-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400 focus:border-transparent"
             />
+            {surveyData.height && !/^1\d{2}$/.test(surveyData.height.toString()) && (
+              <p className="text-red-500 text-sm mt-1">1xx 형식으로 입력해주세요.</p>
+            )}
           </div>
         );
       case '체중':
@@ -277,11 +288,14 @@ const InfoResearch = (): JSX.Element => {
             <input
               type="text"
               name="weight"
-              placeholder="kg"
-              value={surveyData.weight}
+              placeholder="kg (예: 65)"
+              value={surveyData.weight ?? ''}
               onChange={handleInputChange}
               className="w-full p-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400 focus:border-transparent"
             />
+            {surveyData.weight && !/^\d{2,3}$/.test(surveyData.weight.toString()) && (
+              <p className="text-red-500 text-sm mt-1">2자리 또는 3자리 숫자로 입력해주세요.</p>
+            )}
           </div>
         );
       case '식단 목적':
@@ -289,12 +303,12 @@ const InfoResearch = (): JSX.Element => {
           <div ref={stepRefs.current[4]} className="mb-4">
             <p className="text-lg mb-4 font-medium text-gray-700">식단을 통해 이루고자 하는 목표를 입력해주세요</p>
             <div className="grid grid-cols-1 gap-2">
-              {(['체중 감량', '체중 유지', '건강 식습관', '체중 증량'] as DietGoal[]).map((goal) => (
+              {(['체중 감량', '체중 유지', '체중 증량'] as DietGoal[]).map((goal) => (
                 <button
                   key={goal}
                   onClick={() => handleDietGoalSelect(goal)}
-                  className={`py-2 px-4 text-sm bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-red-400 transition duration-200 ${
-                    surveyData.purpose === goal ? 'bg-red-100' : ''
+                  className={`py-2 px-4 text-sm border border-gray-300 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-red-400 transition duration-200 ${
+                    surveyData.purpose === goal ? 'bg-red-400 text-white' : 'bg-white text-gray-700'
                   }`}
                 >
                   {goal}
