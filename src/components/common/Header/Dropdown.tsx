@@ -19,13 +19,15 @@ const Dropdown = () => {
       <DropdownMenuTrigger>
         <ProfileImg
           src={user?.profile_url && user.profile_url.length > 0 ? user.profile_url : Defaultimg}
-          width={40}
-          height={40}
+          width={48}
+          height={48}
         />
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuItem>
-          <Link href={'/my-page'}>내 프로필</Link>
+        <DropdownMenuItem asChild>
+          <Link href={'/my-page'} passHref>
+            내 프로필
+          </Link>
         </DropdownMenuItem>
         <DropdownMenuItem>
           <SocialLogout />
