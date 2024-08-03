@@ -375,7 +375,7 @@ const InfoResearch = (): JSX.Element => {
             <Button
               onClick={saveDataToSupabase}
               disabled={!isStepValid()}
-              className="py-3 px-4 text-lg bg-[#FF7A85] text-white rounded-lg hover:bg-red-500 focus:outline-none focus:ring-1 focus:ring-red-400 transition duration-200 disabled:bg-gray-300 disabled:cursor-not-allowed"
+              className="flex w-56 h-12 items-center justify-center py-3 px-4 text-lg bg-[#FF7A85] text-white rounded-lg hover:bg-red-500 focus:outline-none focus:ring-1 focus:ring-red-400 transition duration-200 disabled:bg-gray-300 disabled:cursor-not-allowed"
             >
               결과보기
             </Button>
