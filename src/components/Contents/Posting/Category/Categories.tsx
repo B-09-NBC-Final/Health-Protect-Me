@@ -25,8 +25,8 @@ const CategoryMain = ({ categories, selectedCategories, onSelectCategory }: Cate
               setShowError(false);
             }}
             className={`px-4 py-2 ml-3 border-spacing-1 rounded-md ${
-              selectedCategories.includes(category.id) ? 'bg-[#64D1B7] text-white' : 'bg-gray-200 text-gray-700'
-            } hover:bg-[#1DB898] hover:text-white transition-colors duration-300`} 
+              selectedCategories.includes(category.id) ? 'bg-[#FF848F] text-white' : 'bg-gray-200 text-gray-700'
+            } hover:bg-[#FF7A85] hover:text-white transition-colors duration-300`} 
           >
             {category.name}
           </button>
