@@ -2,31 +2,12 @@
 
 import Link from 'next/link';
 import { useUserStore } from '@/store/userStore';
-import { createClient } from '@/supabase/client';
-import { useEffect } from 'react';
 import Dropdown from './Dropdown';
 import Image from 'next/image';
 import logo from '@/assets/icons/Vector.svg';
 
 const Header = () => {
-  const { user, setUser } = useUserStore((state) => state);
-  const supabase = createClient();
-
-  useEffect(() => {
-    const getUser = async () => {
-      const { data, error } = await supabase.auth.getUser();
-      if (error) {
-        console.error('Error fetching user:', error);
-      } else if (data) {
-        setUser({
-          userId: data.user?.id || '',
-          email: data.user?.email,
-          profile_url: data.user?.user_metadata?.profile_url || ''
-        });
-      }
-    };
-    getUser();
-  }, []);
+  const { user } = useUserStore((state) => state);
 
   return (
     <header className="inner_wrap px-10">
