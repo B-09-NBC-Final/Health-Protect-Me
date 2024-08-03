@@ -44,18 +44,18 @@ const InfoResearch = (): JSX.Element => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    if (name === 'weight') {
+    if (name === 'weight' || name === 'height' || name === 'year_of_birth') {
       // 숫자만 허용하고, 빈 문자열이면 null로 설정함.
-      const numericValue = value.replace(/[^0-9]/g, '');
+      const allowNumValue = value.replace(/[^0-9]/g, '');
       setSurveyData((prevData) => ({
         ...prevData,
-        [name]: numericValue === '' ? null : Number(numericValue)
+        [name]: allowNumValue === '' ? null : Number(allowNumValue)
       }));
     } else {
       setSurveyData((prevData) => ({
         ...prevData,
-        [name]: ['height', 'year_of_birth'].includes(name) ? (value === '' ? null : Number(value)) : value
-      }));
+        [name]:  value
+    }));
     }
   };
 
