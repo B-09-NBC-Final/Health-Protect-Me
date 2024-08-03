@@ -3,16 +3,28 @@
 import './globals.css';
 import { useUserStore } from '@/store/userStore';
 import { createClient } from '@/supabase/client';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 export default function ClientRootLayout({ children }: { children: React.ReactNode }) {
   const { user, setUser, clearUser } = useUserStore((state) => state);
   const supabase = createClient();
+  const pathname = usePathname();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const redicrectToLogin = () => {
+      clearUser();
+
+      if (pathname === '/' || pathname === '/login') {
+        setLoading(false);
+        return;
+      }
+
+      router.push('/login');
+    };
+
     const checkSession = async () => {
       const {
         data: { session },
@@ -29,11 +41,11 @@ export default function ClientRootLayout({ children }: { children: React.ReactNo
           is_survey_done: session.user.user_metadata?.is_survey_done || false
         });
       } else {
-        clearUser();
-        router.push('/login');
+        redicrectToLogin();
       }
       setLoading(false);
     };
+
     checkSession();
 
     const {
@@ -48,15 +60,14 @@ export default function ClientRootLayout({ children }: { children: React.ReactNo
           is_survey_done: session.user.user_metadata?.is_survey_done || false
         });
       } else {
-        clearUser();
-        router.push('/login');
+        redicrectToLogin();
       }
     });
 
     return () => {
       subscription.unsubscribe();
     };
-  }, [supabase, setUser, clearUser, router]);
+  }, [supabase, setUser, clearUser, pathname, router]);
 
   if (loading) {
     return <div>Loading...</div>;
