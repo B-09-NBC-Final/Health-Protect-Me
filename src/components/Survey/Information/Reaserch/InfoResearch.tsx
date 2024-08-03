@@ -6,10 +6,12 @@ import { createClient } from '@/supabase/client';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { useUserStore } from '@/store/userStore';
+import Loading from '@/components/LoadingPage/Loading';
 
 const supabase = createClient();
 
 const InfoResearch = (): JSX.Element => {
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const user = useUserStore((state) => state.user);
   const setUser = useUserStore((state) => state.setUser);
@@ -173,6 +175,7 @@ const InfoResearch = (): JSX.Element => {
   };
 
   const saveDataToSupabase = async () => {
+    setIsLoading(true);
     try {
       const aiResults = await handleClickAPICall();
       const parsedResults = parseAiResults(aiResults);
@@ -210,6 +213,8 @@ const InfoResearch = (): JSX.Element => {
     } catch (error) {
       console.error('Error saving data:', error);
       toast.error('데이터 저장 중 오류가 발생했습니다. 다시 시도해 주세요.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -259,17 +264,15 @@ const InfoResearch = (): JSX.Element => {
             <div className="flex space-x-4">
               <button
                 onClick={() => handleGenderSelect('남')}
-                className={`flex-1 py-2 px-4 text-sm border border-gray-300 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-red-400 transition duration-200 ${
-                  surveyData.gender === '남' ? 'bg-red-400 text-white' : 'bg-white text-gray-700'
-                }`}
+                className={`flex-1 py-2 px-4 text-sm border border-gray-300 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-red-400 transition duration-200 ${surveyData.gender === '남' ? 'bg-red-400 text-white' : 'bg-white text-gray-700'
+                  }`}
               >
                 남자
               </button>
               <button
                 onClick={() => handleGenderSelect('여')}
-                className={`flex-1 py-2 px-4 text-sm border border-gray-300 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-red-400 transition duration-200 ${
-                  surveyData.gender === '여' ? 'bg-red-400 text-white' : 'bg-white text-gray-700'
-                }`}
+                className={`flex-1 py-2 px-4 text-sm border border-gray-300 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-red-400 transition duration-200 ${surveyData.gender === '여' ? 'bg-red-400 text-white' : 'bg-white text-gray-700'
+                  }`}
               >
                 여자
               </button>
@@ -318,9 +321,8 @@ const InfoResearch = (): JSX.Element => {
                 <button
                   key={goal}
                   onClick={() => handleDietGoalSelect(goal)}
-                  className={`py-2 px-4 text-sm border border-gray-300 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-red-400 transition duration-200 ${
-                    surveyData.purpose === goal ? 'bg-red-400 text-white' : 'bg-white text-gray-700'
-                  }`}
+                  className={`py-2 px-4 text-sm border border-gray-300 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-red-400 transition duration-200 ${surveyData.purpose === goal ? 'bg-red-400 text-white' : 'bg-white text-gray-700'
+                    }`}
                 >
                   {goal}
                 </button>
@@ -332,45 +334,49 @@ const InfoResearch = (): JSX.Element => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto mt-10 mb-4 p-8 bg-white rounded-xl shadow-lg">
-      <h1 className="text-3xl font-bold mb-8 text-center text-gray-800">{steps[currentStepIndex]}</h1>
-      <div className="mb-8 bg-gray-200 rounded-full h-2">
-        <div
-          className="bg-red-400 h-2 rounded-full transition-all duration-500 ease-in-out"
-          style={{ width: `${((currentStepIndex + 1) / steps.length) * 100}%` }}
-        ></div>
-      </div>
+    <>
+      {isLoading && <Loading />}
+      <div className={`max-w-2xl mx-auto mt-10 mb-4 p-8 bg-white rounded-xl shadow-lg ${isLoading ? 'opacity-50' : ''}`}>
+        <h1 className="text-3xl font-bold mb-8 text-center text-gray-800">{steps[currentStepIndex]}</h1>
+        <div className="mb-8 bg-gray-200 rounded-full h-2">
+          <div
+            className="bg-red-400 h-2 rounded-full transition-all duration-500 ease-in-out"
+            style={{ width: `${((currentStepIndex + 1) / steps.length) * 100}%` }}
+          ></div>
+        </div>
 
-      {renderStep()}
+        {renderStep()}
 
-      <div className="mt-8 flex justify-between">
-        {currentStepIndex > 0 && (
-          <Button
-            onClick={preStep}
-            className="py-3 px-6 text-lg text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 transition duration-200"
-          >
-            이전
-          </Button>
-        )}
-        {currentStepIndex < steps.length - 1 ? (
-          <Button
-            onClick={nextStep}
-            disabled={!isStepValid()}
-            className="py-3 px-6 text-lg bg-red-400 text-white rounded-lg hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-400 transition duration-200 disabled:bg-gray-300 disabled:cursor-not-allowed"
-          >
-            다음
-          </Button>
-        ) : (
-          <Button
-            onClick={saveDataToSupabase}
-            disabled={!isStepValid()}
-            className="py-3 px-6 text-lg bg-red-400 text-white rounded-lg hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-400 transition duration-200 disabled:bg-gray-300 disabled:cursor-not-allowed"
-          >
-            결과보기
-          </Button>
-        )}
+        <div className="mt-8 flex justify-between">
+          {currentStepIndex > 0 && (
+            <Button
+              onClick={preStep}
+              className="py-3 px-6 text-lg text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 transition duration-200"
+              disabled={isLoading}
+            >
+              이전
+            </Button>
+          )}
+          {currentStepIndex < steps.length - 1 ? (
+            <Button
+              onClick={nextStep}
+              disabled={!isStepValid() || isLoading}
+              className="py-3 px-6 text-lg bg-red-400 text-white rounded-lg hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-400 transition duration-200 disabled:bg-gray-300 disabled:cursor-not-allowed"
+            >
+              다음
+            </Button>
+          ) : (
+            <Button
+              onClick={saveDataToSupabase}
+              disabled={!isStepValid() || isLoading}
+              className="py-3 px-6 text-lg bg-red-400 text-white rounded-lg hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-400 transition duration-200 disabled:bg-gray-300 disabled:cursor-not-allowed"
+            >
+              결과보기
+            </Button>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
