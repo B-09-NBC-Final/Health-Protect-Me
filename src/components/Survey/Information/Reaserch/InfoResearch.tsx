@@ -93,7 +93,7 @@ const InfoResearch = (): JSX.Element => {
     } catch (error) {
       console.error('Api 요청 중 오류:', error);
       toast.error('오류가 발생했습니다. 다시 시도해주세요!');
-      throw error; // 에러를 다시 throw하여 상위에서 처리할 수 있게 함
+      throw error; 
     }
   };
 
