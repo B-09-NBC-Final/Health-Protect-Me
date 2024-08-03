@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { createClient } from '@/supabase/client';
 import imageUploadBtn from '@/assets/image/imageUploadBtn.png'
 
-type FileInfo = {
+export type FileInfo = {
   file: File;
   preview: string;
   url: string;
