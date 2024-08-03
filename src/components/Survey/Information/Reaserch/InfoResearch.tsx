@@ -15,11 +15,11 @@ const InfoResearch = (): JSX.Element => {
   const setUser = useUserStore((state) => state.setUser);
   const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
   const [surveyData, setSurveyData] = useState<InformationInsertDataType>({
+    year_of_birth: 0,
     gender: '',
-    height: null,
-    weight: null,
+    height: 0,
+    weight: 0,
     purpose: '',
-    year_of_birth: null
   });
 
   const [aiResults, setAiResults] = useState<{ result_diet: string; result_exercise: string }>({
