@@ -8,22 +8,11 @@ import Defaultimg from '@/assets/image/defaultimg.png';
 
 import React from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { createClient } from '@/supabase/client';
 import { useUserStore } from '@/store/userStore';
 import ProfileImg from '@/components/common/ProfileImg';
+import SocialLogout from '@/components/LoginPage/SocialLogout';
 const Dropdown = () => {
-  const { user, setUser } = useUserStore((state) => state);
-  const router = useRouter();
-  const supabase = createClient();
-
-  const signOut = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (!error) {
-      setUser(null);
-      router.push('/');
-    }
-  };
+  const { user } = useUserStore((state) => state);
 
   return (
     <DropdownMenu>
@@ -39,9 +28,7 @@ const Dropdown = () => {
           <Link href={'/my-page'}>내 프로필</Link>
         </DropdownMenuItem>
         <DropdownMenuItem>
-          <button onClick={signOut} className="flex items-center">
-            로그아웃
-          </button>
+          <SocialLogout />
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

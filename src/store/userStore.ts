@@ -1,22 +1,25 @@
 import { create } from 'zustand';
 
 type UserState = {
-  userId: string | '';
-  email: string | undefined;
-  profile_url: string | '';
+  userId: string;
+  email: string;
+  profile_url: string;
+  nickname: string;
+  is_survey_done: boolean;
 } | null;
 
-type UserType = {
+type UserStoreState = {
   user: UserState;
-};
-
-type SetUserState = {
-  setUser: (user: UserState) => void;
+  setUser: (user: Partial<NonNullable<UserState>> | null) => void;
+  clearUser: () => void;
 };
 
 // Zustand 스토어 생성
-export const useUserStore = create<UserType & SetUserState>((set) => ({
+export const useUserStore = create<UserStoreState>((set) => ({
   user: null,
-  setUser: (payload) => set({ user: payload })
+  setUser: (payload) =>
+    set((state) => ({
+      user: payload === null ? null : ({ ...state.user, ...payload } as UserState)
+    })),
+  clearUser: () => set({ user: null })
 }));
-

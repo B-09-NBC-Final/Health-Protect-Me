@@ -6,20 +6,22 @@ import { createClient } from '@/supabase/client';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { useUserStore } from '@/store/userStore';
+import Loading from '@/components/LoadingPage/Loading';
 
 const supabase = createClient();
 
 const InfoResearch = (): JSX.Element => {
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const user = useUserStore((state) => state.user);
   const setUser = useUserStore((state) => state.setUser);
   const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
   const [surveyData, setSurveyData] = useState<InformationInsertDataType>({
+    year_of_birth: 0,
     gender: '',
-    height: null,
-    weight: null,
+    height: 0,
+    weight: 0,
     purpose: '',
-    year_of_birth: null
   });
 
   const [aiResults, setAiResults] = useState<{ result_diet: string; result_exercise: string }>({
@@ -27,8 +29,8 @@ const InfoResearch = (): JSX.Element => {
     result_exercise: ''
   });
 
-  const steps: Step[] = ['출생년도', '성별', '신장', '체중', '식단 목적'];
-  const stepRefs = useRef<React.RefObject<HTMLDivElement>[]>(steps.map(() => React.createRef()));
+  const steps: Step[] = ['출생년도', '성별', '신장 및 체중', '식단 목적']; 
+   const stepRefs = useRef<React.RefObject<HTMLDivElement>[]>(steps.map(() => React.createRef()));
 
   const nextStep = (): void => {
     if (currentStepIndex < steps.length - 1) {
@@ -44,10 +46,19 @@ const InfoResearch = (): JSX.Element => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setSurveyData((prevData) => ({
-      ...prevData,
-      [name]: ['height', 'weight', 'year_of_birth'].includes(name) ? (value === '' ? null : Number(value)) : value
-    }));
+    if (name === 'weight' || name === 'height' || name === 'year_of_birth') {
+      // 숫자만 허용하고, 빈 문자열이면 null로 설정함.
+      const allowNumValue = value.replace(/[^0-9]/g, '');
+      setSurveyData((prevData) => ({
+        ...prevData,
+        [name]: allowNumValue === '' ? null : Number(allowNumValue)
+      }));
+    } else {
+      setSurveyData((prevData) => ({
+        ...prevData,
+        [name]: value
+      }));
+    }
   };
 
   const handleGenderSelect = (gender: Gender): void => {
@@ -84,7 +95,7 @@ const InfoResearch = (): JSX.Element => {
     } catch (error) {
       console.error('Api 요청 중 오류:', error);
       toast.error('오류가 발생했습니다. 다시 시도해주세요!');
-      throw error;  // 에러를 다시 throw하여 상위에서 처리할 수 있게 함
+      throw error; // 에러를 다시 throw하여 상위에서 처리할 수 있게 함
     }
   };
 
@@ -164,14 +175,15 @@ const InfoResearch = (): JSX.Element => {
   };
 
   const saveDataToSupabase = async () => {
+    setIsLoading(true);
     try {
       const aiResults = await handleClickAPICall();
       const parsedResults = parseAiResults(aiResults);
-  
+
       if (!parsedResults) {
         throw new Error('AI 결과 파싱에 실패했습니다.');
       }
-  
+
       const { data, error } = await supabase.from('information').insert({
         year_of_birth: surveyData.year_of_birth,
         weight: surveyData.weight,
@@ -181,19 +193,19 @@ const InfoResearch = (): JSX.Element => {
         result_diet: parsedResults.result_diet,
         result_exercise: parsedResults.result_exercise
       });
-  
+
       if (error) throw error;
 
       const { data: userData, error: userError } = await supabase
         .from('users')
         .update({ is_survey_done: true })
-        .eq('user_id', user?.userId)
+        .eq('user_id', user!.userId)
         .select();
 
       if (userError) throw userError;
 
       if (userData && userData.length > 0) {
-        setUser({ ...user, is_survey_done: true });
+        setUser({ is_survey_done: true });
       }
 
       toast.success('데이터가 성공적으로 저장되었습니다!');
@@ -201,6 +213,8 @@ const InfoResearch = (): JSX.Element => {
     } catch (error) {
       console.error('Error saving data:', error);
       toast.error('데이터 저장 중 오류가 발생했습니다. 다시 시도해 주세요.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -210,10 +224,13 @@ const InfoResearch = (): JSX.Element => {
         return surveyData.year_of_birth !== null && /^19\d{2}$/.test(surveyData.year_of_birth.toString());
       case '성별':
         return !!surveyData.gender;
-      case '신장':
-        return surveyData.height !== null && /^1\d{2}$/.test(surveyData.height.toString());
-      case '체중':
-        return surveyData.weight !== null && /^\d{2,3}$/.test(surveyData.weight.toString());
+      case '신장 및 체중':
+        return (
+          surveyData.height !== null && 
+          /^1\d{2}$/.test(surveyData.height.toString()) &&
+          surveyData.weight !== null && 
+          /^\d{2,3}$/.test(surveyData.weight.toString())
+        );
       case '식단 목적':
         return !!surveyData.purpose;
       default:
@@ -247,55 +264,52 @@ const InfoResearch = (): JSX.Element => {
             <div className="flex space-x-4">
               <button
                 onClick={() => handleGenderSelect('남')}
-                className={`flex-1 py-2 px-4 text-sm border border-gray-300 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-red-400 transition duration-200 ${
-                  surveyData.gender === '남' ? 'bg-red-400 text-white' : 'bg-white text-gray-700'
-                }`}
+                className={`flex-1 py-2 px-4 text-sm border border-gray-300 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-red-400 transition duration-200 ${surveyData.gender === '남' ? 'bg-red-400 text-white' : 'bg-white text-gray-700'
+                  }`}
               >
                 남자
               </button>
               <button
                 onClick={() => handleGenderSelect('여')}
-                className={`flex-1 py-2 px-4 text-sm border border-gray-300 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-red-400 transition duration-200 ${
-                  surveyData.gender === '여' ? 'bg-red-400 text-white' : 'bg-white text-gray-700'
-                }`}
+                className={`flex-1 py-2 px-4 text-sm border border-gray-300 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-red-400 transition duration-200 ${surveyData.gender === '여' ? 'bg-red-400 text-white' : 'bg-white text-gray-700'
+                  }`}
               >
                 여자
               </button>
             </div>
           </div>
         );
-      case '신장':
+      case '신장 및 체중':
         return (
           <div ref={stepRefs.current[2]} className="mb-4">
-            <label className="block text-sm mb-2 font-medium text-gray-700">신장</label>
-            <input
-              type="text"
-              name="height"
-              placeholder="cm (예: 170)"
-              value={surveyData.height ?? ''}
-              onChange={handleInputChange}
-              className="w-full p-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400 focus:border-transparent"
-            />
-            {surveyData.height && !/^1\d{2}$/.test(surveyData.height.toString()) && (
-              <p className="text-red-500 text-sm mt-1">1xx 형식으로 입력해주세요.</p>
-            )}
-          </div>
-        );
-      case '체중':
-        return (
-          <div ref={stepRefs.current[3]} className="mb-4">
-            <label className="block text-sm mb-2 font-medium text-gray-700">체중</label>
-            <input
-              type="text"
-              name="weight"
-              placeholder="kg (예: 65)"
-              value={surveyData.weight ?? ''}
-              onChange={handleInputChange}
-              className="w-full p-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400 focus:border-transparent"
-            />
-            {surveyData.weight && !/^\d{2,3}$/.test(surveyData.weight.toString()) && (
-              <p className="text-red-500 text-sm mt-1">2자리 또는 3자리 숫자로 입력해주세요.</p>
-            )}
+            <div className="mb-4">
+              <label className="block text-sm mb-2 font-medium text-gray-700">신장</label>
+              <input
+                type="text"
+                name="height"
+                placeholder="cm (예: 170)"
+                value={surveyData.height ?? ''}
+                onChange={handleInputChange}
+                className="w-full p-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400 focus:border-transparent"
+              />
+              {surveyData.height && !/^1\d{2}$/.test(surveyData.height.toString()) && (
+                <p className="text-red-500 text-sm mt-1">1xx 형식으로 입력해주세요.</p>
+              )}
+            </div>
+            <div>
+              <label className="block text-sm mb-2 font-medium text-gray-700">체중</label>
+              <input
+                type="text"
+                name="weight"
+                placeholder="kg (예: 65)"
+                value={surveyData.weight ?? ''}
+                onChange={handleInputChange}
+                className="w-full p-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400 focus:border-transparent"
+              />
+              {surveyData.weight && !/^\d{2,3}$/.test(surveyData.weight.toString()) && (
+                <p className="text-red-500 text-sm mt-1">2자리 또는 3자리 숫자로 입력해주세요.</p>
+              )}
+            </div>
           </div>
         );
       case '식단 목적':
@@ -307,9 +321,8 @@ const InfoResearch = (): JSX.Element => {
                 <button
                   key={goal}
                   onClick={() => handleDietGoalSelect(goal)}
-                  className={`py-2 px-4 text-sm border border-gray-300 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-red-400 transition duration-200 ${
-                    surveyData.purpose === goal ? 'bg-red-400 text-white' : 'bg-white text-gray-700'
-                  }`}
+                  className={`py-2 px-4 text-sm border border-gray-300 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-red-400 transition duration-200 ${surveyData.purpose === goal ? 'bg-red-400 text-white' : 'bg-white text-gray-700'
+                    }`}
                 >
                   {goal}
                 </button>
@@ -321,45 +334,49 @@ const InfoResearch = (): JSX.Element => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto mt-10 mb-4 p-8 bg-white rounded-xl shadow-lg">
-      <h1 className="text-3xl font-bold mb-8 text-center text-gray-800">{steps[currentStepIndex]}</h1>
-      <div className="mb-8 bg-gray-200 rounded-full h-2">
-        <div
-          className="bg-red-400 h-2 rounded-full transition-all duration-500 ease-in-out"
-          style={{ width: `${((currentStepIndex + 1) / steps.length) * 100}%` }}
-        ></div>
-      </div>
+    <>
+      {isLoading && <Loading />}
+      <div className={`max-w-2xl mx-auto mt-10 mb-4 p-8 bg-white rounded-xl shadow-lg ${isLoading ? 'opacity-50' : ''}`}>
+        <h1 className="text-3xl font-bold mb-8 text-center text-gray-800">{steps[currentStepIndex]}</h1>
+        <div className="mb-8 bg-gray-200 rounded-full h-2">
+          <div
+            className="bg-red-400 h-2 rounded-full transition-all duration-500 ease-in-out"
+            style={{ width: `${((currentStepIndex + 1) / steps.length) * 100}%` }}
+          ></div>
+        </div>
 
-      {renderStep()}
+        {renderStep()}
 
-      <div className="mt-8 flex justify-between">
-        {currentStepIndex > 0 && (
-          <Button
-            onClick={preStep}
-            className="py-3 px-6 text-lg text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 transition duration-200"
-          >
-            이전
-          </Button>
-        )}
-        {currentStepIndex < steps.length - 1 ? (
-          <Button
-            onClick={nextStep}
-            disabled={!isStepValid()}
-            className="py-3 px-6 text-lg bg-red-400 text-white rounded-lg hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-400 transition duration-200 disabled:bg-gray-300 disabled:cursor-not-allowed"
-          >
-            다음
-          </Button>
-        ) : (
-          <Button
-            onClick={saveDataToSupabase}
-            disabled={!isStepValid()}
-            className="py-3 px-6 text-lg bg-red-400 text-white rounded-lg hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-400 transition duration-200 disabled:bg-gray-300 disabled:cursor-not-allowed"
-          >
-            결과보기
-          </Button>
-        )}
+        <div className="mt-8 flex justify-between">
+          {currentStepIndex > 0 && (
+            <Button
+              onClick={preStep}
+              className="py-3 px-6 text-lg text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 transition duration-200"
+              disabled={isLoading}
+            >
+              이전
+            </Button>
+          )}
+          {currentStepIndex < steps.length - 1 ? (
+            <Button
+              onClick={nextStep}
+              disabled={!isStepValid() || isLoading}
+              className="py-3 px-6 text-lg bg-red-400 text-white rounded-lg hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-400 transition duration-200 disabled:bg-gray-300 disabled:cursor-not-allowed"
+            >
+              다음
+            </Button>
+          ) : (
+            <Button
+              onClick={saveDataToSupabase}
+              disabled={!isStepValid() || isLoading}
+              className="py-3 px-6 text-lg bg-red-400 text-white rounded-lg hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-400 transition duration-200 disabled:bg-gray-300 disabled:cursor-not-allowed"
+            >
+              결과보기
+            </Button>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
