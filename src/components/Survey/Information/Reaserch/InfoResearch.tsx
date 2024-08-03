@@ -6,10 +6,12 @@ import { createClient } from '@/supabase/client';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { useUserStore } from '@/store/userStore';
+import Loading from '@/components/LoadingPage/Loading';
 
 const supabase = createClient();
 
 const InfoResearch = (): JSX.Element => {
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const user = useUserStore((state) => state.user);
   const setUser = useUserStore((state) => state.setUser);
@@ -93,7 +95,7 @@ const InfoResearch = (): JSX.Element => {
     } catch (error) {
       console.error('Api 요청 중 오류:', error);
       toast.error('오류가 발생했습니다. 다시 시도해주세요!');
-      throw error; 
+      throw error;
     }
   };
 
@@ -173,6 +175,7 @@ const InfoResearch = (): JSX.Element => {
   };
 
   const saveDataToSupabase = async () => {
+    setIsLoading(true);
     try {
       const aiResults = await handleClickAPICall();
       const parsedResults = parseAiResults(aiResults);
@@ -210,6 +213,8 @@ const InfoResearch = (): JSX.Element => {
     } catch (error) {
       console.error('Error saving data:', error);
       toast.error('데이터 저장 중 오류가 발생했습니다. 다시 시도해 주세요.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -334,45 +339,50 @@ const InfoResearch = (): JSX.Element => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto mt-10 mb-4 p-8 bg-white rounded-xl shadow-lg">
-      <h1 className="text-3xl font-bold mb-8 text-center text-gray-800">{steps[currentStepIndex]}</h1>
-      <div className="mb-8 bg-gray-200 rounded-full h-2">
-        <div
-          className="bg-red-400 h-2 rounded-full transition-all duration-500 ease-in-out"
-          style={{ width: `${((currentStepIndex + 1) / steps.length) * 100}%` }}
-        ></div>
-      </div>
+    <>
+      {isLoading && <Loading />}
+      <div
+        className={`max-w-2xl mx-auto mt-10 mb-4 p-8 bg-white rounded-xl shadow-lg ${isLoading ? 'opacity-50' : ''}`}
+      >
+        <h1 className="text-3xl font-bold mb-8 text-center text-gray-800">{steps[currentStepIndex]}</h1>
+        <div className="mb-8 bg-gray-200 rounded-full h-2">
+          <div
+            className="bg-red-400 h-2 rounded-full transition-all duration-500 ease-in-out"
+            style={{ width: `${((currentStepIndex + 1) / steps.length) * 100}%` }}
+          ></div>
+        </div>
 
-      {renderStep()}
+        {renderStep()}
 
-      <div className="mt-36 flex justify-between">
-        {currentStepIndex > 0 && (
-          <Button
-            onClick={preStep}
-            className="flex w-56 h-12 items-center justify-center py-3 text-lg text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-1 focus:ring-gray-400 transition duration-200"
-          >
-            이전
-          </Button>
-        )}
-        {currentStepIndex < steps.length - 1 ? (
-          <Button
-            onClick={nextStep}
-            disabled={!isStepValid()}
-            className="flex w-56 h-12 items-center justify-center bg-[#FF7A85] text-white py-3 rounded-lg hover:bg-[#FF7A85] transition duration-300"
-          >
-            다음
-          </Button>
-        ) : (
-          <Button
-            onClick={saveDataToSupabase}
-            disabled={!isStepValid()}
-            className="py-3 px-4 text-lg bg-[#FF7A85] text-white rounded-lg hover:bg-red-500 focus:outline-none focus:ring-1 focus:ring-red-400 transition duration-200 disabled:bg-gray-300 disabled:cursor-not-allowed"
-          >
-            결과보기
-          </Button>
-        )}
+        <div className="mt-36 flex justify-between">
+          {currentStepIndex > 0 && (
+            <Button
+              onClick={preStep}
+              className="flex w-56 h-12 items-center justify-center py-3 text-lg text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-1 focus:ring-gray-400 transition duration-200"
+            >
+              이전
+            </Button>
+          )}
+          {currentStepIndex < steps.length - 1 ? (
+            <Button
+              onClick={nextStep}
+              disabled={!isStepValid()}
+              className="flex w-56 h-12 items-center justify-center bg-[#FF7A85] text-white py-3 rounded-lg hover:bg-[#FF7A85] transition duration-300"
+            >
+              다음
+            </Button>
+          ) : (
+            <Button
+              onClick={saveDataToSupabase}
+              disabled={!isStepValid()}
+              className="py-3 px-4 text-lg bg-[#FF7A85] text-white rounded-lg hover:bg-red-500 focus:outline-none focus:ring-1 focus:ring-red-400 transition duration-200 disabled:bg-gray-300 disabled:cursor-not-allowed"
+            >
+              결과보기
+            </Button>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
