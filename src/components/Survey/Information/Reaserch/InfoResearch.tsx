@@ -17,11 +17,11 @@ const InfoResearch = (): JSX.Element => {
   const setUser = useUserStore((state) => state.setUser);
   const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
   const [surveyData, setSurveyData] = useState<InformationInsertDataType>({
+    year_of_birth: 0,
     gender: '',
-    height: null,
-    weight: null,
+    height: 0,
+    weight: 0,
     purpose: '',
-    year_of_birth: null
   });
 
   const [aiResults, setAiResults] = useState<{ result_diet: string; result_exercise: string }>({
@@ -29,8 +29,8 @@ const InfoResearch = (): JSX.Element => {
     result_exercise: ''
   });
 
-  const steps: Step[] = ['출생년도', '성별', '신장', '체중', '식단 목적'];
-  const stepRefs = useRef<React.RefObject<HTMLDivElement>[]>(steps.map(() => React.createRef()));
+  const steps: Step[] = ['출생년도', '성별', '신장 및 체중', '식단 목적']; 
+   const stepRefs = useRef<React.RefObject<HTMLDivElement>[]>(steps.map(() => React.createRef()));
 
   const nextStep = (): void => {
     if (currentStepIndex < steps.length - 1) {
@@ -46,10 +46,19 @@ const InfoResearch = (): JSX.Element => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setSurveyData((prevData) => ({
-      ...prevData,
-      [name]: ['height', 'weight', 'year_of_birth'].includes(name) ? (value === '' ? null : Number(value)) : value
-    }));
+    if (name === 'weight' || name === 'height' || name === 'year_of_birth') {
+      // 숫자만 허용하고, 빈 문자열이면 null로 설정함.
+      const allowNumValue = value.replace(/[^0-9]/g, '');
+      setSurveyData((prevData) => ({
+        ...prevData,
+        [name]: allowNumValue === '' ? null : Number(allowNumValue)
+      }));
+    } else {
+      setSurveyData((prevData) => ({
+        ...prevData,
+        [name]: value
+      }));
+    }
   };
 
   const handleGenderSelect = (gender: Gender): void => {
@@ -86,7 +95,7 @@ const InfoResearch = (): JSX.Element => {
     } catch (error) {
       console.error('Api 요청 중 오류:', error);
       toast.error('오류가 발생했습니다. 다시 시도해주세요!');
-      throw error;  // 에러를 다시 throw하여 상위에서 처리할 수 있게 함
+      throw error; // 에러를 다시 throw하여 상위에서 처리할 수 있게 함
     }
   };
 
@@ -215,10 +224,13 @@ const InfoResearch = (): JSX.Element => {
         return surveyData.year_of_birth !== null && /^19\d{2}$/.test(surveyData.year_of_birth.toString());
       case '성별':
         return !!surveyData.gender;
-      case '신장':
-        return surveyData.height !== null && /^1\d{2}$/.test(surveyData.height.toString());
-      case '체중':
-        return surveyData.weight !== null && /^\d{2,3}$/.test(surveyData.weight.toString());
+      case '신장 및 체중':
+        return (
+          surveyData.height !== null && 
+          /^1\d{2}$/.test(surveyData.height.toString()) &&
+          surveyData.weight !== null && 
+          /^\d{2,3}$/.test(surveyData.weight.toString())
+        );
       case '식단 목적':
         return !!surveyData.purpose;
       default:
@@ -267,38 +279,37 @@ const InfoResearch = (): JSX.Element => {
             </div>
           </div>
         );
-      case '신장':
+      case '신장 및 체중':
         return (
           <div ref={stepRefs.current[2]} className="mb-4">
-            <label className="block text-sm mb-2 font-medium text-gray-700">신장</label>
-            <input
-              type="text"
-              name="height"
-              placeholder="cm (예: 170)"
-              value={surveyData.height ?? ''}
-              onChange={handleInputChange}
-              className="w-full p-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400 focus:border-transparent"
-            />
-            {surveyData.height && !/^1\d{2}$/.test(surveyData.height.toString()) && (
-              <p className="text-red-500 text-sm mt-1">1xx 형식으로 입력해주세요.</p>
-            )}
-          </div>
-        );
-      case '체중':
-        return (
-          <div ref={stepRefs.current[3]} className="mb-4">
-            <label className="block text-sm mb-2 font-medium text-gray-700">체중</label>
-            <input
-              type="text"
-              name="weight"
-              placeholder="kg (예: 65)"
-              value={surveyData.weight ?? ''}
-              onChange={handleInputChange}
-              className="w-full p-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400 focus:border-transparent"
-            />
-            {surveyData.weight && !/^\d{2,3}$/.test(surveyData.weight.toString()) && (
-              <p className="text-red-500 text-sm mt-1">2자리 또는 3자리 숫자로 입력해주세요.</p>
-            )}
+            <div className="mb-4">
+              <label className="block text-sm mb-2 font-medium text-gray-700">신장</label>
+              <input
+                type="text"
+                name="height"
+                placeholder="cm (예: 170)"
+                value={surveyData.height ?? ''}
+                onChange={handleInputChange}
+                className="w-full p-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400 focus:border-transparent"
+              />
+              {surveyData.height && !/^1\d{2}$/.test(surveyData.height.toString()) && (
+                <p className="text-red-500 text-sm mt-1">1xx 형식으로 입력해주세요.</p>
+              )}
+            </div>
+            <div>
+              <label className="block text-sm mb-2 font-medium text-gray-700">체중</label>
+              <input
+                type="text"
+                name="weight"
+                placeholder="kg (예: 65)"
+                value={surveyData.weight ?? ''}
+                onChange={handleInputChange}
+                className="w-full p-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400 focus:border-transparent"
+              />
+              {surveyData.weight && !/^\d{2,3}$/.test(surveyData.weight.toString()) && (
+                <p className="text-red-500 text-sm mt-1">2자리 또는 3자리 숫자로 입력해주세요.</p>
+              )}
+            </div>
           </div>
         );
       case '식단 목적':

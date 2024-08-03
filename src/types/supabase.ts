@@ -233,6 +233,7 @@ export type Database = {
     }
   }
 }
+export type InfomationTable = Database['public']['Tables']['information']['Insert']
 
 type PublicSchema = Database[Extract<keyof Database, "public">]
 
