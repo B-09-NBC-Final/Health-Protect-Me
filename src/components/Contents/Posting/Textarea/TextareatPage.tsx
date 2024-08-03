@@ -9,14 +9,13 @@ import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Category } from '@/types/tags';
-import ImageUpload from '../ImageUpload/ImageUpload';
+import ImageUpload, {FileInfo} from '../ImageUpload/ImageUpload';
 import CategoryMain from '../Category/Categories';
+import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogAction } from '@/components/ui/alert-dialog';
 
-type FileInfo = {
-  url: string;
-};
-
-
+// type FileInfo = {
+//   url: string;
+// };
 
 const supabase = createClient();
 
@@ -30,6 +29,8 @@ const TextareaPage = () => {
   const [contentError, setContentError] = useState<string | null>(null);
   const [categoryError, setCategoryError] = useState<string | null>(null);
   const [imageError, setImageError] = useState<string | null>(null);
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
   const user = useUserStore((state) => state.user);
   const router = useRouter();
 
@@ -56,36 +57,41 @@ const TextareaPage = () => {
   const validateContent = (value: string) => {
     if (value.length > 500) {
       setContentError('내용은 최대 500자까지 입력 가능합니다.');
-    } else {
-      setContentError(null);
+      return;
     }
+    setContentError(null);
     setContent(value);
+  };
+
+  const showAlertMessage = (message: string) => {
+    setAlertMessage(message);
+    setShowAlert(true);
   };
 
   const handlePostRegist = async () => {
     try {
       if (!user) {
-        setError('로그인이 필요합니다.');
+        showAlertMessage('로그인이 필요합니다.');
         return;
       }
 
       if (title.length < 2) {
-        setTitleError('제목은 최소 2자 이상이어야 합니다.');
+        showAlertMessage('제목은 최소 2자 이상이어야 합니다.');
         return;
       }
 
-      if (content.length > 500) {
-        setContentError('내용은 최대 500자까지 입력 가능합니다.');
+      if (content.length === 0 || content.length > 500) {
+        showAlertMessage('내용은 1자 이상 500자 이하여야 합니다.');
         return;
       }
 
       if (!selectedCategory) {
-        setCategoryError('카테고리를 선택해주세요.');
+        showAlertMessage('카테고리를 선택해주세요.');
         return;
       }
 
       if (fileInfos.length === 0) {
-        setImageError('최소 1개의 이미지를 업로드해주세요.');
+        showAlertMessage('최소 1개의 이미지를 업로드해주세요.');
         return;
       }
 
@@ -104,7 +110,7 @@ const TextareaPage = () => {
 
       router.push('/posting-main');
     } catch (error) {
-      setError('게시글 등록 중 문제가 발생했습니다. 다시 시도해주세요.');
+      showAlertMessage('게시글 등록 중 문제가 발생했습니다. 다시 시도해주세요.');
       console.error(error);
     }
   };
@@ -134,15 +140,16 @@ const TextareaPage = () => {
             className="mt-4 w-full h-64 p-4 rounded-lg focus:ring-2 outline-none transition-all duration-300 resize-none placeholder-gray-400 text-black"
             value={content}
             onChange={(e) => validateContent(e.target.value)}
+            maxLength={500}
           />
           {contentError && <div className="text-red-500 mt-2">{contentError}</div>}
         </div>
       </div>
       <ImageUpload
-      fileInfos={fileInfos}
-      setFileInfos={setFileInfos}
-      setImageError={setImageError}
-    />  
+        fileInfos={fileInfos}
+        setFileInfos={setFileInfos}
+        setImageError={setImageError}
+      />  
       {imageError && <div className="text-red-500 mt-2">{imageError}</div>}
       {error && <div className="text-red-500 mt-4">{error}</div>}
       <div className="mt-8 flex justify-center">
@@ -161,6 +168,18 @@ const TextareaPage = () => {
           </Button>
         </div>
       </div>
+
+      <AlertDialog open={showAlert} onOpenChange={setShowAlert}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>알림!</AlertDialogTitle>
+            <AlertDialogDescription>{alertMessage}</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogAction onClick={() => setShowAlert(false)}>확인</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
