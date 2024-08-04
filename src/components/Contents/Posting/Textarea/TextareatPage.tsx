@@ -19,10 +19,6 @@ import {
   AlertDialogAction
 } from '@/components/ui/alert-dialog';
 
-// type FileInfo = {
-//   url: string;
-// };
-
 const supabase = createClient();
 
 const TextareaPage = () => {
@@ -122,7 +118,7 @@ const TextareaPage = () => {
   };
 
   return (
-    <div className="w-[800px] mx-auto">
+    <div className="w-[800px] mx-auto pb-[188px]">
       <h2 className="text-lg font-semibold mb-4">포스트 작성</h2>
       <div className="mb-6">
         <CategoryMain
@@ -159,7 +155,7 @@ const TextareaPage = () => {
           <Button
             buttonName="취소"
             onClick={() => router.push('/posting-main')}
-            bgColor="#FFFFFF"
+            bgColor="bg-white"
             boxShadow="none"
             textColor="text-gray900"
             paddingY="py-2"
@@ -170,7 +166,7 @@ const TextareaPage = () => {
           <Button
             buttonName="작성 완료"
             onClick={handlePostRegist}
-            bgColor="#FFFFFF"
+            bgColor="bg-white"
             boxShadow="none"
             textColor="text-primary600"
             paddingY="py-2"

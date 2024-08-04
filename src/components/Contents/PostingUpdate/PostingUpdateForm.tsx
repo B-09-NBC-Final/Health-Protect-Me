@@ -209,7 +209,7 @@ const PostingUpdateForm = ({ params }: { params: { id: string } }) => {
           <Button
             buttonName="취소"
             onClick={handleCancel}
-            bgColor="#FFFFFF"
+            bgColor="bg-white"
             boxShadow="none"
             textColor="text-gray900"
             paddingY="py-2"
@@ -220,7 +220,7 @@ const PostingUpdateForm = ({ params }: { params: { id: string } }) => {
           <Button
             buttonName="수정 완료"
             onClick={handleSubmit}
-            bgColor="#FFFFFF"
+            bgColor="bg-white"
             boxShadow="none"
             textColor="text-primary600"
             paddingY="py-2"

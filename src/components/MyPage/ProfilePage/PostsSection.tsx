@@ -52,7 +52,7 @@ const PostsSection = () => {
   }, []);
 
   return (
-    <section className="w-[880px] px-10 py-6 border border-[#D5D6D8] rounded-2xl">
+    <section className="w-[880px] px-10 py-6 border border-[#D5D6D8] rounded-2xl bg-white">
       <h2 className="text-xl font-semibold mb-4">내가 작성한 글</h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
         {posts.length > 0 ? (

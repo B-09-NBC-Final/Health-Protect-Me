@@ -13,6 +13,7 @@ const PostingDetailPost = ({ params }: { params: { id: string } }) => {
   const [post, setPost] = useState<Post | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [userPurpose, setUserPurpose] = useState<string | null>(null);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
   const postDate = new Date(post?.created_at as string);
   const postYear = String(postDate.getFullYear()).slice(-2);
   const postMonth = String(postDate.getMonth() + 1).padStart(2, '0');
@@ -58,7 +59,23 @@ const PostingDetailPost = ({ params }: { params: { id: string } }) => {
 
   useEffect(() => {
     getPost();
+    getCurrentUser();
   }, []);
+
+  const getCurrentUser = async () => {
+    const {
+      data: { user }
+    } = await supabase.auth.getUser();
+    if (user) {
+      const { data, error } = await supabase.from('users').select('*').eq('user_id', user.id).single();
+
+      if (error) {
+        console.log('error', error);
+      } else {
+        setCurrentUser(data);
+      }
+    }
+  };
 
   useEffect(() => {
     if (post?.user_id) {
@@ -73,14 +90,16 @@ const PostingDetailPost = ({ params }: { params: { id: string } }) => {
   return (
     <>
       <div className="w-[800px] mx-auto">
-        <span className="text-primary600 border-primary500 border border-solid py-1 px-2 mb-3 rounded">
+        <span className="text-primary600 border-primary500 border border-solid py-1 px-2 mb-3 rounded bg-white">
           {post?.category}
         </span>
         <div className="flex justify-between">
           <p className="text-gray900 font-semibold mt-2">{post?.title}</p>
-          <i>
-            <KebabMenu params={params} />
-          </i>
+          {currentUser && post && currentUser.user_id === post.user_id && (
+            <i>
+              <KebabMenu params={params} />
+            </i>
+          )}
         </div>
         <p className="text-gray600 text-sm pb-4 border-b border-gray200 border-solid">{dateOnly}</p>
         <Image
@@ -110,7 +129,7 @@ const PostingDetailPost = ({ params }: { params: { id: string } }) => {
         ) : null}
         <p className="mt-6">{post?.content}</p>
 
-        <div className="inline-flex border border-gray100 border-solid rounded-2xl pl-3 py-6 pr-6 mt-10">
+        <div className="inline-flex border border-gray100 border-solid rounded-2xl pl-3 py-6 pr-6 mt-10 bg-gray-50">
           <Image
             src={user?.profile_url ? (user?.profile_url as string) : defaultImageUrl}
             alt=""
