@@ -1,11 +1,11 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/supabase/client';
 import { v4 as uuidv4 } from 'uuid';
 import Button from '@/components/common/Button';
-import ProfileImage from './ProfileImg';
 
 type ModalProps = {
   show: boolean;
@@ -195,13 +195,16 @@ const ProfileEdit = ({
     fetchUserData();
   }, []);
 
-  const handleImageChange = (file: File) => {
-    setImageFile(file);
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setProfileImage(reader.result as string);
-    };
-    reader.readAsDataURL(file);
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files[0]) {
+      const file = event.target.files[0];
+      setImageFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setProfileImage(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const openDeleteModal = () => {
@@ -213,18 +216,34 @@ const ProfileEdit = ({
   };
 
   return (
-    <section className="w-[1360px] max-w-md mx-auto mt-10">
-      <h1 className="text-xl font-bold m-5">프로필 수정</h1>
+    <section className="w-[1360px] max-w-md mx-auto">
+      <h1 className="w-[400px] h-8 mb-4 mx-4 text-2xl font-bold">프로필 수정</h1>
       <div className="flex flex-col items-center text-center mb-8 w-full px-4">
-        <ProfileImage profileImage={profileImage} onImageChange={handleImageChange} />
-        <form className="w-[400px] mb-10">
+        <div className="flex justify-between items-center w-full mb-10">
+          <div className="w-24 h-24 rounded-full bg-gray-300 flex items-center justify-center relative">
+            <Image
+              className="rounded-full cursor-pointer"
+              src={profileImage || '/path/to/default-profile-image.jpg'}
+              alt="Profile"
+              width={120}
+              height={120}
+              onClick={() => document.getElementById('fileInput')?.click()}
+            />
+            <input type="file" accept="image/*" id="fileInput" className="hidden" onChange={handleImageUpload} />
+          </div>
+          <div className="flex flex-col text-left">
+            <div className="w-[272px] mb-1">프로필 사진</div>
+            <div className="w-[272px] text-sm text-[#76797F]">5MB 이하의 PNG, JPG 파일을 올려주세요.</div>
+          </div>
+        </div>
+        <form className="w-[400px] mb-20">
           <div className="mb-6">
-            <label className="block text-left" htmlFor="nickname">
+            <label className="block text-left mb-1" htmlFor="nickname">
               닉네임
             </label>
             <input
               id="nickname"
-              className="border rounded p-2 w-full"
+              className="border rounded p-2 w-full h-12"
               type="text"
               placeholder="닉네임"
               value={nickname}
@@ -232,12 +251,12 @@ const ProfileEdit = ({
             />
           </div>
           <div className="mb-6">
-            <label className="block text-left" htmlFor="height">
+            <label className="block text-left mb-1" htmlFor="height">
               키
             </label>
             <input
               id="height"
-              className="border rounded p-2 w-full"
+              className="border rounded p-2 w-full h-12"
               type="number"
               placeholder="키"
               value={height}
@@ -245,12 +264,12 @@ const ProfileEdit = ({
             />
           </div>
           <div className="mb-6">
-            <label className="block text-left" htmlFor="weight">
+            <label className="block text-left mb-1" htmlFor="weight">
               체중
             </label>
             <input
               id="weight"
-              className="border rounded p-2 w-full"
+              className="border rounded p-2 w-full h-12"
               type="number"
               placeholder="체중"
               value={weight}
@@ -258,24 +277,30 @@ const ProfileEdit = ({
             />
           </div>
           <div className="mb-4">
-            <label className="block text-left">나의 식단 목표</label>
+            <label className="block text-left mb-1">나의 식단 목표</label>
             <div className="flex justify-center space-x-2">
               <Button
                 buttonName="체중 감량"
-                bgColor={goal === '체중 감량' ? 'bg-blue-500' : 'bg-gray-300'}
-                textColor="text-white"
+                bgColor={goal === '체중 감량' ? 'bg-[#FFF6F2]' : 'bg-white'}
+                textColor="text-[#404145]"
+                boxShadow="shadow-none"
+                border={goal === '체중 감량' ? 'border border-solid-[#F5637C]' : 'border border-solid-[#B7B9BD]'}
                 onClick={() => setGoal('체중 감량')}
               />
               <Button
                 buttonName="체중 유지"
-                bgColor={goal === '체중 유지' ? 'bg-blue-500' : 'bg-gray-300'}
-                textColor="text-white"
+                bgColor={goal === '체중 유지' ? 'bg-[#FFF6F2]' : 'bg-white'}
+                textColor="text-[#404145]"
+                boxShadow="shadow-none"
+                border={goal === '체중 유지' ? 'border border-solid-[#F5637C]' : 'border border-solid-[#B7B9BD]'}
                 onClick={() => setGoal('체중 유지')}
               />
               <Button
                 buttonName="체중 증가"
-                bgColor={goal === '체중 증가' ? 'bg-blue-500' : 'bg-gray-300'}
-                textColor="text-white"
+                bgColor={goal === '체중 증가' ? 'bg-[#FFF6F2]' : 'bg-white'}
+                textColor="text-[#404145]"
+                boxShadow="shadow-none"
+                border={goal === '체중 증가' ? 'border border-solid-[#F5637C]' : 'border border-solid-[#B7B9BD]'}
                 onClick={() => setGoal('체중 증가')}
               />
             </div>
@@ -286,6 +311,8 @@ const ProfileEdit = ({
               bgColor="bg-white"
               textColor="text-[#27282A]"
               buttonWidth="w-48"
+              boxShadow="shadow-none"
+              border="border-solid-[#B7B9BD]"
               onClick={() => {
                 onCancel();
                 router.push('/my-page');
@@ -296,6 +323,7 @@ const ProfileEdit = ({
               bgColor="bg-[#FF7A85]"
               textColor="text-white"
               buttonWidth="w-48"
+              boxShadow="shadow-none"
               onClick={handleSave}
             />
           </div>
@@ -304,9 +332,10 @@ const ProfileEdit = ({
           <Button
             buttonName="탈퇴하기"
             bgColor="bg-transparent"
-            textColor="text-[#76797F] underline"
-            buttonWidth="w-auto"
+            textColor="text-[#76797F]"
+            buttonWidth="w-[65px]"
             onClick={openDeleteModal}
+            boxShadow="shadow-none"
           />
         </div>
       </div>

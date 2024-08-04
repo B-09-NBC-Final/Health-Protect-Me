@@ -3,17 +3,16 @@ import PostsSection from '@/components/MyPage/ProfilePage/PostsSection';
 
 const MyProfile = () => {
   return (
-    <main className="min-h-screen bg-white text-black p-8">
-      <div className="max-w-6xl mx-auto flex flex-col md:flex-row">
-        <div className="md:w-1/3">
+    <div className="h-[858px] flex justify-between">
+      <div className="max-w-full flex flex-col md:flex-row">
+        <div className="flex flex-col items-start mr-10">
           <Profile />
         </div>
-        <div className="hidden md:block md:w-px bg-gray-300 mx-6"></div>
-        <div className="md:w-2/3">
+        <div className="flex flex-col items-end ml-10">
           <PostsSection />
         </div>
       </div>
-    </main>
+    </div>
   );
 };
 

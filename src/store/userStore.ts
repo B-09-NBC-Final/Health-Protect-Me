@@ -2,15 +2,16 @@ import { create } from 'zustand';
 
 type UserState = {
   userId: string;
-  email: string;
-  profile_url: string;
+  height: number | null;
+  weight: number | null;
+  goal: string;
   nickname: string;
-  is_survey_done: boolean;
-} | null;
+  profileImage: string;
+};
 
 type UserStoreState = {
-  user: UserState;
-  setUser: (user: Partial<NonNullable<UserState>> | null) => void;
+  user: UserState | null;
+  setUser: (user: Partial<UserState> | null) => void;
   clearUser: () => void;
 };
 

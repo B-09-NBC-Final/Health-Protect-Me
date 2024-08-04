@@ -9,6 +9,7 @@ interface ButtonProps {
   buttonWidth?: string;
   boxShadow?: string;
   border?: string;
+  hover?: string;
   onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
 }
 
@@ -21,6 +22,7 @@ const Button = ({
   buttonWidth,
   boxShadow,
   border,
+  hover,
   onClick
 }: ButtonProps) => {
   return (
@@ -31,7 +33,8 @@ const Button = ({
         buttonWidth ? buttonWidth : 'w-[240px]'
       }
         ${boxShadow ? boxShadow : 'shadow-main-btn'}
-        ${border ? `${border} border border-solid` : ''} `}
+        ${border ? `${border} border border-solid` : ''} 
+        ${hover ? hover : 'hover:bg-pramary100'}`}
       onClick={onClick}
       type="button"
     >
