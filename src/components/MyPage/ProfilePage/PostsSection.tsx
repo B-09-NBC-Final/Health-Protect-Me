@@ -61,7 +61,7 @@ const PostsSection = () => {
               <Link href={`/posting-detail/${post?.id}`}>
                 <div className="w-60 h-48 mb-4 relative">
                   <Image
-                    className="rounded-lg"
+                    className="object-cover rounded-lg"
                     src={post.image_url[0] || '/path/to/default-image.jpg'}
                     alt={`Post ${post.id}`}
                     layout="fill"
