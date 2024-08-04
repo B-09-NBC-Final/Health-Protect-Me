@@ -10,6 +10,7 @@ import Header from '@/components/common/Header/Header';
 import Footer from '@/components/common/Footer';
 
 const MainPage = () => {
+  console.log(process.env.NEXT_PUBLIC_BASE_URL)
   return (
     <>
       <Header />
