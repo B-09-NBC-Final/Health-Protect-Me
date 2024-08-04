@@ -101,8 +101,8 @@ const config = {
         'main-btn-hover': 'inset 0px -4px 4px 0px rgba(39, 40, 42, 0.25), 0px 8px 16px 0px rgba(255, 122, 133, 0.40)',
         'my-box': '0px 2px 4px 0px rgba(39, 40, 42, 0.10)'
       },
-      height: {
-        'main-height': 'calc(100vh - 57px)'
+      minHeight: {
+        'main-height': 'calc(100vh - 194px)'
       }
     }
   },

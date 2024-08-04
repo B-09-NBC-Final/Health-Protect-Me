@@ -19,8 +19,8 @@ const Dropdown = () => {
       <DropdownMenuTrigger>
         <ProfileImg
           src={user?.profile_url && user.profile_url.length > 0 ? user.profile_url : Defaultimg}
-          width={48}
-          height={48}
+          width={40}
+          height={40}
         />
       </DropdownMenuTrigger>
       <DropdownMenuContent>

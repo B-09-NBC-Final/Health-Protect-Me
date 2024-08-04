@@ -53,7 +53,7 @@ const PostsSection = () => {
 
   return (
     <section className="w-[880px] px-10 py-6 border border-[#D5D6D8] rounded-2xl bg-white">
-      <h2 className="text-xl font-semibold mb-4">내가 작성한 글</h2>
+      <h2 className="text-2xl font-medium mb-4 text-gray900">내가 작성한 글</h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
         {posts.length > 0 ? (
           posts.map((post) => (
@@ -67,10 +67,10 @@ const PostsSection = () => {
                     layout="fill"
                   />
                 </div>
-                <h3 className="text-[#F5637C] font-semibold mb-2 truncate">{post.category}</h3>
-                <p className="text-[#27282A] font-semibold mb-2 truncate">{post.title}</p>
-                <p className="text-[#404145] mb-2 line-clamp-2">{post.content}</p>
-                <time className="text-[#76797F]">{new Date(post.created_at).toLocaleDateString('ko-KR')}</time>
+                <h3 className="text-primary600 text-sm font-semibold mb-2 truncate">{post.category}</h3>
+                <p className="text-gray900 font-semibold mb-1 truncate">{post.title}</p>
+                <p className="text-gray800 text-sm mb-2 line-clamp-2 h-10">{post.content}</p>
+                <time className="text-gray600 text-sm">{new Date(post.created_at).toLocaleDateString('ko-KR')}</time>
               </Link>
             </article>
           ))
