@@ -5,7 +5,7 @@ import Footer from '@/components/common/Footer';
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
-      <div className="relative min-h-screen">
+      <div className="relative min-h-screen flex flex-col">
         <Header />
         <main className="pt-15 bg-default">
           <div className="max-w-[1440px] px-10 py-10 my-0 mx-auto min-h-screen">{children}</div>

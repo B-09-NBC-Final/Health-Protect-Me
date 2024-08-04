@@ -79,7 +79,7 @@ const PostingList = () => {
                     <div>
                       <span className="text-sm font-semibold text-primary600 mb-2">{item.category}</span>
                       <p className="text-gray900 font-semibold">{item.title}</p>
-                      <p className="line-clamp-2">{item.content}</p>
+                      <p className="line-clamp-2 text-gray800 text-sm">{item.content}</p>
                     </div>
                     <div className="flex justify-between w-full">
                       <p className="text-xs text-gray600">{item.users?.nickname}</p>
