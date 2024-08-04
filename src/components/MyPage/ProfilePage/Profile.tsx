@@ -104,8 +104,8 @@ const Profile = () => {
   };
 
   return (
-    <div className="w-full max-w-6xl mx-auto pt-4 pb-6 px-10 rounded-2xl border border-gray-300 flex flex-col items-center">
-      <div className="w-24 h-24 rounded-full bg-gray-300 flex items-center justify-center mb-4">
+    <div className="w-[400px] h-[472px] p-6 px-10 rounded-2xl border border-gray-300 flex flex-col items-center">
+      <div className="w-[120px] h-[120px] rounded-full flex items-center justify-center mb-4">
         <Image
           className="rounded-full"
           src={userData.profileImage || DEFAULT_PROFILE_IMAGE}
@@ -115,11 +115,11 @@ const Profile = () => {
         />
       </div>
       <h1 className="text-sm font-bold mb-6 text-center">{userData.nickname || '사용자'}</h1>
-      <div className="py-4 px-10 text-center w-80 bg-[#FAFAFA] shadow-md rounded-2xl flex flex-col items-center justify-center">
+      <div className="py-4 px-10 text-center w-80 h-[164px] bg-[#FAFAFA] shadow-md rounded-2xl flex flex-col items-center justify-center">
         <div className="flex items-center justify-center w-60 h-10 bg-[#EAF3EC] text-[#257D1D] rounded-2xl mb-2">
           <h2 className="text-sm font-bold">{userData.goal}</h2>
         </div>
-        <p className="text-gray-500 text-sm mt-2">헬프미와 함께 목표를 달성</p>
+        <p className="text-gray-500 text-sm mt-2">헬프미와 함께 나의 목표를 달성해요</p>
         <div className="flex justify-between items-center mt-6 w-full">
           <div className="flex flex-col items-center">
             <span className="font-bold">키</span>
@@ -137,9 +137,9 @@ const Profile = () => {
           </div>
         </div>
       </div>
-      <div className="flex justify-center mt-8">
+      <div className="flex justify-center mt-10">
         <button
-          className="w-80 h-10 text-sm font-bold border border-[#B7B9BD] rounded-xl"
+          className="flex h-10 py-2 px-3 justify-center items-center gap-1 self-stretch w-80 text-sm border border-[#B7B9BD] rounded-xl"
           onClick={handleNavigateToEdit}
         >
           프로필 수정

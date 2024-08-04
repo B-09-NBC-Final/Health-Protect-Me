@@ -53,15 +53,15 @@ const PostsSection = () => {
 
   return (
     <section className="w-[880px] px-10 py-6 border border-[#D5D6D8] rounded-2xl">
-      <h2 className="text-xl font-semibold ml-5 mb-4">내가 작성한 글</h2>
+      <h2 className="text-xl font-semibold mb-4">내가 작성한 글</h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
         {posts.length > 0 ? (
           posts.map((post) => (
             <article key={post.id}>
               <Link href={`/posting-detail/${post?.id}`}>
-                <div className="w-60 h-48 bg-gray-200 mb-4 relative">
+                <div className="w-60 h-48 mb-4 relative">
                   <Image
-                    className="object-cover"
+                    className="rounded-lg"
                     src={post.image_url[0] || '/path/to/default-image.jpg'}
                     alt={`Post ${post.id}`}
                     layout="fill"
@@ -77,7 +77,7 @@ const PostsSection = () => {
         ) : (
           <div>
             <p className="text-[#404145]">아직 작성된 글이 존재하지 않아요.</p>
-            <p className="text-[#404145]">커뮤니티에서 글을 작성해보세요!</p>
+            <p className="text-[#404145]">첫번째 글을 작성하고 커뮤니티를 시작해보세요!</p>
           </div>
         )}
       </div>
