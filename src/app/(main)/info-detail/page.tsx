@@ -199,7 +199,7 @@ const InforDetailPage = () => {
             <span className="font-[number:var(--desktop-subtitle2-font-weight)] font-desktop-subtitle2 [font-style:var(--desktop-subtitle2-font-style)] tracking-[var(--desktop-subtitle2-letter-spacing)] leading-[var(--desktop-subtitle2-line-height)] text-[length:var(--desktop-subtitle2-font-size)]">
               목표를 위한 일일 권장 칼로리 섭취량은{' '}
             </span>
-            <span className="font-desktop-subtitle2 font-bold font-[number:var(--desktop-subtitle2-font-weight)] [font-style:var(--desktop-subtitle2-font-style)] tracking-[var(--desktop-subtitle2-letter-spacing)] leading-[var(--desktop-subtitle2-line-height)] text-[length:var(--desktop-subtitle2-font-size)]">
+            <span className="font-desktop-subtitle2 [font-style:var(--desktop-subtitle2-font-style)] tracking-[var(--desktop-subtitle2-letter-spacing)] leading-[var(--desktop-subtitle2-line-height)] text-[length:var(--desktop-subtitle2-font-size)]">
               {meal[3].calories.replace('총 칼로리:', '')}
             </span>
             <span className="font-[number:var(--desktop-subtitle2-font-weight)] font-desktop-subtitle2 [font-style:var(--desktop-subtitle2-font-style)] tracking-[var(--desktop-subtitle2-letter-spacing)] leading-[var(--desktop-subtitle2-line-height)] text-[length:var(--desktop-subtitle2-font-size)]">
@@ -268,24 +268,6 @@ const InforDetailPage = () => {
               </p>
             </div>
           </Card>
-          {/* <Card className="flex px-10 py-6 self-stretch w-full flex-col items-start gap-6 relative flex-[0_0_auto] bg-color-background-content rounded-[20px] shadow-floating">
-                  <div className="inline-flex flex-col items-start gap-1 relative flex-[0_0_auto]">
-                    <div className="inline-flex items-center gap-1 relative flex-[0_0_auto]">
-                      <div className="w-fit text-[length:var(--desktop-h6-font-size)] leading-[var(--desktop-h6-line-height)] whitespace-nowrap relative mt-[-1.00px] font-desktop-h6 font-[number:var(--desktop-h6-font-weight)] text-color-text-main tracking-[var(--desktop-h6-letter-spacing)] [font-style:var(--desktop-h6-font-style)]">
-                        운동 루틴
-                      </div>
-                    </div>
-                    <div className="relative w-fit font-desktop-p-md font-[number:var(--desktop-p-md-font-weight)] text-color-text-main-2 text-[length:var(--desktop-p-md-font-size)] tracking-[var(--desktop-p-md-letter-spacing)] leading-[var(--desktop-p-md-line-height)] whitespace-nowrap [font-style:var(--desktop-p-md-font-style)]">
-                      1-2분간 빠른 속도로 걷습니다.
-                    </div>
-                    <div className="relative w-fit font-desktop-p-md font-[number:var(--desktop-p-md-font-weight)] text-color-text-main-2 text-[length:var(--desktop-p-md-font-size)] tracking-[var(--desktop-p-md-letter-spacing)] leading-[var(--desktop-p-md-line-height)] whitespace-nowrap [font-style:var(--desktop-p-md-font-style)]">
-                      1-2분간 느리게 걷거나 회복합니다.
-                    </div>
-                    <p className="relative w-fit font-desktop-p-md font-[number:var(--desktop-p-md-font-weight)] text-color-text-main-2 text-[length:var(--desktop-p-md-font-size)] tracking-[var(--desktop-p-md-letter-spacing)] leading-[var(--desktop-p-md-line-height)] whitespace-nowrap [font-style:var(--desktop-p-md-font-style)]">
-                      15-20분간 과정을 반복한 후, 마지막 5-10분은 빠르게 걷습니다.
-                    </p>
-                  </div>
-                </Card> */}
         </div>
       </div>
     </div>

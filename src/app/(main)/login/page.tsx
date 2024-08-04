@@ -1,5 +1,4 @@
 import LoginButton from '@/components/LoginPage/SocialLogin';
-import Link from 'next/link';
 import React from 'react';
 
 const LoginPage = () => {

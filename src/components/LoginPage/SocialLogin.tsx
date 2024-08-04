@@ -31,7 +31,7 @@ const LoginButton = () => {
         alt="Kakao Login"
         width={320}
         height={52}
-        className="mb-6 cursor-pointer"
+        className="mb-4 cursor-pointer"
       />
       <Image
         onClick={handleGoogleLogin}

@@ -8,6 +8,8 @@ type UserState = {
   nickname: string;
   profileImage: string;
   is_survey_done: boolean;
+  email: string;
+  profile_url: string;
 };
 
 type UserStoreState = {
