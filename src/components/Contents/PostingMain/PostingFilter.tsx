@@ -1,12 +1,9 @@
 'use client';
 
-const PostingFilter = ({
-  selectedCategory,
-  setSelectedCategory
-}: {
-  selectedCategory: string;
-  setSelectedCategory: (category: string) => void;
-}) => {
+import { useState } from 'react';
+
+const PostingFilter = () => {
+  const [selectedCategory, setSelectedCategory] = useState('전체 글 보기');
   const categories = ['전체 글 보기', '잡담', '질문', '정보'];
   return (
     <nav className="flex flex-col border border-solid rounded-xl border-gray300 p-2 bg-white ">

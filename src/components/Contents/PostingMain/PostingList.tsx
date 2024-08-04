@@ -8,15 +8,11 @@ import { useEffect, useState } from 'react';
 
 type MyPost = Post & { users: { nickname: string } | null };
 
-const PostingList = ({
-  selectedCategory
-}: {
-  selectedCategory: string;
-  setSelectedCategory: (category: string) => void;
-}) => {
+const PostingList = () => {
   const [posts, setPosts] = useState<MyPost[]>();
   const supabase = createClient();
   const dayjs = require('dayjs');
+  const [selectedCategory, setSelectedCategory] = useState('전체 글 보기');
   const formatDate = (dateString: string) => dayjs(dateString).format('YY.MM.DD');
 
   const getPosts = async () => {
