@@ -25,7 +25,7 @@ const MainContent = () => {
             간편하게, 나만을 위한 <br />
             맞춤형 건강 솔루션
           </h2>
-          <Button buttonName="맞춤 식단 제공받기" onClick={checkDiet}></Button>
+          <Button buttonName="맞춤 식단 제공받기" onClick={checkDiet} hover="hover:shadow-main-btn-hover"></Button>
         </div>
         <Image src={Thumbnail} alt="간편하게, 나만을 위한 맞춤형 건강 솔루션" width={790} height={606} />
       </div>

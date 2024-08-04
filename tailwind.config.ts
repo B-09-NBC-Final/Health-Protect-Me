@@ -50,12 +50,12 @@ const config = {
         primary600: '#F5637C',
         gray500: '95989D',
         gray600: '#76797F',
+        gray800: '#404145',
         gray900: '#27282A',
         backgroundInfo: '#1E87FF',
         backgroundError: '#E52030 '
       },
       fontSize: {
-        'sub-title': '18px',
         'main-title2': '40px'
       },
       borderColor: {
@@ -95,7 +95,8 @@ const config = {
         btnClose: 'rgba(39, 40, 42, 0.50)'
       },
       boxShadow: {
-        'main-btn': '0px 8px 16px 0px rgba(255, 122, 133, 0.40)'
+        'main-btn': '0px 8px 16px 0px rgba(255, 122, 133, 0.40)',
+        'main-btn-hover': '2px 4px 4px 0px rgba(39, 40, 42, 0.25), 0px 8px 16px 0px rgba(255, 122, 133, 0.40)'
       }
     }
   },
