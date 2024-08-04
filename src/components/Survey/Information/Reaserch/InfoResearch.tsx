@@ -162,14 +162,37 @@ const InfoResearch = (): JSX.Element => {
       caution: ''
     };
 
+
+
+    let currentKey: keyof typeof exercise | null = null;
+
     lines.forEach((line) => {
-      if (line.startsWith('운동종류:')) exercise.type = line.substring(5).trim();
-      else if (line.startsWith('운동방법:')) exercise.method = line.substring(5).trim();
-      else if (line.startsWith('운동 팁:')) exercise.tip = line.substring(5).trim();
-      else if (line.startsWith('운동 횟수 및 시간:')) exercise.duration = line.substring(11).trim();
-      else if (line.startsWith('운동의 영향:')) exercise.effect = line.substring(7).trim();
-      else if (line.startsWith('주의사항:')) exercise.caution = line.substring(5).trim();
+      if (line.startsWith('운동종류:')) {
+        exercise.type = line.substring(5).trim();
+        currentKey = 'type';
+      } else if (line.startsWith('운동방법:')) {
+        exercise.method = line.substring(5).trim();
+        currentKey = 'method';
+      } else if (line.startsWith('운동 팁:')) {
+        exercise.tip = line.substring(5).trim();
+        currentKey = 'tip';
+      } else if (line.startsWith('운동 횟수 및 시간:')) {
+        exercise.duration = line.substring(11).trim();
+        currentKey = 'duration';
+      } else if (line.startsWith('운동의 영향:')) {
+        exercise.effect = line.substring(7).trim();
+        currentKey = 'effect';
+      } else if (line.startsWith('주의사항:')) {
+        exercise.caution = line.substring(5).trim();
+        currentKey = 'caution';
+      } else if (currentKey === 'method' && line.trim() !== '') {
+        exercise.method += '\n' + line.trim();
+      }
     });
+
+    if (exercise.method.startsWith('\n')) {
+      exercise.method = exercise.method.substring(1).trim();
+    }
 
     return exercise;
   };
@@ -288,6 +311,8 @@ const InfoResearch = (): JSX.Element => {
       case '신장 및 체중':
         return (
           <div ref={stepRefs.current[2]} className="mb-4 flex flex-col justify-center items-center text-center">
+            <h2 className="text-xl font-semibold mb-2 text-center">신장과 체중을 입력해주세요</h2>
+            <p className="text-sm text-gray-600 mb-10 text-center">신장과 체중에 따라 일일 권장 칼로리 섭취량이 달라집니다</p>
             <div className="mb-4 w-full  ">
               <label className="w-60 block text-sm mb-2 font-medium text-gray-700">신장</label>
               <input

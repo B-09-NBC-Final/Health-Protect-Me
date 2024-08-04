@@ -7,6 +7,7 @@ type UserState = {
   goal: string;
   nickname: string;
   profileImage: string;
+  is_survey_done: boolean;
 };
 
 type UserStoreState = {
