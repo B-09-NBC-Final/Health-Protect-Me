@@ -1,12 +1,17 @@
 import React from 'react';
 import Header from '@/components/common/Header/Header';
+import Footer from '@/components/common/Footer';
 
 const InfoMainLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
-      <div className="relative min-h-screen">
+      <div className="relative ">
         <Header />
-        <main className="pt-15 bg-default">{children}</main>
+        <main className="bg-default">
+          <div  className="min-h-main-height">{children}</div>
+        </main>
+
+        <Footer />
       </div>
     </>
   );

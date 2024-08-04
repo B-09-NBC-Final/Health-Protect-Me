@@ -103,6 +103,10 @@ const config = {
       },
       height: {
         'main-height': 'calc(100vh - 57px)'
+        
+      },
+      minHeight: {
+        'main-height': 'calc(100vh - 194px)'
       }
     }
   },

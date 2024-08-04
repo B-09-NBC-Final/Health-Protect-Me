@@ -51,7 +51,6 @@ export const deleteUser = async () => {
       console.error('Error', error.message);
       throw error;
     }
-    console.log(data);
 
     await supabase.auth.signOut();
   } catch (error) {
@@ -148,7 +147,6 @@ const ProfileEdit = ({
     const { data: sessionData } = await supabase.auth.getSession();
     const isSignIn = !!sessionData.session;
     if (!isSignIn) {
-      console.log('로그인 상태 아님');
       router.push('/login');
       return;
     }

@@ -3,7 +3,7 @@ import InfoMain from '@/components/Survey/Information/InfoMain';
 
 const infoPage = () => {
   return (
-    <div className='w-[1920px] pb- flex flex-col items-center'>
+    <div className='min-h-main-height justify-center  items-center bg-[#F8FAF8]'>
       <InfoMain />
     </div>
   );

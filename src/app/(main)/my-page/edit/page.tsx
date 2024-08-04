@@ -13,11 +13,9 @@ const EditPage = () => {
   };
 
   const handleSave = async (height: number, weight: number, goal: string, nickname: string, profileImage: string) => {
-    console.log('Save', { height, weight, goal, nickname, profileImage });
   };
 
   const handleCancel = () => {
-    console.log('Cancel');
   };
 
   return (

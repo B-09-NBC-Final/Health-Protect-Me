@@ -28,7 +28,6 @@ const PostsSection = () => {
       const isSignIn = !!sessionData.session;
 
       if (!isSignIn) {
-        console.log('로그인 상태 아님');
         router.push('/login');
         return;
       }
