@@ -207,4 +207,10 @@
   .pt-15 {
     padding-top: 3.75rem !important;
   }
+  .text-color-gray {
+    color: #76797f !important;
+  }
+  .gap {
+    gap: 120px !important;
+  }
 }
