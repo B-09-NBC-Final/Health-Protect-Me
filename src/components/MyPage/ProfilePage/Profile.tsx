@@ -130,7 +130,7 @@ const Profile = () => {
       </div>
       <div className="flex justify-center mt-10">
         <button
-          className="flex h-10 py-2 px-3 justify-center items-center gap-1 self-stretch w-80 text-sm border border-[#B7B9BD] rounded-xl"
+          className="flex h-10 py-2 px-3 justify-center items-center gap-1 self-stretch w-80 text-sm font-semibold border border-[#B7B9BD] rounded-lg"
           onClick={handleNavigateToEdit}
         >
           프로필 수정

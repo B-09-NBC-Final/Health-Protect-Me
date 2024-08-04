@@ -215,6 +215,12 @@ const ProfileEdit = ({
     setShowModal(false);
   };
 
+  const getButtonClasses = (currentGoal: string) => {
+    return currentGoal === goal
+      ? 'flex w-32 h-12 py-3 px-4 justify-center items-center gap-2 rounded-lg border border-[#F5637C] bg-[#FFF6F2] text-[#404145] font-semibold'
+      : 'flex w-32 h-12 py-3 px-4 justify-center items-center gap-2 rounded-lg border border-[#B7B9BD] bg-white text-[#404145]';
+  };
+
   return (
     <section className="w-[1360px] max-w-md mx-auto">
       <h1 className="w-[400px] h-8 mb-4 mx-4 text-2xl font-bold">프로필 수정</h1>
@@ -236,7 +242,7 @@ const ProfileEdit = ({
             <div className="w-[272px] text-sm text-[#76797F]">5MB 이하의 PNG, JPG 파일을 올려주세요.</div>
           </div>
         </div>
-        <form className="w-[400px] mb-20">
+        <form className="w-[400px] mb-20" onSubmit={(e) => e.preventDefault()}>
           <div className="mb-6">
             <label className="block text-left mb-1" htmlFor="nickname">
               닉네임
@@ -279,30 +285,15 @@ const ProfileEdit = ({
           <div className="mb-4">
             <label className="block text-left mb-1">나의 식단 목표</label>
             <div className="flex justify-center space-x-2">
-              <Button
-                buttonName="체중 감량"
-                bgColor={goal === '체중 감량' ? 'bg-[#FFF6F2]' : 'bg-white'}
-                textColor="text-[#404145]"
-                boxShadow="shadow-none"
-                border={goal === '체중 감량' ? 'border border-solid-[#F5637C]' : 'border border-solid-[#B7B9BD]'}
-                onClick={() => setGoal('체중 감량')}
-              />
-              <Button
-                buttonName="체중 유지"
-                bgColor={goal === '체중 유지' ? 'bg-[#FFF6F2]' : 'bg-white'}
-                textColor="text-[#404145]"
-                boxShadow="shadow-none"
-                border={goal === '체중 유지' ? 'border border-solid-[#F5637C]' : 'border border-solid-[#B7B9BD]'}
-                onClick={() => setGoal('체중 유지')}
-              />
-              <Button
-                buttonName="체중 증가"
-                bgColor={goal === '체중 증가' ? 'bg-[#FFF6F2]' : 'bg-white'}
-                textColor="text-[#404145]"
-                boxShadow="shadow-none"
-                border={goal === '체중 증가' ? 'border border-solid-[#F5637C]' : 'border border-solid-[#B7B9BD]'}
-                onClick={() => setGoal('체중 증가')}
-              />
+              <button type="button" className={getButtonClasses('체중 감량')} onClick={() => setGoal('체중 감량')}>
+                체중 감량
+              </button>
+              <button type="button" className={getButtonClasses('체중 유지')} onClick={() => setGoal('체중 유지')}>
+                체중 유지
+              </button>
+              <button type="button" className={getButtonClasses('체중 증가')} onClick={() => setGoal('체중 증가')}>
+                체중 증가
+              </button>
             </div>
           </div>
           <div className="flex justify-between mt-8">
@@ -313,6 +304,7 @@ const ProfileEdit = ({
               buttonWidth="w-48"
               boxShadow="shadow-none"
               border="border-solid-[#B7B9BD]"
+              hover="hover:bg-[#FAFAFA] hover:text-[#27282A] border border-solid-[#B7B9BD]"
               onClick={() => {
                 onCancel();
                 router.push('/my-page');
@@ -325,6 +317,7 @@ const ProfileEdit = ({
               buttonWidth="w-48"
               boxShadow="shadow-none"
               onClick={handleSave}
+              hover="hover:bg-[#F5637C] hover:text-white"
             />
           </div>
         </form>
@@ -336,6 +329,7 @@ const ProfileEdit = ({
             buttonWidth="w-[65px]"
             onClick={openDeleteModal}
             boxShadow="shadow-none"
+            hover="hover:none"
           />
         </div>
       </div>
