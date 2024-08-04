@@ -67,6 +67,9 @@
   body {
     @apply bg-background text-foreground;
   }
+  *:focus-visible {
+    outline: none;
+  }
 }
 
 @font-face {
@@ -92,6 +95,27 @@
   src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Bold.woff') format('woff');
   font-weight: 700;
   font-style: normal;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+.login_title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 800;
+  line-height: 40px;
+  letter-spacing: -0.64px;
+  color: #27282a;
+}
+
+.login_subtitle {
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 28px;
+  letter-spacing: -0.36px;
+  color: #76797f;
 }
 
 .inner_wrap {
@@ -145,4 +169,41 @@
 
 .swiper-slide:hover::after {
   background: var(--opacity-default-07, rgba(39, 40, 42, 0.7));
+}
+
+@layer components {
+  .hover-effect {
+    position: relative;
+    display: inline-block;
+    transition: color 0.3s ease;
+  }
+
+  .hover-effect::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    transform: scaleX(0);
+    height: 4px;
+    border-radius: 2px;
+    bottom: -16px;
+    left: 0;
+    background-color: #f5637c;
+    /* transform-origin: bottom right;
+    transition: transform 0.3s ease; */
+  }
+
+  .hover-effect:hover {
+    color: #f5637c;
+  }
+
+  .hover-effect:hover::after {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+  }
+  .mb-15 {
+    margin-bottom: 3.75rem !important;
+  }
+  .pt-15 {
+    padding-top: 3.75rem !important;
+  }
 }
