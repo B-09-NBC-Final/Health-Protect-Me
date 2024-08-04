@@ -1,7 +1,11 @@
-import React from 'react';
+import PostingList from '@/components/Contents/PostingMain/PostingList';
 
 const PostingMainPage = () => {
-  return <div>PostingMainPage</div>;
+  return (
+    <div className="flex justify-between">
+      <PostingList />
+    </div>
+  );
 };
 
 export default PostingMainPage;

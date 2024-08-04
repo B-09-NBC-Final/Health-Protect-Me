@@ -1,7 +1,7 @@
-import React from 'react';
+import PostingMain from '@/components/Contents/Posting/PostingMain';
 
 const PostingPage = () => {
-  return <div>PostingPage</div>;
+  return <PostingMain />;
 };
 
 export default PostingPage;

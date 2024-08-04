@@ -9,10 +9,20 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'pdgwrjxbqywcmuxwjqos.supabase.co',
+        hostname: 'qdtbndpvityeryaniyfj.supabase.co',
         pathname: '/**'
+      },
+      {
+        hostname: 'lh3.googleusercontent.com'
+      },
+      {
+        hostname: 'k.kakaocdn.net'
+      },
+      {
+        hostname: 't1.kakaocdn.net'
       }
-    ]
+    ],
+    domains: ['t1.kakaocdn.net'],
   },
   env: {
     SUPABASE_URL: process.env.SUPABASE_URL,
