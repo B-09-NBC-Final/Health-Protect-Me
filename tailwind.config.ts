@@ -48,18 +48,24 @@ const config = {
           foreground: 'hsl(var(--card-foreground))'
         },
         primary600: '#F5637C',
+        gray500: '95989D',
         gray600: '#76797F',
+        gray800: '#404145',
         gray900: '#27282A',
-        backgroundInfo: '#1E87FF'
+        backgroundInfo: '#1E87FF',
+        backgroundError: '#E52030 '
       },
       fontSize: {
-        'sub-title': '18px',
         'main-title2': '40px'
       },
       borderColor: {
         gray100: '#F1F2F2',
         gray200: '#E4E5E7',
-        primary500: '#FF7A85'
+        gray300: '#D5D6D8',
+        gray400: '#B7B9BD',
+        gray600: '#76797F',
+        primary500: '#FF7A85',
+        secondary600: '#49BA43'
       },
       borderRadius: {
         xl: '20px',
@@ -83,11 +89,14 @@ const config = {
       },
       backgroundColor: {
         gray100: '#F1F2F2',
+        pramary100: '#FFF6F2',
         pramary500: '#FF7A85',
-        pramary600: '#F5637C'
+        pramary600: '#F5637C',
+        btnClose: 'rgba(39, 40, 42, 0.50)'
       },
       boxShadow: {
-        'main-btn': '0px 8px 16px 0px rgba(255, 122, 133, 0.40)'
+        'main-btn': '0px 8px 16px 0px rgba(255, 122, 133, 0.40)',
+        'main-btn-hover': '2px 4px 4px 0px rgba(39, 40, 42, 0.25), 0px 8px 16px 0px rgba(255, 122, 133, 0.40)'
       }
     }
   },

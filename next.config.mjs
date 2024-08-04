@@ -20,6 +20,9 @@ const nextConfig = {
 
       {
         hostname: 'k.kakaocdn.net'
+      },
+      {
+        hostname: 't1.kakaocdn.net'
       }
     ]
   },
