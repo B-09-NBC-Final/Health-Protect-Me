@@ -3,8 +3,8 @@ import Link from 'next/link';
 
 const InfoMain = () => {
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100  ">
-      <div className="max-w-4xl w-full mx-auto p-6 m-10 flex flex-col items-center gap-20 bg-white shadow-lg rounded-lg">
+    <div className="w-[1440px] flex flex-col items-center gap-20 justify-center  bg-[#F8FAF8]  ">
+      <div className="max-w-4xl w-full mx-auto p-6 m-10 flex flex-col items-center gap-20 bg-white rounded-lg">
         <div className="text-center mb-8">
         <h1 className="text-2xl text-center not-italic font-medium leading-8 text-black mb-8">
           나에게 맞는 맞춤 식단으로 개인화된 건강 관리를 시작해보세요
