@@ -1,19 +1,19 @@
-'use client'
+'use client';
 import React, { useState, useEffect } from 'react';
 import { createClient } from '@/supabase/client';
 import { useUserStore } from '@/store/userStore';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 import Image from 'next/image';
-import carbohydrate from '@/assets/icons/carbohydrate.png'
-import protein from '@/assets/icons/protein.png'
-import fat from '@/assets/icons/fat.png'
-import running from '@/assets/icons/running_man.png'
-import dumbbel from '@/assets/icons/dumbbel.png'
-import clock from '@/assets/icons/clock.png'
+import carbohydrate from '@/assets/icons/carbohydrate.png';
+import protein from '@/assets/icons/protein.png';
+import fat from '@/assets/icons/fat.png';
+import running from '@/assets/icons/running_man.png';
+import dumbbel from '@/assets/icons/dumbbel.png';
+import clock from '@/assets/icons/clock.png';
 
 type PostgrestError = {
   message: string;
-}
+};
 
 const InforDetailPage = () => {
   const [resultDiet, setResultDiet] = useState('');
@@ -21,8 +21,15 @@ const InforDetailPage = () => {
   const [error, setError] = useState<PostgrestError | null>(null);
   const [userId, setUserId] = useState('');
   const { user } = useUserStore();
-  const [meal, setMeal] = useState<{ calories: string, menu: string, ratio: string }[]>([]);
-  const [work, setWork] = useState<{ type: string, method: string, tip: string, duration: string, effect: string, caution: string }>({
+  const [meal, setMeal] = useState<{ calories: string; menu: string; ratio: string }[]>([]);
+  const [work, setWork] = useState<{
+    type: string;
+    method: string;
+    tip: string;
+    duration: string;
+    effect: string;
+    caution: string;
+  }>({
     type: '',
     method: '',
     tip: '',
@@ -93,7 +100,7 @@ const InforDetailPage = () => {
     return {
       carbohydrates: ratios ? parseInt(ratios[0], 10) : 0,
       proteins: ratios ? parseInt(ratios[1], 10) : 0,
-      fats: ratios ? parseInt(ratios[2], 10) : 0,
+      fats: ratios ? parseInt(ratios[2], 10) : 0
     };
   };
 
@@ -101,7 +108,6 @@ const InforDetailPage = () => {
   const breakfastRatios = extractRatios(meal[0].ratio);
   const lunchRatios = extractRatios(meal[1].ratio);
   const dinnerRatios = extractRatios(meal[2].ratio);
-
 
   return (
     <div className="border-gray100 border border-solid rounded-xl py-[24px] px-10 bg-white">
@@ -119,17 +125,17 @@ const InforDetailPage = () => {
               <CardContent className="overflow-auto max-h-[200px]">
                 <div className="flex justify-center space-x-4">
                   <div className="flex flex-col items-center justify-center w-32 h-32 rounded-full bg-gray-100">
-                    <Image src={carbohydrate} alt='carbohydrate' width={32} height={32} />
+                    <Image src={carbohydrate} alt="carbohydrate" width={32} height={32} />
                     <p style={{ color: '#76797F' }}>탄수화물</p>
                     <p>{breakfastRatios.carbohydrates}%</p>
                   </div>
                   <div className="flex flex-col items-center justify-center w-32 h-32 rounded-full bg-gray-100">
-                    <Image src={protein} alt='protein' width={32} height={32} />
+                    <Image src={protein} alt="protein" width={32} height={32} />
                     <p style={{ color: '#76797F' }}>단백질</p>
                     <p>{breakfastRatios.proteins}%</p>
                   </div>
                   <div className="flex flex-col items-center justify-center w-32 h-32 rounded-full bg-gray-100">
-                    <Image src={fat} alt='fat' width={32} height={32} />
+                    <Image src={fat} alt="fat" width={32} height={32} />
                     <p style={{ color: '#76797F' }}>지방</p>
                     <p>{breakfastRatios.fats}%</p>
                   </div>
@@ -145,17 +151,17 @@ const InforDetailPage = () => {
               <CardContent>
                 <div className="flex justify-center space-x-4">
                   <div className="flex flex-col items-center justify-center w-32 h-32 rounded-full bg-gray-100">
-                    <Image src={carbohydrate} alt='carbohydrate' width={32} height={32} />
+                    <Image src={carbohydrate} alt="carbohydrate" width={32} height={32} />
                     <p style={{ color: '#76797F' }}>탄수화물</p>
                     <p>{lunchRatios.carbohydrates}%</p>
                   </div>
                   <div className="flex flex-col items-center justify-center w-32 h-32 rounded-full bg-gray-100">
-                    <Image src={protein} alt='protein' width={32} height={32} />
+                    <Image src={protein} alt="protein" width={32} height={32} />
                     <p style={{ color: '#76797F' }}>단백질</p>
                     <p>{lunchRatios.proteins}%</p>
                   </div>
                   <div className="flex flex-col items-center justify-center w-32 h-32 rounded-full bg-gray-100">
-                    <Image src={fat} alt='fat' width={32} height={32} />
+                    <Image src={fat} alt="fat" width={32} height={32} />
                     <p style={{ color: '#76797F' }}>지방</p>
                     <p>{lunchRatios.fats}%</p>
                   </div>
@@ -171,17 +177,17 @@ const InforDetailPage = () => {
               <CardContent>
                 <div className="flex justify-center space-x-4">
                   <div className="flex flex-col items-center justify-center w-32 h-32 rounded-full bg-gray-100">
-                    <Image src={carbohydrate} alt='carbohydrate' width={32} height={32} />
+                    <Image src={carbohydrate} alt="carbohydrate" width={32} height={32} />
                     <p style={{ color: '#76797F' }}>탄수화물</p>
                     <p>{dinnerRatios.carbohydrates}%</p>
                   </div>
                   <div className="flex flex-col items-center justify-center w-32 h-32 rounded-full bg-gray-100">
-                    <Image src={protein} alt='protein' width={32} height={32} />
+                    <Image src={protein} alt="protein" width={32} height={32} />
                     <p style={{ color: '#76797F' }}>단백질</p>
                     <p>{dinnerRatios.proteins}%</p>
                   </div>
                   <div className="flex flex-col items-center justify-center w-32 h-32 rounded-full bg-gray-100">
-                    <Image src={fat} alt='fat' width={32} height={32} />
+                    <Image src={fat} alt="fat" width={32} height={32} />
                     <p style={{ color: '#76797F' }}>지방</p>
                     <p>{dinnerRatios.fats}%</p>
                   </div>
@@ -193,7 +199,7 @@ const InforDetailPage = () => {
             <span className="font-[number:var(--desktop-subtitle2-font-weight)] font-desktop-subtitle2 [font-style:var(--desktop-subtitle2-font-style)] tracking-[var(--desktop-subtitle2-letter-spacing)] leading-[var(--desktop-subtitle2-line-height)] text-[length:var(--desktop-subtitle2-font-size)]">
               목표를 위한 일일 권장 칼로리 섭취량은{' '}
             </span>
-            <span className="font-desktop-subtitle2 font-bold font-[number:var(--desktop-subtitle2-font-weight)] [font-style:var(--desktop-subtitle2-font-style)] tracking-[var(--desktop-subtitle2-letter-spacing)] leading-[var(--desktop-subtitle2-line-height)] text-[length:var(--desktop-subtitle2-font-size)]">
+            <span className="font-desktop-subtitle2 [font-style:var(--desktop-subtitle2-font-style)] tracking-[var(--desktop-subtitle2-letter-spacing)] leading-[var(--desktop-subtitle2-line-height)] text-[length:var(--desktop-subtitle2-font-size)]">
               {meal[3].calories.replace('총 칼로리:', '')}
             </span>
             <span className="font-[number:var(--desktop-subtitle2-font-weight)] font-desktop-subtitle2 [font-style:var(--desktop-subtitle2-font-style)] tracking-[var(--desktop-subtitle2-letter-spacing)] leading-[var(--desktop-subtitle2-line-height)] text-[length:var(--desktop-subtitle2-font-size)]">
@@ -210,7 +216,7 @@ const InforDetailPage = () => {
         <div className="flex gap-4 self-stretch w-full flex-col items-start relative flex-[0_0_auto]">
           <div className="inline-flex items-center gap-2 relative flex-[0_0_auto]">
             <div className="inline-flex flex-col items-start gap-1 relative">
-              <Image src={running} alt='running' width={48} height={48} />
+              <Image src={running} alt="running" width={48} height={48} />
               <div className="font-bold text-black text-lg">{work.type}</div>
             </div>
           </div>
@@ -219,7 +225,7 @@ const InforDetailPage = () => {
           <Card className="flex px-10 py-6 self-stretch w-full flex-col items-start gap-6 relative flex-[0_0_auto] bg-color-background-content rounded-[20px] shadow-floating">
             <div className="inline-flex flex-col items-start gap-1 relative flex-[0_0_auto]">
               <div className="inline-flex items-center gap-1 relative flex-[0_0_auto]">
-                <Image src={dumbbel} alt='dumbbel' width={24} height={24} />
+                <Image src={dumbbel} alt="dumbbel" width={24} height={24} />
                 <div className="relative w-fit font-desktop-h6 font-[number:var(--desktop-h6-font-weight)] text-color-text-main text-[length:var(--desktop-h6-font-size)] tracking-[var(--desktop-h6-letter-spacing)] leading-[var(--desktop-h6-line-height)] whitespace-nowrap [font-style:var(--desktop-h6-font-style)]">
                   운동 방법
                 </div>
@@ -230,7 +236,7 @@ const InforDetailPage = () => {
             </div>
             <div className="inline-flex flex-col items-start gap-1 relative flex-[0_0_auto]">
               <div className="inline-flex items-center gap-1 relative flex-[0_0_auto]">
-                <Image src={clock} alt='clock' width={24} height={24} className="text-green-500" />
+                <Image src={clock} alt="clock" width={24} height={24} className="text-green-500" />
                 <div className="relative w-fit font-desktop-h6 font-[number:var(--desktop-h6-font-weight)] text-color-text-main text-[length:var(--desktop-h6-font-size)] tracking-[var(--desktop-h6-letter-spacing)] leading-[var(--desktop-h6-line-height)] whitespace-nowrap [font-style:var(--desktop-h6-font-style)]">
                   운동 시간
                 </div>
@@ -272,24 +278,6 @@ const InforDetailPage = () => {
               </p>
             </div>
           </Card>
-          {/* <Card className="flex px-10 py-6 self-stretch w-full flex-col items-start gap-6 relative flex-[0_0_auto] bg-color-background-content rounded-[20px] shadow-floating">
-                  <div className="inline-flex flex-col items-start gap-1 relative flex-[0_0_auto]">
-                    <div className="inline-flex items-center gap-1 relative flex-[0_0_auto]">
-                      <div className="w-fit text-[length:var(--desktop-h6-font-size)] leading-[var(--desktop-h6-line-height)] whitespace-nowrap relative mt-[-1.00px] font-desktop-h6 font-[number:var(--desktop-h6-font-weight)] text-color-text-main tracking-[var(--desktop-h6-letter-spacing)] [font-style:var(--desktop-h6-font-style)]">
-                        운동 루틴
-                      </div>
-                    </div>
-                    <div className="relative w-fit font-desktop-p-md font-[number:var(--desktop-p-md-font-weight)] text-color-text-main-2 text-[length:var(--desktop-p-md-font-size)] tracking-[var(--desktop-p-md-letter-spacing)] leading-[var(--desktop-p-md-line-height)] whitespace-nowrap [font-style:var(--desktop-p-md-font-style)]">
-                      1-2분간 빠른 속도로 걷습니다.
-                    </div>
-                    <div className="relative w-fit font-desktop-p-md font-[number:var(--desktop-p-md-font-weight)] text-color-text-main-2 text-[length:var(--desktop-p-md-font-size)] tracking-[var(--desktop-p-md-letter-spacing)] leading-[var(--desktop-p-md-line-height)] whitespace-nowrap [font-style:var(--desktop-p-md-font-style)]">
-                      1-2분간 느리게 걷거나 회복합니다.
-                    </div>
-                    <p className="relative w-fit font-desktop-p-md font-[number:var(--desktop-p-md-font-weight)] text-color-text-main-2 text-[length:var(--desktop-p-md-font-size)] tracking-[var(--desktop-p-md-letter-spacing)] leading-[var(--desktop-p-md-line-height)] whitespace-nowrap [font-style:var(--desktop-p-md-font-style)]">
-                      15-20분간 과정을 반복한 후, 마지막 5-10분은 빠르게 걷습니다.
-                    </p>
-                  </div>
-                </Card> */}
         </div>
       </div>
     </div>
@@ -297,4 +285,3 @@ const InforDetailPage = () => {
 };
 
 export default InforDetailPage;
-
