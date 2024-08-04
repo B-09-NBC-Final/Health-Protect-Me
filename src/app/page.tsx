@@ -9,6 +9,7 @@ import MainSwiperReverse from '@/components/MainPage/MainSwiperReverse';
 import Header from '@/components/common/Header/Header';
 
 const MainPage = () => {
+  console.log(process.env.NEXT_PUBLIC_BASE_URL)
   return (
     <>
       <Header />
