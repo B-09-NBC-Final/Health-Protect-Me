@@ -242,7 +242,7 @@ const InfoResearch = (): JSX.Element => {
     switch (steps[currentStepIndex]) {
       case '출생년도':
         return (
-          <div className=" max-w-md mx-auto bg-white rounded-lg shadow-sm p-6">
+          <div className=" max-w-md mx-auto bg-white rounded-md ">
             <h2 className="text-xl font-semibold mb-4 text-center">출생년도를 입력해주세요</h2>
             <p className="text-sm text-gray-600 mb-4 text-center">연령에 따라 일일 권장 칼로리 섭취량이 달라집니다</p>
             <br />
@@ -254,21 +254,21 @@ const InfoResearch = (): JSX.Element => {
                 placeholder="예) 19xx년"
                 value={surveyData.year_of_birth ?? ''}
                 onChange={handleInputChange}
-                className="w-full p-3 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF7A85] focus:border-transparent"
+                className="w-full p-3 text-sm border rounded-lg focus:outline-none focus:ring-1 focus:ring-[#FF7A85] focus:border-transparent"
               />
             </div>
           </div>
         );
       case '성별':
         return (
-          <div ref={stepRefs.current[1]} className="mb-4 flex flex-col items-center gap-10">
-            <h2 className="text-xl font-semibold mb-4 text-center">성별를 입력해주세요</h2>
-            <p className="text-sm text-gray-600 mb-4 text-center">성별에 따라 일일 권장 칼로리 섭취량이 달라집니다</p>
-            <br />
-            <div className="flex  w-48 pt-3 pr-4 items-center gap-2 space-x-4 ">
+          <div className="flex flex-col items-center">
+            <h2 className="text-xl font-semibold mb-2 text-center">성별을 선택해 주세요</h2>
+            <p className="text-sm text-gray-600 mb-6 text-center">성별에 따라 일일 권장 칼로리 섭취량이 달라집니다</p>
+
+            <div className="flex w-3/4 space-x-3 gap-4 ">
               <button
                 onClick={() => handleGenderSelect('남')}
-                className={`flex-1 h-12 w-48 py-3 px-4 text-sm border border-gray-300 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-red-400 transition duration-200 ${
+                className={`flex-1 text-center w-full py-2 px-4 text-base border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-red-400 transition duration-200 ${
                   surveyData.gender === '남' ? 'bg-[#FFF6F2] text-black' : 'bg-white text-gray-700'
                 }`}
               >
@@ -276,7 +276,7 @@ const InfoResearch = (): JSX.Element => {
               </button>
               <button
                 onClick={() => handleGenderSelect('여')}
-                className={`flex-1 h-12 w-48 py-3 px-4 text-sm border border-gray-300 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-red-400 transition duration-200 ${
+                className={`flex-1 text-center w-full py-3 px-4 text-base border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-400 transition duration-200 ${
                   surveyData.gender === '여' ? 'bg-[#FFF6F2] text-black' : 'bg-white text-gray-700'
                 }`}
               >
@@ -287,30 +287,30 @@ const InfoResearch = (): JSX.Element => {
         );
       case '신장 및 체중':
         return (
-          <div ref={stepRefs.current[2]} className="mb-4">
-            <div className="mb-4">
-              <label className="block text-sm mb-2 font-medium text-gray-700">신장</label>
+          <div ref={stepRefs.current[2]} className="mb-4 flex flex-col justify-center items-center text-center">
+            <div className="mb-4 w-full  ">
+              <label className="w-60 block text-sm mb-2 font-medium text-gray-700">신장</label>
               <input
                 type="text"
                 name="height"
                 placeholder="cm (예: 170)"
                 value={surveyData.height ?? ''}
                 onChange={handleInputChange}
-                className="w-full p-2 text-sm border rounded-lg focus:outline-none focus:ring-1 focus:ring-red-400 focus:border-transparent"
+                className="w-2/3 p-3 text-sm border rounded-lg focus:outline-none focus:ring-1 focus:ring-[#FF7A85] focus:border-transparent"
               />
               {surveyData.height && !/^1\d{2}$/.test(surveyData.height.toString()) && (
                 <p className="text-red-500 text-sm mt-1">1xx 형식으로 입력해주세요.</p>
               )}
             </div>
-            <div>
-              <label className="block text-sm mb-2 font-medium text-gray-700">체중</label>
+            <div className="mb-4 w-full  ">
+              <label className=" w-60 block text-sm mb-2 font-medium text-gray-700">체중</label>
               <input
                 type="text"
                 name="weight"
                 placeholder="kg (예: 65)"
                 value={surveyData.weight ?? ''}
                 onChange={handleInputChange}
-                className="w-full p-2 text-sm border rounded-md focus:outline-none focus:ring-1 focus:ring-red-400 focus:border-transparent"
+               className="w-2/3 p-3 text-sm border rounded-lg focus:outline-none focus:ring-1 focus:ring-[#FF7A85] focus:border-transparent"
               />
               {surveyData.weight && !/^\d{2,3}$/.test(surveyData.weight.toString()) && (
                 <p className="text-red-500 text-sm mt-1">2자리 또는 3자리 숫자로 입력해주세요.</p>
@@ -321,13 +321,14 @@ const InfoResearch = (): JSX.Element => {
       case '식단 목적':
         return (
           <div ref={stepRefs.current[4]} className="mb-4">
-            <p className="text-lg mb-4 font-medium text-gray-700">식단을 통해 이루고자 하는 목표를 입력해주세요</p>
-            <div className="grid grid-cols-1 gap-2">
+             <h2 className="text-xl font-semibold mb-2 text-center">식단을 통해 이루고자 하는 목표를 알려주세요</h2>
+             <p className="text-sm text-gray-600 mb-10 text-center">선택한 목표에 가장 최적화된 식단과 운동을 추천해 드려요</p>
+            <div className="flex flex-col justify-center items-center gap-4">
               {(['체중 감량', '체중 유지', '체중 증량'] as DietGoal[]).map((goal) => (
                 <button
                   key={goal}
                   onClick={() => handleDietGoalSelect(goal)}
-                  className={`py-2 px-4 text-sm border border-gray-300 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-red-400 transition duration-200 ${
+                  className={`w-80 flex h-12 items-center text-center justify-center py-3 px-4 text-base border border-gray-300 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-red-400 transition duration-200 ${
                     surveyData.purpose === goal ? 'bg-[#FFF6F2] text-black' : 'bg-white text-gray-700'
                   }`}
                 >
@@ -344,7 +345,9 @@ const InfoResearch = (): JSX.Element => {
     <>
       {isLoading && <Loading />}
       <div
-        className={`max-w-2xl mx-auto mt-10 mb-4 p-8 bg-white rounded-xl shadow-lg ${isLoading ? 'opacity-50' : ''}`}
+        className={`w-[1360px] max-w-2xl flex flex-col item-center  mx-auto mt-10 mb-4 p-8  bg-white rounded-xl shadow-lg ${
+          isLoading ? 'opacity-50' : ''
+        }`}
       >
         <h1 className="text-3xl font-bold mb-8 text-center text-gray-800">{steps[currentStepIndex]}</h1>
         <div className="mb-8 bg-gray-200 rounded-full h-2">
@@ -356,7 +359,7 @@ const InfoResearch = (): JSX.Element => {
 
         {renderStep()}
 
-        <div className="mt-36 flex items-center gap-4">
+        <div className="mt-36 flex items-center justify-center ">
           {currentStepIndex > 0 && (
             <Button
               onClick={preStep}
@@ -369,7 +372,7 @@ const InfoResearch = (): JSX.Element => {
             <Button
               onClick={nextStep}
               disabled={!isStepValid()}
-              className="flex w-56 h-12 items-center justify-center bg-[#FF7A85] text-white py-3 rounded-lg hover:bg-[#FF7A85] transition duration-300"
+              className="flex w-56 h-12 ml-14 items-center  bg-[#FF7A85] text-white py-3 rounded-lg hover:bg-[#FF7A85] transition duration-300"
             >
               다음
             </Button>
@@ -377,7 +380,7 @@ const InfoResearch = (): JSX.Element => {
             <Button
               onClick={saveDataToSupabase}
               disabled={!isStepValid()}
-              className="flex w-56 h-12 items-center justify-center py-3 px-4 text-lg bg-[#FF7A85] text-white rounded-lg hover:bg-red-500 focus:outline-none focus:ring-1 focus:ring-red-400 transition duration-200 disabled:bg-gray-300 disabled:cursor-not-allowed"
+              className="flex w-56 h-12 ml-14 items-center  bg-[#FF7A85] text-white py-3 rounded-lg hover:bg-[#FF7A85] transition duration-300"
             >
               결과보기
             </Button>
