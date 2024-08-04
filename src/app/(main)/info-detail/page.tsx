@@ -82,10 +82,25 @@ const InforDetailPage = () => {
 
   if (meal.length === 0 || !work) return null;
 
+  const extractRatios = (ratioString: string) => {
+    const ratios = ratioString.match(/\d+/g);
+    return {
+      carbohydrates: ratios ? parseInt(ratios[0], 10) : 0,
+      proteins: ratios ? parseInt(ratios[1], 10) : 0,
+      fats: ratios ? parseInt(ratios[2], 10) : 0,
+    };
+  };
+
+  // 각 식사에서 비율 분리
+  const breakfastRatios = extractRatios(meal[0].ratio);
+  const lunchRatios = extractRatios(meal[1].ratio);
+  const dinnerRatios = extractRatios(meal[2].ratio);
+
+
   return (
     <div className='bg-[#f8faf8] flex flex-row justify-center w-full"'>
       <div className='bg-color-background-default w-[1920px] h-[1668px] relative'>
-        <div className="flex flex-col w-[1360px] items-start gap-10 absolute top-[100px] left-[280px] bg-white rounded-[20px] border border-solid border-gray-100">
+        <div className="flex flex-col w-[1360px] items-start gap-10 absolute top-[100px] left-[280px] bg-white rounded-[20px] border border-solid border-gray-100 overflow-auto">
           <div className="gap-6 flex flex-col items-start px-10 py-6 relative self-stretch w-full flex-[0_0_auto]">
             <div className="flex self-stretch w-full flex-col items-start gap-2 relative flex-[0_0_auto]">
               <div className="flex items-center gap-2 relative self-stretch w-full flex-[0_0_auto]">
@@ -99,35 +114,35 @@ const InforDetailPage = () => {
             </div>
             <div className="inline-flex gap-10 flex-col items-start relative flex-[0_0_auto]">
               <div className="inline-flex items-center gap-10 relative flex-[0_0_auto]">
-                <Card className="!flex-[0_0_auto] shadow-floating">
+                <Card className="!flex-[0_0_auto] shadow-floating overflow-hidden">
                   <CardHeader className="!text-color-text-sub">
-                    <CardTitle style={{ color: '#3E9B2E' }}>아침</CardTitle>
+                    <CardDescription style={{ color: '#3E9B2E' }}>아침</CardDescription>
                     <CardDescription>{meal[0].menu}</CardDescription>
                     <p style={{ color: '#76797F' }}>{meal[0].calories.replace('&칼로리:', '')}</p>
                   </CardHeader>
-                  <CardContent>
+                  <CardContent className="overflow-auto max-h-[200px]"> {/* 최대 높이를 설정 */}
                     <div className="flex space-x-4">
                       <div className="flex flex-col items-center rounded-full bg-#F5F7FA">
                         <Image src='/assets/icons/carbohydrate.png' alt='' width={50} height={50} />
                         <p style={{ color: '#76797F' }}>탄수화물</p>
-                        <p>31g</p>
+                        <p>{breakfastRatios.carbohydrates}%</p>
                       </div>
                       <div className="flex flex-col items-center">
                         <Image src='/assets/icons/protein.png' alt='' width={50} height={50} />
                         <p style={{ color: '#76797F' }}>단백질</p>
-                        <p>22g</p>
+                        <p>{breakfastRatios.proteins}%</p>
                       </div>
                       <div className="flex flex-col items-center">
                         <Image src='/assets/icons/fat.png' alt='' width={50} height={50} />
                         <p style={{ color: '#76797F' }}>지방</p>
-                        <p>44g</p>
+                        <p>{breakfastRatios.fats}%</p>
                       </div>
                     </div>
                   </CardContent>
                 </Card>
                 <Card className="!flex-[0_0_auto] shadow-floating">
                   <CardHeader className="!text-color-text-sub">
-                    <CardTitle style={{ color: '#3E9B2E' }}>점심</CardTitle>
+                    <CardDescription style={{ color: '#3E9B2E' }}>점심</CardDescription>
                     <CardDescription>{meal[1].menu}</CardDescription>
                     <p style={{ color: '#76797F' }}>{meal[0].calories.replace('&칼로리:', '')}</p>
                   </CardHeader>
@@ -136,24 +151,24 @@ const InforDetailPage = () => {
                       <div className="flex flex-col items-center">
                         <Image src='/assets/icons/carbohydrate.png' alt='' width={50} height={50} />
                         <p style={{ color: '#76797F' }}>탄수화물</p>
-                        <p>31g</p>
+                        <p>{lunchRatios.carbohydrates}%</p>
                       </div>
                       <div className="flex flex-col items-center">
                         <Image src='/assets/icons/protein.png' alt='' width={50} height={50} />
                         <p style={{ color: '#76797F' }}>단백질</p>
-                        <p>22g</p>
+                        <p>{lunchRatios.proteins}%</p>
                       </div>
                       <div className="flex flex-col items-center">
                         <Image src='/assets/icons/fat.png' alt='' width={50} height={50} />
                         <p style={{ color: '#76797F' }}>지방</p>
-                        <p>44g</p>
+                        <p>{lunchRatios.fats}%</p>
                       </div>
                     </div>
                   </CardContent>
                 </Card>
                 <Card className="!flex-[0_0_auto] shadow-floating">
                   <CardHeader className="!text-color-text-sub">
-                    <CardTitle style={{ color: '#3E9B2E' }}>저녁</CardTitle>
+                    <CardDescription style={{ color: '#3E9B2E' }}>저녁</CardDescription>
                     <CardDescription>{meal[2].menu}</CardDescription>
                     <p style={{ color: '#76797F' }}>{meal[0].calories.replace('&칼로리:', '')}</p>
                   </CardHeader>
@@ -162,17 +177,17 @@ const InforDetailPage = () => {
                       <div className="flex flex-col items-center">
                         <Image src='/assets/icons/carbohydrate.png' alt='' width={50} height={50} />
                         <p style={{ color: '#76797F' }}>탄수화물</p>
-                        <p>31g</p>
+                        <p>{dinnerRatios.carbohydrates}%</p>
                       </div>
                       <div className="flex flex-col items-center">
                         <Image src='/assets/icons/protein.png' alt='' width={50} height={50} />
                         <p style={{ color: '#76797F' }}>단백질</p>
-                        <p>22g</p>
+                        <p>{dinnerRatios.proteins}%</p>
                       </div>
                       <div className="flex flex-col items-center">
                         <Image src='/assets/icons/fat.png' alt='' width={50} height={50} />
                         <p style={{ color: '#76797F' }}>지방</p>
-                        <p>44g</p>
+                        <p>{dinnerRatios.fats}%</p>
                       </div>
                     </div>
                   </CardContent>
@@ -351,182 +366,6 @@ const InforDetailPage = () => {
     //       <p>주의사항: {work.caution}</p>
     //     </pre>
     //   </section>
-    // </div>
-    // <div className="flex flex-col w-[1360px] items-start gap-10 relative bg-color-background-white rounded-[20px] border border-solid border-gray-100">
-    //   <div className="flex gap-6 self-stretch w-full flex-col items-start px-10 py-6 relative flex-[0_0_auto]">
-    //     <div className="flex flex-col items-start gap-2 relative self-stretch w-full flex-[0_0_auto]">
-    //       <div className="flex items-center gap-2 relative self-stretch w-full flex-[0_0_auto]">
-    //         <div className="relative flex-1 mt-[-1.00px] font-desktop-h3 font-[number:var(--desktop-h3-font-weight)] text-gray-900 text-[length:var(--desktop-h3-font-size)] tracking-[var(--desktop-h3-letter-spacing)] leading-[var(--desktop-h3-line-height)] [font-style:var(--desktop-h3-font-style)]">
-    //           오늘의 추천 식단
-    //         </div>
-    //       </div>
-    //       <p className="relative self-stretch font-desktop-p-md font-[number:var(--desktop-p-md-font-weight)] text-gray-600 text-[length:var(--desktop-p-md-font-size)] tracking-[var(--desktop-p-md-letter-spacing)] leading-[var(--desktop-p-md-line-height)] [font-style:var(--desktop-p-md-font-style)]">
-    //         AI 분석을 바탕으로 매일 맞춤 식단을 추천해 드려요
-    //       </p>
-    //     </div>
-    //     <div className="inline-flex gap-10 flex-col items-start relative flex-[0_0_auto]">
-    //       <div className="inline-flex items-center gap-10 relative flex-[0_0_auto]">
-    //       <div
-    //           className="!flex-[0_0_auto]"
-    //           day="아침"
-    //           divClassName="!text-color-text-sub"
-    //           img="image-4.svg"
-    //           img1="image-5.svg"
-    //           img2="image-6.svg"
-    //           infoColor="#76797F"
-    //           kcal="520 kcal"
-    //           prop="31g"
-    //           prop1="22g"
-    //           prop2="44g"
-    //           prop3="계란 샌드위치"
-    //         />
-    //         <div
-    //           className="!flex-[0_0_auto]"
-    //           day="점심"
-    //           divClassName="!text-color-text-sub"
-    //           img="image-7.svg"
-    //           img1="image-8.svg"
-    //           img2="image-9.svg"
-    //           infoColor="#76797F"
-    //           kcal="1,500 kcal"
-    //           prop="90g"
-    //           prop1="80g"
-    //           prop2="100g"
-    //           prop3="크림 치킨 파스타"
-    //         />
-    //         <MainCardContent
-    //           className="!flex-[0_0_auto]"
-    //           day="저녁"
-    //           divClassName="!text-color-text-sub"
-    //           img="image-10.svg"
-    //           img1="image-11.svg"
-    //           img2="image-12.svg"
-    //           infoColor="#76797F"
-    //           kcal="450 kcal"
-    //           prop="9.5g"
-    //           prop1="56g"
-    //           prop2="62g"
-    //           prop3="닭가슴살 샐러드"
-    //         />
-    //       </div>
-    //       <p className="relative self-stretch font-desktop-subtitle2 font-[number:var(--desktop-subtitle2-font-weight)] text-color-text-sub text-[length:var(--desktop-subtitle2-font-size)] tracking-[var(--desktop-subtitle2-letter-spacing)] leading-[var(--desktop-subtitle2-line-height)] [font-style:var(--desktop-subtitle2-font-style)]">
-    //         <span className="font-[number:var(--desktop-subtitle2-font-weight)] font-desktop-subtitle2 [font-style:var(--desktop-subtitle2-font-style)] tracking-[var(--desktop-subtitle2-letter-spacing)] leading-[var(--desktop-subtitle2-line-height)] text-[length:var(--desktop-subtitle2-font-size)]">
-    //           목표를 위한 일일 권장 칼로리 섭취량은{" "}
-    //         </span>
-    //         <span className="font-desktop-subtitle2 font-[number:var(--desktop-subtitle2-font-weight)] [font-style:var(--desktop-subtitle2-font-style)] tracking-[var(--desktop-subtitle2-letter-spacing)] leading-[var(--desktop-subtitle2-line-height)] text-[length:var(--desktop-subtitle2-font-size)]">
-    //           2250 kcal
-    //         </span>
-    //         <span className="font-[number:var(--desktop-subtitle2-font-weight)] font-desktop-subtitle2 [font-style:var(--desktop-subtitle2-font-style)] tracking-[var(--desktop-subtitle2-letter-spacing)] leading-[var(--desktop-subtitle2-line-height)] text-[length:var(--desktop-subtitle2-font-size)]">
-    //           {" "}
-    //           입니다.
-    //         </span>
-    //       </p>
-    //     </div>
-    //   </div>
-    //   <div className="inline-flex gap-10 flex-col items-start px-10 py-6 relative flex-[0_0_auto]">
-    //     <div className="flex flex-col items-start gap-2 relative self-stretch w-full flex-[0_0_auto]">
-    //       <div className="flex items-center gap-2 relative self-stretch w-full flex-[0_0_auto]">
-    //         <div className="relative flex-1 mt-[-1.00px] font-desktop-h3 font-[number:var(--desktop-h3-font-weight)] text-gray-900 text-[length:var(--desktop-h3-font-size)] tracking-[var(--desktop-h3-letter-spacing)] leading-[var(--desktop-h3-line-height)] [font-style:var(--desktop-h3-font-style)]">
-    //           오늘의 운동 플랜
-    //         </div>
-    //       </div>
-    //       <p className="relative self-stretch font-desktop-p-md font-[number:var(--desktop-p-md-font-weight)] text-gray-600 text-[length:var(--desktop-p-md-font-size)] tracking-[var(--desktop-p-md-letter-spacing)] leading-[var(--desktop-p-md-line-height)] [font-style:var(--desktop-p-md-font-style)]">
-    //         목표를 더 빠르게 달성할 수 있도록 식단과 함께하면 좋은 최적의 운동이에요
-    //       </p>
-    //     </div>
-    //     <div className="flex gap-4 self-stretch w-full flex-col items-start relative flex-[0_0_auto]">
-    //       <div className="inline-flex items-center gap-2 relative flex-[0_0_auto]">
-    //         <div className="flex flex-col w-[65px] items-start gap-1 relative">
-    //           <div className="relative self-stretch mt-[-1.00px] font-desktop-h5 font-[number:var(--desktop-h5-font-weight)] text-color-text-main text-[length:var(--desktop-h5-font-size)] tracking-[var(--desktop-h5-letter-spacing)] leading-[var(--desktop-h5-line-height)] [font-style:var(--desktop-h5-font-style)]">
-    //             빠른 걷기
-    //           </div>
-    //           <div className="relative self-stretch font-desktop-p-sm font-[number:var(--desktop-p-sm-font-weight)] text-gray-700 text-[length:var(--desktop-p-sm-font-size)] tracking-[var(--desktop-p-sm-letter-spacing)] leading-[var(--desktop-p-sm-line-height)] [font-style:var(--desktop-p-sm-font-style)]">
-    //             유산소 운동
-    //           </div>
-    //         </div>
-    //       </div>
-    //       <div className="inline-flex flex-col items-start gap-6 relative flex-[0_0_auto]">
-    //         <div className="flex px-10 py-6 self-stretch w-full flex-col items-start gap-6 relative flex-[0_0_auto] bg-color-background-white rounded-[20px] shadow-floating">
-    //           <div className="inline-flex flex-col items-start gap-1 relative flex-[0_0_auto]">
-    //             <div className="inline-flex items-center gap-1 relative flex-[0_0_auto]">
-    //               <div className="relative w-fit font-desktop-h6 font-[number:var(--desktop-h6-font-weight)] text-color-text-main text-[length:var(--desktop-h6-font-size)] tracking-[var(--desktop-h6-letter-spacing)] leading-[var(--desktop-h6-line-height)] whitespace-nowrap [font-style:var(--desktop-h6-font-style)]">
-    //                 운동 방법
-    //               </div>
-    //             </div>
-    //             <p className="relative w-fit font-desktop-p-md font-[number:var(--desktop-p-md-font-weight)] text-color-text-main-2 text-[length:var(--desktop-p-md-font-size)] tracking-[var(--desktop-p-md-letter-spacing)] leading-[var(--desktop-p-md-line-height)] whitespace-nowrap [font-style:var(--desktop-p-md-font-style)]">
-    //               1. 머리를 들고 어깨를 편 채 허리를 곧게 유지합니다.
-    //             </p>
-    //             <p className="relative w-fit font-desktop-p-md font-[number:var(--desktop-p-md-font-weight)] text-color-text-main-2 text-[length:var(--desktop-p-md-font-size)] tracking-[var(--desktop-p-md-letter-spacing)] leading-[var(--desktop-p-md-line-height)] whitespace-nowrap [font-style:var(--desktop-p-md-font-style)]">
-    //               2. 발뒤꿈치부터 착지해 발바닥 전체로 밀어내며 걷습니다.
-    //             </p>
-    //             <p className="relative w-fit font-desktop-p-md font-[number:var(--desktop-p-md-font-weight)] text-color-text-main-2 text-[length:var(--desktop-p-md-font-size)] tracking-[var(--desktop-p-md-letter-spacing)] leading-[var(--desktop-p-md-line-height)] whitespace-nowrap [font-style:var(--desktop-p-md-font-style)]">
-    //               3. 팔을 약 90도로 굽혀 자연스럽게 흔듭니다.
-    //             </p>
-    //           </div>
-    //           <div className="inline-flex flex-col items-start gap-1 relative flex-[0_0_auto]">
-    //             <div className="inline-flex items-center gap-1 relative flex-[0_0_auto]">
-    //               <div className="relative w-fit font-desktop-h6 font-[number:var(--desktop-h6-font-weight)] text-color-text-main text-[length:var(--desktop-h6-font-size)] tracking-[var(--desktop-h6-letter-spacing)] leading-[var(--desktop-h6-line-height)] whitespace-nowrap [font-style:var(--desktop-h6-font-style)]">
-    //                 운동 시간
-    //               </div>
-    //             </div>
-    //             <div className="relative w-fit font-desktop-p-md font-[number:var(--desktop-p-md-font-weight)] text-color-text-main-2 text-[length:var(--desktop-p-md-font-size)] tracking-[var(--desktop-p-md-letter-spacing)] leading-[var(--desktop-p-md-line-height)] whitespace-nowrap [font-style:var(--desktop-p-md-font-style)]">
-    //               1회당 30분
-    //             </div>
-    //           </div>
-    //         </div>
-    //         <div className="flex px-10 py-6 self-stretch w-full flex-col items-start gap-6 relative flex-[0_0_auto] bg-color-background-white rounded-[20px] shadow-floating">
-    //           <div className="inline-flex flex-col items-start gap-1 relative flex-[0_0_auto]">
-    //             <div className="inline-flex items-center gap-1 relative flex-[0_0_auto]">
-    //               <div className="w-fit text-[length:var(--desktop-h6-font-size)] leading-[var(--desktop-h6-line-height)] whitespace-nowrap relative mt-[-1.00px] font-desktop-h6 font-[number:var(--desktop-h6-font-weight)] text-color-text-main tracking-[var(--desktop-h6-letter-spacing)] [font-style:var(--desktop-h6-font-style)]">
-    //                 추가 팁
-    //               </div>
-    //             </div>
-    //             <p className="relative w-fit font-desktop-p-md font-[number:var(--desktop-p-md-font-weight)] text-color-text-main-2 text-[length:var(--desktop-p-md-font-size)] tracking-[var(--desktop-p-md-letter-spacing)] leading-[var(--desktop-p-md-line-height)] whitespace-nowrap [font-style:var(--desktop-p-md-font-style)]">
-    //               운동 효과를 극대화하기 위해 일정한 속도를 유지하세요.
-    //             </p>
-    //           </div>
-    //           <div className="inline-flex flex-col items-start gap-1 relative flex-[0_0_auto]">
-    //             <div className="inline-flex items-center gap-1 relative flex-[0_0_auto]">
-    //               <div className="w-fit text-[length:var(--desktop-h6-font-size)] leading-[var(--desktop-h6-line-height)] whitespace-nowrap relative mt-[-1.00px] font-desktop-h6 font-[number:var(--desktop-h6-font-weight)] text-color-text-main tracking-[var(--desktop-h6-letter-spacing)] [font-style:var(--desktop-h6-font-style)]">
-    //                 주요 효과
-    //               </div>
-    //             </div>
-    //             <p className="relative w-fit font-desktop-p-md font-[number:var(--desktop-p-md-font-weight)] text-color-text-main-2 text-[length:var(--desktop-p-md-font-size)] tracking-[var(--desktop-p-md-letter-spacing)] leading-[var(--desktop-p-md-line-height)] whitespace-nowrap [font-style:var(--desktop-p-md-font-style)]">
-    //               심혈관 건강 증진 및 체지방 감소
-    //             </p>
-    //           </div>
-    //           <div className="inline-flex flex-col items-start gap-1 relative flex-[0_0_auto]">
-    //             <div className="inline-flex items-center gap-1 relative flex-[0_0_auto]">
-    //               <div className="w-fit text-[length:var(--desktop-h6-font-size)] leading-[var(--desktop-h6-line-height)] whitespace-nowrap relative mt-[-1.00px] font-desktop-h6 font-[number:var(--desktop-h6-font-weight)] text-color-text-main tracking-[var(--desktop-h6-letter-spacing)] [font-style:var(--desktop-h6-font-style)]">
-    //                 주의 사항
-    //               </div>
-    //             </div>
-    //             <p className="relative w-fit font-desktop-p-md font-[number:var(--desktop-p-md-font-weight)] text-color-text-main-2 text-[length:var(--desktop-p-md-font-size)] tracking-[var(--desktop-p-md-letter-spacing)] leading-[var(--desktop-p-md-line-height)] whitespace-nowrap [font-style:var(--desktop-p-md-font-style)]">
-    //               발에 맞지 않거나 지지력이 부족한 신발은 부상의 위험을 높일 수 있어요!
-    //             </p>
-    //           </div>
-    //         </div>
-    //         <div className="flex px-10 py-6 self-stretch w-full flex-col items-start gap-6 relative flex-[0_0_auto] bg-color-background-white rounded-[20px] shadow-floating">
-    //           <div className="inline-flex flex-col items-start gap-1 relative flex-[0_0_auto]">
-    //             <div className="inline-flex items-center gap-1 relative flex-[0_0_auto]">
-    //               <div className="w-fit text-[length:var(--desktop-h6-font-size)] leading-[var(--desktop-h6-line-height)] whitespace-nowrap relative mt-[-1.00px] font-desktop-h6 font-[number:var(--desktop-h6-font-weight)] text-color-text-main tracking-[var(--desktop-h6-letter-spacing)] [font-style:var(--desktop-h6-font-style)]">
-    //                 운동 루틴
-    //               </div>
-    //             </div>
-    //             <div className="relative w-fit font-desktop-p-md font-[number:var(--desktop-p-md-font-weight)] text-color-text-main-2 text-[length:var(--desktop-p-md-font-size)] tracking-[var(--desktop-p-md-letter-spacing)] leading-[var(--desktop-p-md-line-height)] whitespace-nowrap [font-style:var(--desktop-p-md-font-style)]">
-    //               1-2분간 빠른 속도로 걷습니다.
-    //             </div>
-    //             <div className="relative w-fit font-desktop-p-md font-[number:var(--desktop-p-md-font-weight)] text-color-text-main-2 text-[length:var(--desktop-p-md-font-size)] tracking-[var(--desktop-p-md-letter-spacing)] leading-[var(--desktop-p-md-line-height)] whitespace-nowrap [font-style:var(--desktop-p-md-font-style)]">
-    //               1-2분간 느리게 걷거나 회복합니다.
-    //             </div>
-    //             <p className="relative w-fit font-desktop-p-md font-[number:var(--desktop-p-md-font-weight)] text-color-text-main-2 text-[length:var(--desktop-p-md-font-size)] tracking-[var(--desktop-p-md-letter-spacing)] leading-[var(--desktop-p-md-line-height)] whitespace-nowrap [font-style:var(--desktop-p-md-font-style)]">
-    //               15-20분간 과정을 반복한 후, 마지막 5-10분은 빠르게 걷습니다.
-    //             </p>
-    //           </div>
-    //         </div>
-    //       </div>
-    //     </div>
-    //   </div>
     // </div>
   );
 };
