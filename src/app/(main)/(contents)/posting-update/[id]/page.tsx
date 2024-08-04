@@ -2,9 +2,11 @@ import PostingUpdateForm from '@/components/Contents/PostingUpdate/PostingUpdate
 
 const PostingUpdatePage = ({ params }: { params: { id: string } }) => {
   return (
-    <div className="max-w-2xl mx-auto p-6">
-      <PostingUpdateForm params={params} />
-    </div>
+    <main>
+      <div className="max-w-[1360px] pt-10 pb-64 mx-auto p-6">
+        <PostingUpdateForm params={params} />
+      </div>
+    </main>
   );
 };
 
