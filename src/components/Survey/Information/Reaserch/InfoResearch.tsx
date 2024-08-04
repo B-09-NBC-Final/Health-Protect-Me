@@ -21,7 +21,7 @@ const InfoResearch = (): JSX.Element => {
     gender: '',
     height: 0,
     weight: 0,
-    purpose: '',
+    purpose: ''
   });
 
   const [aiResults, setAiResults] = useState<{ result_diet: string; result_exercise: string }>({
@@ -29,8 +29,8 @@ const InfoResearch = (): JSX.Element => {
     result_exercise: ''
   });
 
-  const steps: Step[] = ['출생년도', '성별', '신장 및 체중', '식단 목적']; 
-   const stepRefs = useRef<React.RefObject<HTMLDivElement>[]>(steps.map(() => React.createRef()));
+  const steps: Step[] = ['출생년도', '성별', '신장 및 체중', '식단 목적'];
+  const stepRefs = useRef<React.RefObject<HTMLDivElement>[]>(steps.map(() => React.createRef()));
 
   const nextStep = (): void => {
     if (currentStepIndex < steps.length - 1) {
@@ -95,7 +95,7 @@ const InfoResearch = (): JSX.Element => {
     } catch (error) {
       console.error('Api 요청 중 오류:', error);
       toast.error('오류가 발생했습니다. 다시 시도해주세요!');
-      throw error; // 에러를 다시 throw하여 상위에서 처리할 수 있게 함
+      throw error;
     }
   };
 
@@ -226,9 +226,9 @@ const InfoResearch = (): JSX.Element => {
         return !!surveyData.gender;
       case '신장 및 체중':
         return (
-          surveyData.height !== null && 
+          surveyData.height !== null &&
           /^1\d{2}$/.test(surveyData.height.toString()) &&
-          surveyData.weight !== null && 
+          surveyData.weight !== null &&
           /^\d{2,3}$/.test(surveyData.weight.toString())
         );
       case '식단 목적':
@@ -242,37 +242,43 @@ const InfoResearch = (): JSX.Element => {
     switch (steps[currentStepIndex]) {
       case '출생년도':
         return (
-          <div ref={stepRefs.current[0]} className="mb-4">
-            <label className="block text-sm mb-2 font-medium text-gray-700">출생년도</label>
-            <input
-              type="text"
-              name="year_of_birth"
-              placeholder="예) 1990"
-              value={surveyData.year_of_birth ?? ''}
-              onChange={handleInputChange}
-              className="w-full p-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400 focus:border-transparent"
-            />
-            {surveyData.year_of_birth && !/^19\d{2}$/.test(surveyData.year_of_birth.toString()) && (
-              <p className="text-red-500 text-sm mt-1">19xx 형식으로 입력해주세요.</p>
-            )}
+          <div className=" max-w-md mx-auto bg-white rounded-lg shadow-sm p-6">
+            <h2 className="text-xl font-semibold mb-4 text-center">출생년도를 입력해주세요</h2>
+            <p className="text-sm text-gray-600 mb-4 text-center">연령에 따라 일일 권장 칼로리 섭취량이 달라집니다</p>
+            <br />
+            <div className="mb-4">
+              <label className="block text-sm mb-2 font-medium text-gray-700">출생년도</label>
+              <input
+                type="text"
+                name="year_of_birth"
+                placeholder="예) 19xx년"
+                value={surveyData.year_of_birth ?? ''}
+                onChange={handleInputChange}
+                className="w-full p-3 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF7A85] focus:border-transparent"
+              />
+            </div>
           </div>
         );
       case '성별':
         return (
-          <div ref={stepRefs.current[1]} className="mb-4">
-            <label className="block text-sm mb-2 font-medium text-gray-700">성별</label>
-            <div className="flex space-x-4">
+          <div ref={stepRefs.current[1]} className="mb-4 flex flex-col items-center gap-10">
+            <h2 className="text-xl font-semibold mb-4 text-center">성별를 입력해주세요</h2>
+            <p className="text-sm text-gray-600 mb-4 text-center">성별에 따라 일일 권장 칼로리 섭취량이 달라집니다</p>
+            <br />
+            <div className="flex  w-48 pt-3 pr-4 items-center gap-2 space-x-4 ">
               <button
                 onClick={() => handleGenderSelect('남')}
-                className={`flex-1 py-2 px-4 text-sm border border-gray-300 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-red-400 transition duration-200 ${surveyData.gender === '남' ? 'bg-red-400 text-white' : 'bg-white text-gray-700'
-                  }`}
+                className={`flex-1 h-12 w-48 py-3 px-4 text-sm border border-gray-300 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-red-400 transition duration-200 ${
+                  surveyData.gender === '남' ? 'bg-[#FFF6F2] text-black' : 'bg-white text-gray-700'
+                }`}
               >
                 남자
               </button>
               <button
                 onClick={() => handleGenderSelect('여')}
-                className={`flex-1 py-2 px-4 text-sm border border-gray-300 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-red-400 transition duration-200 ${surveyData.gender === '여' ? 'bg-red-400 text-white' : 'bg-white text-gray-700'
-                  }`}
+                className={`flex-1 h-12 w-48 py-3 px-4 text-sm border border-gray-300 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-red-400 transition duration-200 ${
+                  surveyData.gender === '여' ? 'bg-[#FFF6F2] text-black' : 'bg-white text-gray-700'
+                }`}
               >
                 여자
               </button>
@@ -290,7 +296,7 @@ const InfoResearch = (): JSX.Element => {
                 placeholder="cm (예: 170)"
                 value={surveyData.height ?? ''}
                 onChange={handleInputChange}
-                className="w-full p-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400 focus:border-transparent"
+                className="w-full p-2 text-sm border rounded-lg focus:outline-none focus:ring-1 focus:ring-red-400 focus:border-transparent"
               />
               {surveyData.height && !/^1\d{2}$/.test(surveyData.height.toString()) && (
                 <p className="text-red-500 text-sm mt-1">1xx 형식으로 입력해주세요.</p>
@@ -304,7 +310,7 @@ const InfoResearch = (): JSX.Element => {
                 placeholder="kg (예: 65)"
                 value={surveyData.weight ?? ''}
                 onChange={handleInputChange}
-                className="w-full p-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400 focus:border-transparent"
+                className="w-full p-2 text-sm border rounded-md focus:outline-none focus:ring-1 focus:ring-red-400 focus:border-transparent"
               />
               {surveyData.weight && !/^\d{2,3}$/.test(surveyData.weight.toString()) && (
                 <p className="text-red-500 text-sm mt-1">2자리 또는 3자리 숫자로 입력해주세요.</p>
@@ -321,8 +327,9 @@ const InfoResearch = (): JSX.Element => {
                 <button
                   key={goal}
                   onClick={() => handleDietGoalSelect(goal)}
-                  className={`py-2 px-4 text-sm border border-gray-300 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-red-400 transition duration-200 ${surveyData.purpose === goal ? 'bg-red-400 text-white' : 'bg-white text-gray-700'
-                    }`}
+                  className={`py-2 px-4 text-sm border border-gray-300 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-red-400 transition duration-200 ${
+                    surveyData.purpose === goal ? 'bg-[#FFF6F2] text-black' : 'bg-white text-gray-700'
+                  }`}
                 >
                   {goal}
                 </button>
@@ -336,7 +343,9 @@ const InfoResearch = (): JSX.Element => {
   return (
     <>
       {isLoading && <Loading />}
-      <div className={`max-w-2xl mx-auto mt-10 mb-4 p-8 bg-white rounded-xl shadow-lg ${isLoading ? 'opacity-50' : ''}`}>
+      <div
+        className={`max-w-2xl mx-auto mt-10 mb-4 p-8 bg-white rounded-xl shadow-lg ${isLoading ? 'opacity-50' : ''}`}
+      >
         <h1 className="text-3xl font-bold mb-8 text-center text-gray-800">{steps[currentStepIndex]}</h1>
         <div className="mb-8 bg-gray-200 rounded-full h-2">
           <div
@@ -347,12 +356,11 @@ const InfoResearch = (): JSX.Element => {
 
         {renderStep()}
 
-        <div className="mt-8 flex justify-between">
+        <div className="mt-36 flex items-center gap-4">
           {currentStepIndex > 0 && (
             <Button
               onClick={preStep}
-              className="py-3 px-6 text-lg text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 transition duration-200"
-              disabled={isLoading}
+              className="flex w-56 h-12 items-center justify-center py-3 text-lg text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-1 focus:ring-gray-400 transition duration-200"
             >
               이전
             </Button>
@@ -360,16 +368,16 @@ const InfoResearch = (): JSX.Element => {
           {currentStepIndex < steps.length - 1 ? (
             <Button
               onClick={nextStep}
-              disabled={!isStepValid() || isLoading}
-              className="py-3 px-6 text-lg bg-red-400 text-white rounded-lg hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-400 transition duration-200 disabled:bg-gray-300 disabled:cursor-not-allowed"
+              disabled={!isStepValid()}
+              className="flex w-56 h-12 items-center justify-center bg-[#FF7A85] text-white py-3 rounded-lg hover:bg-[#FF7A85] transition duration-300"
             >
               다음
             </Button>
           ) : (
             <Button
               onClick={saveDataToSupabase}
-              disabled={!isStepValid() || isLoading}
-              className="py-3 px-6 text-lg bg-red-400 text-white rounded-lg hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-400 transition duration-200 disabled:bg-gray-300 disabled:cursor-not-allowed"
+              disabled={!isStepValid()}
+              className="flex w-56 h-12 items-center justify-center py-3 px-4 text-lg bg-[#FF7A85] text-white rounded-lg hover:bg-red-500 focus:outline-none focus:ring-1 focus:ring-red-400 transition duration-200 disabled:bg-gray-300 disabled:cursor-not-allowed"
             >
               결과보기
             </Button>

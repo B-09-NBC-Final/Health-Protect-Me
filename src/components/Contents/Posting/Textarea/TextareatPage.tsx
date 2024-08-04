@@ -19,10 +19,6 @@ import {
   AlertDialogAction
 } from '@/components/ui/alert-dialog';
 
-// type FileInfo = {
-//   url: string;
-// };
-
 const supabase = createClient();
 
 const TextareaPage = () => {

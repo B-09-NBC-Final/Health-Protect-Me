@@ -13,6 +13,7 @@ const PostingDetailPost = ({ params }: { params: { id: string } }) => {
   const [post, setPost] = useState<Post | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [userPurpose, setUserPurpose] = useState<string | null>(null);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
   const postDate = new Date(post?.created_at as string);
   const postYear = String(postDate.getFullYear()).slice(-2);
   const postMonth = String(postDate.getMonth() + 1).padStart(2, '0');
@@ -58,7 +59,23 @@ const PostingDetailPost = ({ params }: { params: { id: string } }) => {
 
   useEffect(() => {
     getPost();
+    getCurrentUser();
   }, []);
+
+  const getCurrentUser = async () => {
+    const {
+      data: { user }
+    } = await supabase.auth.getUser();
+    if (user) {
+      const { data, error } = await supabase.from('users').select('*').eq('user_id', user.id).single();
+
+      if (error) {
+        console.log('error', error);
+      } else {
+        setCurrentUser(data);
+      }
+    }
+  };
 
   useEffect(() => {
     if (post?.user_id) {
@@ -78,9 +95,11 @@ const PostingDetailPost = ({ params }: { params: { id: string } }) => {
         </span>
         <div className="flex justify-between">
           <p className="text-gray900 font-semibold mt-2">{post?.title}</p>
-          <i>
-            <KebabMenu params={params} />
-          </i>
+          {currentUser && post && currentUser.user_id === post.user_id && (
+            <i>
+              <KebabMenu params={params} />
+            </i>
+          )}
         </div>
         <p className="text-gray600 text-sm pb-4 border-b border-gray200 border-solid">{dateOnly}</p>
         <Image
