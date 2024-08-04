@@ -63,6 +63,7 @@ const config = {
         gray200: '#E4E5E7',
         gray300: '#D5D6D8',
         gray400: '#B7B9BD',
+        gray600: '#76797F',
         primary500: '#FF7A85',
         secondary600: '#49BA43'
       },
@@ -88,6 +89,7 @@ const config = {
       },
       backgroundColor: {
         gray100: '#F1F2F2',
+        pramary100: '#FFF6F2',
         pramary500: '#FF7A85',
         pramary600: '#F5637C',
         btnClose: 'rgba(39, 40, 42, 0.50)'

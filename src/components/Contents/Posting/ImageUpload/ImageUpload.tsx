@@ -2,7 +2,8 @@ import React from 'react';
 import Image from 'next/image';
 import { v4 as uuidv4 } from 'uuid';
 import { createClient } from '@/supabase/client';
-import imageUploadBtn from '@/assets/image/imageUploadBtn.png'
+import iconImage from '@/assets/icons/icon_image.svg';
+import iconClose from '@/assets/icons/icon_close.svg';
 
 export type FileInfo = {
   file: File;
@@ -68,11 +69,20 @@ const ImageUpload = ({ fileInfos, setFileInfos, setImageError }: ImageUploadProp
   };
 
   return (
-    <div className="mt-8">
-      <div className="flex flex-wrap gap-4 mb-4">
+    <div className="flex pb-10 border-b border-solid border-gray200">
+      {fileInfos.length < 3 && (
+        <div className="flex">
+          <label className="flex flex-col items-center cursor-pointer border border-solid border-gray300 rounded-lg p-2 w-[76px] h-[76px]">
+            <Image src={iconImage} alt="이미지 추가" width={36} height={36} />
+            <input type="file" multiple accept="image/*" className="hidden" onChange={handleUploadFiles} />
+            <span className="text-gray600 text-sm mt-1">{fileInfos.length}/3</span>
+          </label>
+        </div>
+      )}
+      <div className="flex">
         {fileInfos.map((info, index) => (
-          <div key={index} className="relative">
-            <div className="relative w-[120px] h-[120px]">
+          <div key={index} className="relative ml-4">
+            <div className="relative w-[76px] h-[76px]">
               <Image
                 src={info.preview}
                 alt={`preview-${index}`}
@@ -81,22 +91,17 @@ const ImageUpload = ({ fileInfos, setFileInfos, setImageError }: ImageUploadProp
                 className="rounded-lg"
               />
               <button
-                className="absolute -top-2 -right-2 bg-[#FF7A85] text-white font-bold rounded-full w-6 h-6 flex items-center justify-center text-xs"
+                className="absolute top-1 right-1 bg-btnClose rounded-full w-5 h-5 flex items-center justify-center"
                 onClick={() => handleRemovePrevFile(index)}
               >
-                X
+                <i>
+                  <Image src={iconClose} alt="이미지 삭제" width={16} height={16} />
+                </i>
               </button>
             </div>
           </div>
         ))}
       </div>
-      {fileInfos.length < 3 && (
-        <label className="flex items-center cursor-pointer">
-          <Image src={imageUploadBtn} alt="addImg" width={50} height={50} className="mr-2" />
-          <span className="text-sm text-blue-500">최대 3개</span>
-          <input type="file" id="test" multiple accept="image/*" className="hidden" onChange={handleUploadFiles} />
-        </label>
-      )}
     </div>
   );
 };
