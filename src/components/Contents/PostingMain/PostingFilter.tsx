@@ -9,7 +9,7 @@ const PostingFilter = ({
 }) => {
   const categories = ['전체 글 보기', '잡담', '질문', '정보'];
   return (
-    <nav className="flex flex-col border border-solid rounded-xl border-gray300 p-2">
+    <nav className="flex flex-col border border-solid rounded-xl border-gray300 p-2 bg-white ">
       {categories.map((category, idx) => (
         <button
           key={category}

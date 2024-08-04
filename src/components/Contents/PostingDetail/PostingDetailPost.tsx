@@ -73,7 +73,7 @@ const PostingDetailPost = ({ params }: { params: { id: string } }) => {
   return (
     <>
       <div className="w-[800px] mx-auto">
-        <span className="text-primary600 border-primary500 border border-solid py-1 px-2 mb-3 rounded">
+        <span className="text-primary600 border-primary500 border border-solid py-1 px-2 mb-3 rounded bg-white">
           {post?.category}
         </span>
         <div className="flex justify-between">
@@ -110,7 +110,7 @@ const PostingDetailPost = ({ params }: { params: { id: string } }) => {
         ) : null}
         <p className="mt-6">{post?.content}</p>
 
-        <div className="inline-flex border border-gray100 border-solid rounded-2xl pl-3 py-6 pr-6 mt-10">
+        <div className="inline-flex border border-gray100 border-solid rounded-2xl pl-3 py-6 pr-6 mt-10 bg-gray-50">
           <Image
             src={user?.profile_url ? (user?.profile_url as string) : defaultImageUrl}
             alt=""

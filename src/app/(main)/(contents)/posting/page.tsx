@@ -1,11 +1,7 @@
 import PostingMain from '@/components/Contents/Posting/PostingMain';
 
 const PostingPage = () => {
-  return (
-    <div>
-      <PostingMain />
-    </div>
-  );
+  return <PostingMain />;
 };
 
 export default PostingPage;

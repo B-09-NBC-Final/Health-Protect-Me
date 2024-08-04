@@ -104,7 +104,7 @@ const Profile = () => {
   };
 
   return (
-    <div className="w-[400px] h-[472px] p-6 px-10 rounded-2xl border border-gray-300 flex flex-col items-center">
+    <div className="w-[400px] h-[472px] p-6 px-10 rounded-2xl border border-gray-300 flex flex-col items-center bg-white">
       <div className="w-[120px] h-[120px] rounded-full flex items-center justify-center mb-4">
         <Image
           className="rounded-full"
