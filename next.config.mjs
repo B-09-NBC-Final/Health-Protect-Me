@@ -7,21 +7,19 @@ const nextConfig = {
         hostname: 'raw.githubusercontent.com',
         pathname: '/**'
       },
-
       {
         protocol: 'https',
         hostname: 'qdtbndpvityeryaniyfj.supabase.co',
         pathname: '/**'
       },
-
       {
         hostname: 'lh3.googleusercontent.com'
       },
-
       {
         hostname: 'k.kakaocdn.net'
       }
-    ]
+    ],
+    domains: ['t1.kakaocdn.net'],
   },
   env: {
     SUPABASE_URL: process.env.SUPABASE_URL,
