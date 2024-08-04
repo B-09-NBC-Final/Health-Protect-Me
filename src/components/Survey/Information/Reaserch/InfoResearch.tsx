@@ -261,12 +261,14 @@ const InfoResearch = (): JSX.Element => {
         );
       case '성별':
         return (
-          <div ref={stepRefs.current[1]} className="mb-4">
-            <label className="block text-sm mb-2 font-medium text-gray-700">성별</label>
-            <div className="flex space-x-4">
+          <div ref={stepRefs.current[1]} className="mb-4 flex flex-col items-center gap-10">
+            <h2 className="text-xl font-semibold mb-4 text-center">성별를 입력해주세요</h2>
+            <p className="text-sm text-gray-600 mb-4 text-center">성별에 따라 일일 권장 칼로리 섭취량이 달라집니다</p>
+            <br />
+            <div className="flex  w-48 pt-3 pr-4 items-center gap-2 space-x-4 ">
               <button
                 onClick={() => handleGenderSelect('남')}
-                className={`flex-1 py-2 px-4 text-sm border border-gray-300 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-red-400 transition duration-200 ${
+                className={`flex-1 h-12 w-48 py-3 px-4 text-sm border border-gray-300 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-red-400 transition duration-200 ${
                   surveyData.gender === '남' ? 'bg-[#FFF6F2] text-black' : 'bg-white text-gray-700'
                 }`}
               >
@@ -274,7 +276,7 @@ const InfoResearch = (): JSX.Element => {
               </button>
               <button
                 onClick={() => handleGenderSelect('여')}
-                className={`flex-1 py-2 px-4 text-sm border border-gray-300 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-red-400 transition duration-200 ${
+                className={`flex-1 h-12 w-48 py-3 px-4 text-sm border border-gray-300 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-red-400 transition duration-200 ${
                   surveyData.gender === '여' ? 'bg-[#FFF6F2] text-black' : 'bg-white text-gray-700'
                 }`}
               >
@@ -354,7 +356,7 @@ const InfoResearch = (): JSX.Element => {
 
         {renderStep()}
 
-        <div className="mt-36 flex justify-between">
+        <div className="mt-36 flex items-center gap-4">
           {currentStepIndex > 0 && (
             <Button
               onClick={preStep}
