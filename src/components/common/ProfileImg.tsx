@@ -8,7 +8,7 @@ type UserProfileProps = {
 
 const UserProfile: React.FC<UserProfileProps> = ({ src, width, height }) => {
   return (
-    <div className={`border rounded-full overflow-hidden`}>
+    <div className={`border rounded-full overflow-auto`}>
       <Image
         src={src! || Defaultimg}
         width={width}
