@@ -4,8 +4,10 @@ import Header from '@/components/common/Header/Header';
 const InfoMainLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
-      <Header />  
-      {children}
+      <div className="relative min-h-screen">
+        <Header />
+        <main className="pt-15 bg-default">{children}</main>
+      </div>
     </>
   );
 };
