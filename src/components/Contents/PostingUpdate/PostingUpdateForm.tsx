@@ -1,26 +1,26 @@
 'use client';
 
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { createClient } from '@/supabase/client';
-import { Post } from '@/types';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { uuid } from 'uuidv4';
-import iconCamera from '@/assets/icons/icon_camera.svg';
-import { Button } from '@/components/ui/button';
-import Link from 'next/link';
+import iconImage from '@/assets/icons/icon_image.svg';
+import iconClose from '@/assets/icons/icon_close.svg';
 import { useRouter } from 'next/navigation';
-import { url } from 'inspector';
+import Button from '@/components/common/Button';
 
 const PostingUpdateForm = ({ params }: { params: { id: string } }) => {
   const { id } = params;
   const supabase = createClient();
   const [title, setTitle] = useState<string>('');
+  const [titleError, setTitleError] = useState<string | null>(null);
   const [content, setContent] = useState<string>('');
+  const [contentError, setContentError] = useState<string | null>(null);
   const [fileUrl, setFileUrl] = useState<string[]>([]);
   const [uploadFile, setUploadFile] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
+  const [imageError, setImageError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
   const getPost = async () => {
@@ -81,10 +81,29 @@ const PostingUpdateForm = ({ params }: { params: { id: string } }) => {
     setFileUrl((prevurl) => prevurl.filter((_, i) => i !== index));
   };
 
+  const handleCancel = () => {
+    router.push(`/posting-detail/${id}`);
+  };
+
   const handleSubmit = async () => {
-    const checkConfirm = confirm('등록 하시겠습니까?');
-    if (checkConfirm) {
-      try {
+    try {
+      if (title.length < 2) {
+        setTitleError('제목은 최소 2자 이상이어야 합니다.');
+        return;
+      }
+
+      if (content.length > 500) {
+        setContentError('내용은 최대 500자까지 입력 가능합니다.');
+        return;
+      }
+
+      if (fileUrl.length === 0) {
+        setImageError('최소 1개의 이미지를 업로드해주세요.');
+        return;
+      }
+
+      const checkConfirm = confirm('등록 하시겠습니까?');
+      if (checkConfirm) {
         await supabase
           .from('posts')
           .update({
@@ -96,12 +115,31 @@ const PostingUpdateForm = ({ params }: { params: { id: string } }) => {
           .select('*');
         alert('등록 되었습니다.');
         router.push(`/posting-detail/${id}`);
-      } catch (error) {
-        console.log(error);
+      } else {
+        alert('취소되었습니다.');
       }
-    } else {
-      alert('취소되었습니다.');
+    } catch (error) {
+      setError('게시글 등록 중 문제가 발생했습니다. 다시 시도해주세요.');
+      console.error(error);
     }
+  };
+
+  const validateTitle = (value: string) => {
+    if (value.length < 2) {
+      setTitleError('최소 2자 이상이어야 합니다.');
+    } else {
+      setTitleError(null);
+    }
+    setTitle(value);
+  };
+
+  const validateContent = (value: string) => {
+    if (value.length > 500) {
+      setContentError('내용은 최대 500자까지 입력 가능합니다.');
+    } else {
+      setContentError(null);
+    }
+    setContent(value);
   };
 
   useEffect(() => {
@@ -109,62 +147,86 @@ const PostingUpdateForm = ({ params }: { params: { id: string } }) => {
   }, []);
 
   return (
-    <div className="mb-12">
-      <h1 className="text-4xl font-bold mb-6">게시글 수정</h1>
-      <div className="border-t border-gray-200 pt-8">
-        <Input
+    <div className="w-[800px] mx-auto">
+      <h2 className="text-lg font-semibold mb-4">포스트 수정</h2>
+      <div>
+        <input
           type="text"
-          placeholder="제목을 입력 해주세요."
-          className="w-full p-2 mb-4 border-b border-transparent focus:border-[#FF7A85] focus:outline-none transition-colors duration-300 placeholder-gray-400 text-black"
+          placeholder="제목을 입력해 주세요."
+          className="border border-gray300 border-solid p-3 rounded-sm w-full text-gray900 placeholder:text-gray500 hover:border-gray600 focus:outline-none focus:border-secondary600"
           value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          onChange={(e) => validateTitle(e.target.value)}
         />
-        <Textarea
-          placeholder="내용을 적어주세요."
-          id="content"
-          className="mt-4 w-full h-64 p-4 mb-5 border-transparent rounded-lg focus:ring-2 focus:ring-[#FF7A85] focus:border-[#FF7A85] outline-none transition-all duration-300 resize-none placeholder-gray-400 text-black"
+        {titleError && <p className="text-backgroundError mt-1 text-sm">{titleError}</p>}
+        <textarea
+          placeholder="식단을 공유하거나, 자유롭게 이야기를 나눠보세요."
+          className="border border-gray300 border-solid p-3 rounded-sm w-full text-gray900 placeholder:text-gray500 hover:border-gray600 focus:outline-none focus:border-secondary600 mt-2 h-[400px]"
           value={content}
-          onChange={(e) => setContent(e.target.value)}
+          onChange={(e) => validateContent(e.target.value)}
         />
-      </div>
-
-      <div className="flex">
         <div className="flex">
-          {previews.map((preview, index) => (
-            <div key={index} className="relative mr-2">
-              <div className="relative w-[100px] h-[100px]">
-                <Image src={preview} alt={`preview-${index}`} layout="fill" objectFit="cover" className="rounded-lg" />
-                <button
-                  className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs"
-                  onClick={() => handleRemovePrevFile(index)}
-                >
-                  X
-                </button>
-              </div>
-            </div>
-          ))}
+          {contentError && <p className="text-backgroundError text-sm">{contentError}</p>}
+          <p className="ml-auto text-gray600 text-sm">{content.length}/500</p>
         </div>
-        <label className="flex justify-center items-center cursor-pointer bg-gray-200 rounded-lg w-[100px] h-[100px]">
-          <Image src={iconCamera} alt="이미지 추가" width={30} height={30} />
-          <input type="file" multiple accept="image/*" className="hidden" onChange={handleUploadFiles} />
-        </label>
       </div>
 
-      <div className="mt-8">
-        <div className="flex justify-end space-x-4">
+      <div className="pb-10 border-b border-solid border-gray200">
+        <div className="flex mt-4">
+          <label className="flex flex-col items-center cursor-pointer border border-solid border-gray300 rounded-lg p-2 w-[76px] h-[76px]">
+            <Image src={iconImage} alt="이미지 추가" width={36} height={36} />
+            <input type="file" multiple accept="image/*" className="hidden" onChange={handleUploadFiles} />
+            <span className="text-gray600 text-sm mt-1">{fileUrl.length}/3</span>
+          </label>
+          <div className="flex">
+            {previews.map((preview, index) => (
+              <div key={index} className="relative ml-4">
+                <div className="relative w-[76px] h-[76px]">
+                  <Image
+                    src={preview}
+                    alt={`preview-${index}`}
+                    layout="fill"
+                    objectFit="cover"
+                    className="rounded-lg"
+                  />
+                  <button
+                    className="absolute top-1 right-1 bg-btnClose rounded-full w-5 h-5 flex items-center justify-center"
+                    onClick={() => handleRemovePrevFile(index)}
+                  >
+                    <i>
+                      <Image src={iconClose} alt="이미지 삭제" width={16} height={16} />
+                    </i>
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        {imageError && <p className="text-backgroundError text-sm mt-1">{imageError}</p>}
+      </div>
+
+      <div className="mt-10">
+        <div className="flex justify-center space-x-4">
           <Button
+            buttonName="취소"
+            onClick={handleCancel}
+            bgColor="#FFFFFF"
+            boxShadow="none"
+            textColor="text-gray900"
+            paddingY="py-2"
+            border="border-gray400"
+            buttonWidth="w-[192px]"
+            hover="hover:bg-gray100 hover:border-gray600"
+          ></Button>
+          <Button
+            buttonName="수정 완료"
             onClick={handleSubmit}
-            type="button"
-            className="px-6 py-2 bg-[#FF848F] text-white rounded-lg hover:bg-[#FF7A85] transition duration-300"
-          >
-            등록하기
-          </Button>
-          <Button
-            type="button"
-            className="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition duration-300"
-          >
-            <Link href={`/posting-detail/${id}`}>취소하기</Link>
-          </Button>
+            bgColor="#FFFFFF"
+            boxShadow="none"
+            textColor="text-primary600"
+            paddingY="py-2"
+            border="border-primary500"
+            buttonWidth="w-[192px]"
+          ></Button>
         </div>
       </div>
     </div>

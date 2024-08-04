@@ -5,13 +5,19 @@ import { createClient } from '@/supabase/client';
 import dayjs from 'dayjs';
 import { useUserStore } from '@/store/userStore';
 import { useRouter } from 'next/navigation';
-import { Textarea } from '@/components/ui/textarea';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
+import Button from '@/components/common/Button';
 import { Category } from '@/types/tags';
-import ImageUpload, {FileInfo} from '../ImageUpload/ImageUpload';
+import ImageUpload, { FileInfo } from '../ImageUpload/ImageUpload';
 import CategoryMain from '../Category/Categories';
-import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogAction } from '@/components/ui/alert-dialog';
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogAction
+} from '@/components/ui/alert-dialog';
 
 // type FileInfo = {
 //   url: string;
@@ -116,56 +122,61 @@ const TextareaPage = () => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-6">
-      <div className="mb-12">
-        <h1 className="text-4xl font-bold mb-6">게시글 작성</h1>
+    <div className="w-[800px] mx-auto">
+      <h2 className="text-lg font-semibold mb-4">포스트 작성</h2>
+      <div className="mb-6">
         <CategoryMain
           categories={categories}
           selectedCategories={selectedCategory}
           onSelectCategory={handleCategorySelect}
         />
-        {categoryError && <div className="text-red-500 mb-2">{categoryError}</div>}
-        <div className="border-t border-gray-200 pt-8">
-          <Input
-            type="text"
-            placeholder="제목을 입력 해주세요. (최소 2자)"
-            className="w-full p-2 mb-4 border-b focus:outline-none transition-colors duration-300 placeholder-gray-400 text-black"
-            value={title}
-            onChange={(e) => validateTitle(e.target.value)}
-          />
-          {titleError && <div className="text-red-500 mb-2">{titleError}</div>}
-          <Textarea
-            placeholder="식단을 공유하거나, 자유롭게 이야기를 나눠보세요. (최대 500자)"
-            id="content"
-            className="mt-4 w-full h-64 p-4 rounded-lg focus:ring-2 outline-none transition-all duration-300 resize-none placeholder-gray-400 text-black"
-            value={content}
-            onChange={(e) => validateContent(e.target.value)}
-            maxLength={500}
-          />
-          {contentError && <div className="text-red-500 mt-2">{contentError}</div>}
+        {categoryError && <div className="text-backgroundError mt-1 text-sm">{categoryError}</div>}
+        <input
+          type="text"
+          placeholder="제목을 입력 해주세요. (최소 2자)"
+          className="border border-gray300 border-solid p-3 rounded-sm w-full text-gray900 placeholder:text-gray500 hover:border-gray600 focus:outline-none focus:border-secondary600"
+          value={title}
+          onChange={(e) => validateTitle(e.target.value)}
+        />
+        {titleError && <div className="text-backgroundError mt-1 text-sm">{titleError}</div>}
+        <textarea
+          placeholder="식단을 공유하거나, 자유롭게 이야기를 나눠보세요. (최대 500자)"
+          className="border border-gray300 border-solid p-3 rounded-sm w-full text-gray900 placeholder:text-gray500 hover:border-gray600 focus:outline-none focus:border-secondary600 mt-2 h-[400px]"
+          value={content}
+          onChange={(e) => validateContent(e.target.value)}
+        />
+        <div className="flex">
+          {contentError && <p className="text-backgroundError text-sm">{contentError}</p>}
+          <p className="ml-auto text-gray600 text-sm">{content.length}/500</p>
         </div>
       </div>
-      <ImageUpload
-        fileInfos={fileInfos}
-        setFileInfos={setFileInfos}
-        setImageError={setImageError}
-      />  
-      {imageError && <div className="text-red-500 mt-2">{imageError}</div>}
+      <ImageUpload fileInfos={fileInfos} setFileInfos={setFileInfos} setImageError={setImageError} />
+      {imageError && <div className="text-backgroundError mt-1 text-sm">{imageError}</div>}
       {error && <div className="text-red-500 mt-4">{error}</div>}
-      <div className="mt-8 flex justify-center">
-        <div className="space-x-4">
+
+      <div className="mt-10">
+        <div className="flex justify-center space-x-4">
           <Button
-            className="px-6 py-2 bg-[#FF848F] text-white rounded-lg hover:bg-[#FF7A85] transition duration-300"
-            onClick={handlePostRegist}
-          >
-            등록하기
-          </Button>
-          <Button
-            className="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition duration-300"
+            buttonName="취소"
             onClick={() => router.push('/posting-main')}
-          >
-            취소하기
-          </Button>
+            bgColor="#FFFFFF"
+            boxShadow="none"
+            textColor="text-gray900"
+            paddingY="py-2"
+            border="border-gray400"
+            buttonWidth="w-[192px]"
+            hover="hover:bg-gray100 hover:border-gray600"
+          ></Button>
+          <Button
+            buttonName="작성 완료"
+            onClick={handlePostRegist}
+            bgColor="#FFFFFF"
+            boxShadow="none"
+            textColor="text-primary600"
+            paddingY="py-2"
+            border="border-primary500"
+            buttonWidth="w-[192px]"
+          ></Button>
         </div>
       </div>
 

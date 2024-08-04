@@ -24,9 +24,11 @@ const CategoryMain = ({ categories, selectedCategories, onSelectCategory }: Cate
               onSelectCategory(category.id);
               setShowError(false);
             }}
-            className={`px-4 py-2 ml-3 border-spacing-1 rounded-md ${
-              selectedCategories.includes(category.id) ? 'bg-[#FF848F] text-white' : 'bg-gray-200 text-gray-700'
-            } hover:bg-[#FF7A85] hover:text-white transition-colors duration-300`} 
+            className={`px-4 py-2 ml-2 border-gray300 rounded-xl w-[72px] ${
+              selectedCategories.includes(category.id)
+                ? 'bg-pramary600 text-white'
+                : 'bg-white text-gray900 border-spacing-1 border border-solid'
+            } hover:bg-pramary600 hover:text-white transition-colors duration-300`}
           >
             {category.name}
           </button>
