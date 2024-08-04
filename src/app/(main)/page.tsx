@@ -2,59 +2,66 @@ import MainContent from '@/components/MainPage/MainContent';
 import MainSwiper from '@/components/MainPage/MainSwiper';
 import Image from 'next/image';
 import Thumbnail from '@/assets/image/img_thumbnail.svg';
+import main01 from '@/assets/image/img_main01.svg';
+import main02 from '@/assets/image/img_main02.svg';
+import main03 from '@/assets/image/img_main03.svg';
 import MainBanner from '@/components/MainPage/MainBanner';
+import MainSwiperReverse from '@/components/MainPage/MainSwiperReverse';
 
 const MainPage = () => {
   return (
-    <main>
+    <main className="w-full">
       <MainContent />
       <section className="swiper-area">
         <div className="inner_wrap flex justify-between">
-          <MainSwiper reverseDirection={true} />
-          <p className="text-white text-2xl font-medium flex items-center">사용자들의 이야기</p>
-          <MainSwiper reverseDirection={false} />
+          <MainSwiper />
+          <div className="flex flex-col justify-center items-center">
+            <p className="text-white text-2xl font-medium">사용자들의 이야기</p>
+            <p className="text-white opacity-60 text-lg">추천 식단과 함께한 경험</p>
+          </div>
+          <MainSwiperReverse />
         </div>
       </section>
       <section className="inner_wrap">
-        <ul className="mb-40">
+        <ul className="pb-40">
           <li className="flex justify-between pt-40 pl-40">
-            <div>
-              <p className="text-main-title2 font-medium leading-tight">
+            <div className="pt-[156px]">
+              <p className="text-main-title2 text-gray900 font-medium leading-tight">
                 나에게 맞는 <br />
                 맞춤 식단을 간편하게 확인
               </p>
-              <p className="text-sub-title font-medium mt-2">
+              <p className="text-lg font-medium mt-2 text-gray600">
                 나의 건강 상태와 목표에 맞춘 식단을 AI가 매일 자동으로 추천합니다. <br />
                 균형잡힌 영양소 정보를 바탕으로 다양한 식단을 안내해 드려요.
               </p>
             </div>
-            <Image src={Thumbnail} alt="간편하게, 나만을 위한 맞춤형 건강 솔루션" width={600} height={480} />
+            <Image src={main01} alt="간편하게, 나만을 위한 맞춤형 건강 솔루션" width={600} height={480} />
           </li>
           <li className="flex justify-between pt-40">
-            <Image src={Thumbnail} alt="간편하게, 나만을 위한 맞춤형 건강 솔루션" width={600} height={480} />
-            <div className="w-[600px]">
-              <p className="text-main-title2 font-medium leading-tight">
+            <Image src={main02} alt="간편하게, 나만을 위한 맞춤형 건강 솔루션" width={600} height={480} />
+            <div className="w-[600px] pt-[156px]">
+              <p className="text-main-title2 text-gray900 font-medium leading-tight">
                 목표 달성을 <br />
                 도와줄 최적화된 운동 플랜
               </p>
-              <p className="text-sub-title font-medium mt-2">
+              <p className="text-lg font-medium mt-2 text-gray600">
                 개인 맞춤형으로 설계된 운동 플랜으로 더 효과적인 건강관리를 할 수 있어요. <br />
                 간단한 운동 가이드와 함께 효율적으로 목표를 달성해 보세요.
               </p>
             </div>
           </li>
           <li className="flex justify-between pt-40 pl-40">
-            <div>
-              <p className="text-main-title2 font-medium leading-tight">
+            <div className="pt-[156px]">
+              <p className="text-main-title2 text-gray900 font-medium leading-tight">
                 건강한 <br />
                 라이프스타일을 위한 커뮤니티
               </p>
-              <p className="text-sub-title font-medium mt-2">
+              <p className="text-lg font-medium mt-2 text-gray600">
                 혼자라서 어려웠던 경험, 한 번쯤은 있지 않으셨나요? <br />
                 비슷한 목표를 가진 사람들과 소통하고, 성공적인 경험을 나누어 보세요.
               </p>
             </div>
-            <Image src={Thumbnail} alt="간편하게, 나만을 위한 맞춤형 건강 솔루션" width={600} height={480} />
+            <Image src={main03} alt="간편하게, 나만을 위한 맞춤형 건강 솔루션" width={600} height={480} />
           </li>
         </ul>
       </section>
