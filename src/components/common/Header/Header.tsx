@@ -31,7 +31,7 @@ const Header = () => {
                 </Link>
               </li>
               <div className="w-px h-5 bg-gray-300"></div>
-              <li className="flex items-center">
+              <li className="flex items-center w-10 h-10">
                 <Dropdown />
               </li>
             </ul>
