@@ -215,6 +215,7 @@ const PostingUpdateForm = ({ params }: { params: { id: string } }) => {
             paddingY="py-2"
             border="border-gray400"
             buttonWidth="w-[192px]"
+            hover="hover:bg-gray100 hover:border-gray600"
           ></Button>
           <Button
             buttonName="수정 완료"
