@@ -108,7 +108,7 @@ const Profile = () => {
         />
       </div>
       <h1 className="text-sm font-bold mb-6 text-center">{user.nickname || '사용자'}</h1>
-      <div className="py-4 px-10 text-center w-80 h-[164px] bg-[#FAFAFA] shadow-md rounded-2xl flex flex-col items-center justify-center">
+      <div className="py-4 px-10 text-center w-80 h-[164px] shadow-my-box rounded-2xl flex flex-col items-center justify-center">
         <div className="flex items-center justify-center w-60 h-10 bg-[#EAF3EC] text-[#257D1D] rounded-2xl mb-2">
           <h2 className="text-sm font-bold">{user.goal}</h2>
         </div>
