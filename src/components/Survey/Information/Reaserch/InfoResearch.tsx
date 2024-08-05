@@ -287,10 +287,10 @@ const InfoResearch = (): JSX.Element => {
             <h2 className="text-xl font-semibold mb-2 text-center">성별을 선택해 주세요</h2>
             <p className="text-sm text-gray-600 mb-6 text-center">성별에 따라 일일 권장 칼로리 섭취량이 달라집니다</p>
 
-            <div className="flex w-3/4 space-x-3 gap-4 ">
+            <div className="flex w-3/4 space-x-2 gap-4 ">
               <button
                 onClick={() => handleGenderSelect('남')}
-                className={`flex-1 text-center w-full py-2 px-4 text-base border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-red-400 transition duration-200 ${
+                className={`flex-1 text-center  py-2 px-4 text-base border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-red-400 transition duration-200 ${
                   surveyData.gender === '남' ? 'bg-[#FFF6F2] text-black' : 'bg-white text-gray-700'
                 }`}
               >
