@@ -95,6 +95,7 @@ const ProfileEdit = ({
 
       if (!userId) {
         throw new Error('사용자 ID를 찾을 수 없습니다.');
+        console.log(userId);
       }
 
       let avatarUrl = profileImage;
