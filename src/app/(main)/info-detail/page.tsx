@@ -91,7 +91,7 @@ const InforDetailPage = () => {
     };
 
     fetchData();
-  }, [userId]); // userId가 변경될 때마다 fetchData 실행
+  }, [userId]);
 
   if (meal.length === 0 || !work) return null;
 
