@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { useUserStore } from '@/store/userStore';
 import Loading from '@/components/LoadingPage/Loading';
+import Footer from '@/components/common/Footer';
 
 const supabase = createClient();
 
@@ -162,8 +163,6 @@ const InfoResearch = (): JSX.Element => {
       caution: ''
     };
 
-
-
     let currentKey: keyof typeof exercise | null = null;
 
     lines.forEach((line) => {
@@ -312,7 +311,9 @@ const InfoResearch = (): JSX.Element => {
         return (
           <div ref={stepRefs.current[2]} className="mb-4 flex flex-col justify-center items-center text-center">
             <h2 className="text-xl font-semibold mb-2 text-center">신장과 체중을 입력해주세요</h2>
-            <p className="text-sm text-gray-600 mb-10 text-center">신장과 체중에 따라 일일 권장 칼로리 섭취량이 달라집니다</p>
+            <p className="text-sm text-gray-600 mb-10 text-center">
+              신장과 체중에 따라 일일 권장 칼로리 섭취량이 달라집니다
+            </p>
             <div className="mb-4 w-full  ">
               <label className="w-60 block text-sm mb-2 font-medium text-gray-700">신장</label>
               <input
@@ -335,7 +336,7 @@ const InfoResearch = (): JSX.Element => {
                 placeholder="kg (예: 65)"
                 value={surveyData.weight ?? ''}
                 onChange={handleInputChange}
-               className="w-2/3 p-3 text-sm border rounded-lg focus:outline-none focus:ring-1 focus:ring-[#FF7A85] focus:border-transparent"
+                className="w-2/3 p-3 text-sm border rounded-lg focus:outline-none focus:ring-1 focus:ring-[#FF7A85] focus:border-transparent"
               />
               {surveyData.weight && !/^\d{2,3}$/.test(surveyData.weight.toString()) && (
                 <p className="text-red-500 text-sm mt-1">2자리 또는 3자리 숫자로 입력해주세요.</p>
@@ -346,8 +347,10 @@ const InfoResearch = (): JSX.Element => {
       case '식단 목적':
         return (
           <div ref={stepRefs.current[4]} className="mb-4">
-             <h2 className="text-xl font-semibold mb-2 text-center">식단을 통해 이루고자 하는 목표를 알려주세요</h2>
-             <p className="text-sm text-gray-600 mb-10 text-center">선택한 목표에 가장 최적화된 식단과 운동을 추천해 드려요</p>
+            <h2 className="text-xl font-semibold mb-2 text-center">식단을 통해 이루고자 하는 목표를 알려주세요</h2>
+            <p className="text-sm text-gray-600 mb-10 text-center">
+              선택한 목표에 가장 최적화된 식단과 운동을 추천해 드려요
+            </p>
             <div className="flex flex-col justify-center items-center gap-4">
               {(['체중 감량', '체중 유지', '체중 증량'] as DietGoal[]).map((goal) => (
                 <button
@@ -366,54 +369,56 @@ const InfoResearch = (): JSX.Element => {
     }
   };
 
-  return (
-    <>
-      {isLoading && <Loading />}
-      <div
-        className={`w-[1360px] max-w-2xl flex flex-col item-center  mx-auto mt-10 mb-4 p-8  bg-white rounded-xl shadow-lg ${
-          isLoading ? 'opacity-50' : ''
-        }`}
-      >
-        <h1 className="text-3xl font-bold mb-8 text-center text-gray-800">{steps[currentStepIndex]}</h1>
-        <div className="mb-8 bg-gray-200 rounded-full h-2">
-          <div
-            className="bg-red-400 h-2 rounded-full transition-all duration-500 ease-in-out"
-            style={{ width: `${((currentStepIndex + 1) / steps.length) * 100}%` }}
-          ></div>
+    return (
+      <div className="min-h-screen bg-[#F8FAF8] flex flex-col items-center justify-center py-10">
+        {isLoading && <Loading />}
+        <div
+          className={`w-[1360px] max-w-2xl flex flex-col items-center mx-auto p-8 bg-white rounded-xl shadow-lg ${
+            isLoading ? 'opacity-50' : ''
+          }`}
+        >
+          <h1 className="text-3xl font-bold mb-8 text-center text-gray-800">{steps[currentStepIndex]}</h1>
+          <div className="w-full mb-8 bg-gray-200 rounded-full h-2">
+            <div
+              className="bg-red-400 h-2 rounded-full transition-all duration-500 ease-in-out"
+              style={{ width: `${((currentStepIndex + 1) / steps.length) * 100}%` }}
+            ></div>
+          </div>
+
+          {renderStep()}
+
+          <div className="mt-36 flex items-center justify-center w-full gap-10">
+            {currentStepIndex > 0 && (
+              <Button
+                onClick={preStep}
+                className="flex w-56 h-12 items-center justify-center py-3 text-lg text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-1 focus:ring-gray-400 transition duration-200"
+              >
+                이전
+              </Button>
+            )}
+            {currentStepIndex < steps.length - 1 ? (
+              <Button
+                onClick={nextStep}
+                disabled={!isStepValid()}
+                className="flex w-56 h-12  items-center justify-center bg-[#FF7A85] text-white py-3 rounded-lg hover:bg-[#FF7A85] transition duration-300"
+              >
+                다음
+              </Button>
+            ) : (
+              <Button
+                onClick={saveDataToSupabase}
+                disabled={!isStepValid()}
+                className="flex w-56 h-12 ml-14 items-center justify-center bg-[#FF7A85] text-white py-3 rounded-lg hover:bg-[#FF7A85] transition duration-300"
+              >
+                결과보기
+              </Button>
+            )}
+          </div>
         </div>
 
-        {renderStep()}
-
-        <div className="mt-36 flex items-center justify-center ">
-          {currentStepIndex > 0 && (
-            <Button
-              onClick={preStep}
-              className="flex w-56 h-12 items-center justify-center py-3 text-lg text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-1 focus:ring-gray-400 transition duration-200"
-            >
-              이전
-            </Button>
-          )}
-          {currentStepIndex < steps.length - 1 ? (
-            <Button
-              onClick={nextStep}
-              disabled={!isStepValid()}
-              className="flex w-56 h-12 ml-14 items-center  bg-[#FF7A85] text-white py-3 rounded-lg hover:bg-[#FF7A85] transition duration-300"
-            >
-              다음
-            </Button>
-          ) : (
-            <Button
-              onClick={saveDataToSupabase}
-              disabled={!isStepValid()}
-              className="flex w-56 h-12 ml-14 items-center  bg-[#FF7A85] text-white py-3 rounded-lg hover:bg-[#FF7A85] transition duration-300"
-            >
-              결과보기
-            </Button>
-          )}
-        </div>
       </div>
-    </>
-  );
-};
+    );
+  };
+
 
 export default InfoResearch;

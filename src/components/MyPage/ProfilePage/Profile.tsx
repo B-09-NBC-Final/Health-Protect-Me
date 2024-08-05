@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { createClient } from '@/supabase/client';
 import { useUserStore } from '@/store/userStore';
+import Button from '@/components/common/Button';
 
 const DEFAULT_PROFILE_IMAGE = '/path/to/default-profile-image.jpg';
 
@@ -108,37 +109,48 @@ const Profile = () => {
         />
       </div>
       <h1 className="text-sm font-bold mb-6 text-center">{user.nickname || '사용자'}</h1>
-      <div className="py-4 px-10 text-center w-80 h-[164px] bg-[#FAFAFA] shadow-md rounded-2xl flex flex-col items-center justify-center">
-        <div className="flex items-center justify-center w-60 h-10 bg-[#EAF3EC] text-[#257D1D] rounded-2xl mb-2">
-          <h2 className="text-sm font-bold">{user.goal}</h2>
+      <div className="py-4 px-10 text-center w-80 h-[164px] shadow-my-box rounded-2xl flex flex-col items-center justify-center">
+        <div className="flex items-center justify-center w-60 h-10 bg-[#EAF3EC] text-[#257D1D] rounded-xl mb-2 font-semibold">
+          <h2 className="text-lg font-medium py-2">{user.goal}</h2>
         </div>
         <p className="text-gray-500 text-sm mt-2">헬프미와 함께 나의 목표를 달성해요</p>
         <div className="flex justify-between items-center mt-6 w-full">
           <div className="flex flex-col items-center">
             <span className="font-bold">키</span>
-            <span>{user.height ? `${user.height}cm` : 'N/A'}</span>
+            <span className="text-sm text-gray800">{user.height ? `${user.height}cm` : 'N/A'}</span>
           </div>
           <div className="h-12 w-px bg-gray-300 mx-4"></div>
           <div className="flex flex-col items-center">
             <span className="font-bold">체중</span>
-            <span>{user.weight ? `${user.weight}kg` : 'N/A'}</span>
+            <span className="text-sm text-gray800">{user.weight ? `${user.weight}kg` : 'N/A'}</span>
           </div>
           <div className="h-12 w-px bg-gray-300 mx-4"></div>
           <div className="flex flex-col items-center">
             <span className="font-bold">BMI</span>
-            <span>{bmiStatus}</span>
+            <span className="text-sm text-gray800">{bmiStatus}</span>
           </div>
         </div>
       </div>
       <div className="flex justify-center mt-10">
-        <button
+        {/* <button
           className={`flex h-10 py-2 px-3 justify-center items-center gap-1 self-stretch w-80 text-sm font-semibold border rounded-lg ${
             buttonClicked ? 'border-[#B7B9BD] bg-[#FAFAFA]' : 'border-[#D5D6D8] bg-white'
           }`}
           onClick={handleNavigateToEdit}
         >
           프로필 수정
-        </button>
+        </button> */}
+        <Button
+          buttonName="프로필 수정하기"
+          onClick={handleNavigateToEdit}
+          bgColor="bg-white"
+          boxShadow="none"
+          textColor="text-gray900"
+          paddingY="py-2"
+          border="border-gray400"
+          buttonWidth="w-[320px]"
+          hover="hover:bg-gray100 hover:border-gray600"
+        ></Button>
       </div>
     </div>
   );

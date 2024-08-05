@@ -68,7 +68,6 @@ const PostingUpdateForm = ({ params }: { params: { id: string } }) => {
       const publicUrl = response.data.publicUrl;
 
       setFileUrl((url) => [...url, publicUrl]);
-      console.log(fileUrl);
     } catch (error) {
       console.error('문제가 발생했습니다. 다시 시도 해주세요..!');
     }

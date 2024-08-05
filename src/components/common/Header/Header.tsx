@@ -10,8 +10,8 @@ const Header = () => {
   const { user } = useUserStore((state) => state);
 
   return (
-    <header className="fixed w-full bg-white z-10">
-      <div className="inner_wrap flex justify-between items-center px-10 py-4">
+    <header className="fixed w-full bg-white z-10 h-[57px]">
+      <div className="inner_wrap flex justify-between items-center px-10 py-4 h-full">
         <div className="flex items-center">
           <Link href={'/'}>
             <Image src={logo} alt="logo" width={100} height={28} />
@@ -31,7 +31,7 @@ const Header = () => {
                 </Link>
               </li>
               <div className="w-px h-5 bg-gray-300"></div>
-              <li>
+              <li className="flex items-center w-10 h-10">
                 <Dropdown />
               </li>
             </ul>
