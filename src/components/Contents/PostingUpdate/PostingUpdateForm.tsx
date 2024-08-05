@@ -8,6 +8,15 @@ import iconImage from '@/assets/icons/icon_image.svg';
 import iconClose from '@/assets/icons/icon_close.svg';
 import { useRouter } from 'next/navigation';
 import Button from '@/components/common/Button';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 const PostingUpdateForm = ({ params }: { params: { id: string } }) => {
   const { id } = params;
@@ -21,6 +30,9 @@ const PostingUpdateForm = ({ params }: { params: { id: string } }) => {
   const [previews, setPreviews] = useState<string[]>([]);
   const [imageError, setImageError] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [isConfirmDialog, setIsConfirmDialog] = useState(false);
   const router = useRouter();
 
   const getPost = async () => {
@@ -68,7 +80,6 @@ const PostingUpdateForm = ({ params }: { params: { id: string } }) => {
       const publicUrl = response.data.publicUrl;
 
       setFileUrl((url) => [...url, publicUrl]);
-      console.log(fileUrl);
     } catch (error) {
       console.error('문제가 발생했습니다. 다시 시도 해주세요..!');
     }
@@ -85,48 +96,56 @@ const PostingUpdateForm = ({ params }: { params: { id: string } }) => {
     router.push(`/posting-detail/${id}`);
   };
 
+  const showAlertMessage = (message: string, isConfirm: boolean = false) => {
+    setAlertMessage(message);
+    setIsConfirmDialog(isConfirm);
+    setShowAlert(true);
+  };
+
   const handleSubmit = async () => {
+    if (title.length < 2) {
+      showAlertMessage('제목은 최소 2자 이상이어야 합니다.');
+      return;
+    }
+
+    if (content.length === 0 || content.length > 500) {
+      showAlertMessage('내용은 1자 이상 500자 이하여야 합니다.');
+      return;
+    }
+
+    if (fileUrl.length === 0) {
+      showAlertMessage('최소 1개의 이미지를 업로드해주세요.');
+      return;
+    }
+
+    showAlertMessage('수정 하시겠습니까?', true);
+  };
+
+  const handleAlertConfirm = async () => {
     try {
-      if (title.length < 2) {
-        setTitleError('제목은 최소 2자 이상이어야 합니다.');
-        return;
-      }
+      const { data, error } = await supabase
+        .from('posts')
+        .update({
+          title,
+          content,
+          image_url: fileUrl
+        })
+        .eq('id', id)
+        .select('*');
 
-      if (content.length > 500) {
-        setContentError('내용은 최대 500자까지 입력 가능합니다.');
-        return;
-      }
+      if (error) throw error;
 
-      if (fileUrl.length === 0) {
-        setImageError('최소 1개의 이미지를 업로드해주세요.');
-        return;
-      }
-
-      const checkConfirm = confirm('등록 하시겠습니까?');
-      if (checkConfirm) {
-        await supabase
-          .from('posts')
-          .update({
-            title,
-            content,
-            image_url: fileUrl
-          })
-          .eq('id', id)
-          .select('*');
-        alert('등록 되었습니다.');
-        router.push(`/posting-detail/${id}`);
-      } else {
-        alert('취소되었습니다.');
-      }
+      showAlertMessage('수정되었습니다.');
+      router.push(`/posting-detail/${id}`);
     } catch (error) {
-      setError('게시글 등록 중 문제가 발생했습니다. 다시 시도해주세요.');
+      showAlertMessage('게시글 수정 중 문제가 발생했습니다. 다시 시도해주세요.');
       console.error(error);
     }
   };
 
   const validateTitle = (value: string) => {
     if (value.length < 2) {
-      setTitleError('최소 2자 이상이어야 합니다.');
+      setTitleError('제목은 최소 2자 이상이어야 합니다.');
     } else {
       setTitleError(null);
     }
@@ -229,6 +248,25 @@ const PostingUpdateForm = ({ params }: { params: { id: string } }) => {
           ></Button>
         </div>
       </div>
+
+      <AlertDialog open={showAlert} onOpenChange={setShowAlert}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>알림</AlertDialogTitle>
+            <AlertDialogDescription>{alertMessage}</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            {isConfirmDialog ? (
+              <>
+                <AlertDialogAction onClick={() => setShowAlert(false)}>취소</AlertDialogAction>
+                <AlertDialogAction onClick={handleAlertConfirm}>확인</AlertDialogAction>
+              </>
+            ) : (
+              <AlertDialogAction onClick={() => setShowAlert(false)}>확인</AlertDialogAction>
+            )}
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };

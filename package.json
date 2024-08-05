@@ -30,7 +30,7 @@
     "react-router-dom": "^6.25.1",
     "react-toastify": "^10.0.5",
     "supabase": "^1.187.10",
-    "swiper": "^11.1.8",
+    "swiper": "^11.1.9",
     "tailwind-merge": "^2.4.0",
     "tailwindcss-animate": "^1.0.7",
     "uuid": "^10.0.0",

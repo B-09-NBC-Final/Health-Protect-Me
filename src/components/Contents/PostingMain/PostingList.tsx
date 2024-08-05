@@ -5,6 +5,7 @@ import { Post } from '@/types';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import PostingMainBtn from './PostingBtn';
 
 type MyPost = Post & { users: { nickname: string } | null };
 
@@ -50,8 +51,8 @@ const PostingList = () => {
             </button>
           ))}
         </nav>
+        <PostingMainBtn />
       </div>
-
       <div className="border border-solid rounded-xl border-gray300 w-[1032px] ml-20 px-10 py-6 bg-white">
         <h2 className="mb-4 text-2xl text-gray900 font-medium">건강한 식단 이야기</h2>
         {filteredPosts?.length === 0 ? (
@@ -79,7 +80,7 @@ const PostingList = () => {
                     <div>
                       <span className="text-sm font-semibold text-primary600 mb-2">{item.category}</span>
                       <p className="text-gray900 font-semibold">{item.title}</p>
-                      <p className="line-clamp-2">{item.content}</p>
+                      <p className="line-clamp-2 text-gray800 text-sm">{item.content}</p>
                     </div>
                     <div className="flex justify-between w-full">
                       <p className="text-xs text-gray600">{item.users?.nickname}</p>

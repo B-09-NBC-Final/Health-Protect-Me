@@ -2,12 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
 
 export async function POST(request: NextRequest) {
-    console.log(">>callGPT");
 
     const SurveyData = await request.json();
     const { year_of_birth, gender, height, weight, purpose } = SurveyData;
-
-    console.log('SurbeyData', SurveyData);
 
     const openai = new OpenAI({
         apiKey: process.env.NEXT_PUBLIC_OPENAI_SECRET_KEY,

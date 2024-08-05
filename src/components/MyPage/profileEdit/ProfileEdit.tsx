@@ -51,7 +51,6 @@ export const deleteUser = async () => {
       console.error('Error', error.message);
       throw error;
     }
-    console.log(data);
 
     await supabase.auth.signOut();
   } catch (error) {
@@ -96,6 +95,7 @@ const ProfileEdit = ({
 
       if (!userId) {
         throw new Error('사용자 ID를 찾을 수 없습니다.');
+        console.log(userId);
       }
 
       let avatarUrl = profileImage;
@@ -148,7 +148,6 @@ const ProfileEdit = ({
     const { data: sessionData } = await supabase.auth.getSession();
     const isSignIn = !!sessionData.session;
     if (!isSignIn) {
-      console.log('로그인 상태 아님');
       router.push('/login');
       return;
     }
@@ -248,10 +247,10 @@ const ProfileEdit = ({
               닉네임
             </label>
             <input
-              id="nickname"
-              className="border rounded p-2 w-full h-12"
               type="text"
+              id="nickname"
               placeholder="닉네임"
+              className="border border-gray300 border-solid p-3 rounded-sm w-full text-gray900 placeholder:text-gray500 hover:border-gray600 focus:outline-none focus:border-secondary600"
               value={nickname}
               onChange={(e) => setNickname(e.target.value)}
             />
@@ -261,10 +260,10 @@ const ProfileEdit = ({
               키
             </label>
             <input
+              type="text"
               id="height"
-              className="border rounded p-2 w-full h-12"
-              type="number"
               placeholder="키"
+              className="border border-gray300 border-solid p-3 rounded-sm w-full text-gray900 placeholder:text-gray500 hover:border-gray600 focus:outline-none focus:border-secondary600"
               value={height}
               onChange={(e) => setHeight(parseFloat(e.target.value))}
             />
@@ -274,10 +273,10 @@ const ProfileEdit = ({
               체중
             </label>
             <input
+              type="text"
               id="weight"
-              className="border rounded p-2 w-full h-12"
-              type="number"
               placeholder="체중"
+              className="border border-gray300 border-solid p-3 rounded-sm w-full text-gray900 placeholder:text-gray500 hover:border-gray600 focus:outline-none focus:border-secondary600"
               value={weight}
               onChange={(e) => setWeight(parseFloat(e.target.value))}
             />

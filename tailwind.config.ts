@@ -93,14 +93,20 @@ const config = {
         pramary500: '#FF7A85',
         pramary600: '#F5637C',
         btnClose: 'rgba(39, 40, 42, 0.50)',
-        default: '#F8FAF8'
+        default: '#F8FAF8',
+        gray75: '#F5F7FA'
       },
       boxShadow: {
         'main-btn': '0px 8px 16px 0px rgba(255, 122, 133, 0.40)',
-        'main-btn-hover': '2px 4px 4px 0px rgba(39, 40, 42, 0.25), 0px 8px 16px 0px rgba(255, 122, 133, 0.40)'
+        'main-btn-hover': 'inset 0px -4px 4px 0px rgba(39, 40, 42, 0.25), 0px 8px 16px 0px rgba(255, 122, 133, 0.40)',
+        'my-box': '0px 2px 4px 0px rgba(39, 40, 42, 0.10)'
       },
       height: {
         'main-height': 'calc(100vh - 57px)'
+        
+      },
+      minHeight: {
+        'main-height': 'calc(100vh - 194px)'
       }
     }
   },
