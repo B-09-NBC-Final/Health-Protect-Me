@@ -9,7 +9,7 @@ import Defaultimg from '@/assets/image/defaultimg.png';
 import React from 'react';
 import Link from 'next/link';
 import { useUserStore } from '@/store/userStore';
-import ProfileImg from '@/components/common/ProfileImg';
+import ProfileImg from '@/components/Common/ProfileImg';
 import SocialLogout from '@/components/LoginPage/SocialLogout';
 const Dropdown = () => {
   const { user } = useUserStore((state) => state);

@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { getAuthToken } from '@/utils/getUserData';
-import { getUserSurveyStatus } from '../utils/getUserSurveyStatus';
+import { getAuthToken } from '@/api/getUserData';
+import { getUserSurveyStatus } from '../api/getUserSurveyStatus';
 
 export const updateSession = async (req: NextRequest) => {
   const { pathname } = req.nextUrl;

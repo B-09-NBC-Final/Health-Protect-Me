@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import Button from '../common/Button';
+import Button from '../Common/Button';
 import { createClient } from '@/supabase/client';
 
 const MainBanner = () => {

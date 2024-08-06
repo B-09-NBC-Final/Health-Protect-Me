@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Thumbnail from '@/assets/image/img_thumbnail.svg';
-import Button from '@/components/common/Button';
+import Button from '@/components/Common/Button';
 import { createClient } from '@/supabase/client';
 import { useRouter } from 'next/navigation';
 

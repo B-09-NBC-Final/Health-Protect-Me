@@ -7,7 +7,6 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { useUserStore } from '@/store/userStore';
 import Loading from '@/components/LoadingPage/Loading';
-import Footer from '@/components/common/Footer';
 
 const supabase = createClient();
 

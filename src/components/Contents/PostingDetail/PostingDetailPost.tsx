@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { createClient } from '@/supabase/client';
 import { Post, User } from '@/types';
 import Defaultimg from '@/assets/image/defaultimg.png';
-import KebabMenu from '@/components/common/KebabMenu';
+import KebabMenu from '@/components/Common/KebabMenu';
 
 const PostingDetailPost = ({ params }: { params: { id: string } }) => {
   const { id } = params;
