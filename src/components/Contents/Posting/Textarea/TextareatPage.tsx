@@ -5,7 +5,7 @@ import { createClient } from '@/supabase/client';
 import dayjs from 'dayjs';
 import { useUserStore } from '@/store/userStore';
 import { useRouter } from 'next/navigation';
-import Button from '@/components/common/Button';
+import Button from '@/components/Common/Button';
 import { Category } from '@/types/tags';
 import ImageUpload, { FileInfo } from '../ImageUpload/ImageUpload';
 import CategoryMain from '../Category/Categories';

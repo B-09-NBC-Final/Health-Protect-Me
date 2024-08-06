@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { createClient } from '@/supabase/client';
 import { useUserStore } from '@/store/userStore';
-import Button from '@/components/common/Button';
+import Button from '@/components/Common/Button';
 
 const DEFAULT_PROFILE_IMAGE = '/path/to/default-profile-image.jpg';
 

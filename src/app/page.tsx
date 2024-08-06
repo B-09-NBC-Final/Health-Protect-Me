@@ -6,8 +6,8 @@ import main02 from '@/assets/image/img_main02.svg';
 import main03 from '@/assets/image/img_main03.svg';
 import MainBanner from '@/components/MainPage/MainBanner';
 import MainSwiperReverse from '@/components/MainPage/MainSwiperReverse';
-import Header from '@/components/common/Header/Header';
-import Footer from '@/components/common/Footer';
+import Header from '@/components/Common/Header/Header';
+import Footer from '@/components/Common/Footer';
 
 const MainPage = () => {
   console.log(process.env.NEXT_PUBLIC_BASE_URL)
