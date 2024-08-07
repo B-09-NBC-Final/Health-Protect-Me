@@ -88,6 +88,7 @@ const ProfileEdit = ({
   const [showModal, setShowModal] = useState<boolean>(false);
   const router = useRouter();
 
+  // 프로필 저장 함수
   const handleSave = async () => {
     try {
       const { data: sessionData } = await supabase.auth.getSession();
@@ -119,9 +120,10 @@ const ProfileEdit = ({
         throw new Error(userUpdateError.message);
       }
 
+      // 정보 업데이트 시 sync_user_data 필드도 false로 설정
       const { data: aa, error: infoUpdateError } = await supabase
         .from('information')
-        .update({ height, weight, purpose: goal })
+        .update({ weight, purpose: goal, sync_user_data: false })
         .eq('user_id', userId);
 
       if (infoUpdateError) {
@@ -133,6 +135,7 @@ const ProfileEdit = ({
       console.error('Failed to save user data:', error);
     }
   };
+
 
   const handleDeleteAccount = async () => {
     try {
