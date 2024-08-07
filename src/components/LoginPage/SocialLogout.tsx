@@ -14,7 +14,11 @@ const SignOutButton = () => {
     clearUser();
     router.push('/');
   };
-  return <button onClick={signOut}>로그아웃</button>;
+  return (
+    <button className="block w-full text-left px-2 py-2 text-sm letter-spacing color-dropdown" onClick={signOut}>
+      로그아웃
+    </button>
+  );
 };
 
 export default SignOutButton;
