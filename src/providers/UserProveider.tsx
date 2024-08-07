@@ -1,6 +1,5 @@
 'use client';
 
-// global.css?
 import { useUserStore } from '@/store/userStore';
 import { createClient } from '@/supabase/client';
 import { useRouter, usePathname } from 'next/navigation';

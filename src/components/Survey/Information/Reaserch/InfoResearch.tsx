@@ -3,10 +3,10 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Step, Gender, DietGoal, InformationInsertDataType } from '@/types/infoReaserch';
 import { Button } from '@/components/ui/button';
 import { createClient } from '@/supabase/client';
-import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { useUserStore } from '@/store/userStore';
 import Loading from '@/components/LoadingPage/Loading';
+import { useRouter } from 'next/navigation';
 
 const supabase = createClient();
 
@@ -17,10 +17,10 @@ const InfoResearch = (): JSX.Element => {
   const setUser = useUserStore((state) => state.setUser);
   const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
   const [surveyData, setSurveyData] = useState<InformationInsertDataType>({
-    year_of_birth: 0,
+    year_of_birth: null,
     gender: '',
-    height: 0,
-    weight: 0,
+    height: null,
+    weight: null,
     purpose: ''
   });
 
@@ -206,7 +206,7 @@ const InfoResearch = (): JSX.Element => {
       }
 
       const { data, error } = await supabase.from('information').insert({
-        year_of_birth: surveyData.year_of_birth,
+        year_of_birth: surveyData.year_of_birth ? parseInt(surveyData.year_of_birth.toString(),10): null,
         weight: surveyData.weight,
         gender: surveyData.gender,
         height: surveyData.height,
@@ -242,7 +242,7 @@ const InfoResearch = (): JSX.Element => {
   const isStepValid = (): boolean => {
     switch (steps[currentStepIndex]) {
       case '출생년도':
-        return surveyData.year_of_birth !== null && /^19\d{2}$/.test(surveyData.year_of_birth.toString());
+        return surveyData.year_of_birth !== null && /^(19|20)\d{2}$/.test(surveyData.year_of_birth.toString());
       case '성별':
         return !!surveyData.gender;
       case '신장 및 체중':
@@ -262,24 +262,27 @@ const InfoResearch = (): JSX.Element => {
   const renderStep = () => {
     switch (steps[currentStepIndex]) {
       case '출생년도':
-        return (
-          <div className=" max-w-md mx-auto bg-white rounded-md ">
-            <h2 className="text-xl font-semibold mb-4 text-center">출생년도를 입력해주세요</h2>
-            <p className="text-sm text-gray-600 mb-4 text-center">연령에 따라 일일 권장 칼로리 섭취량이 달라집니다</p>
-            <br />
-            <div className="mb-4">
-              <label className="block text-sm mb-2 font-medium text-gray-700">출생년도</label>
-              <input
-                type="text"
-                name="year_of_birth"
-                placeholder="예) 19xx년"
-                value={surveyData.year_of_birth ?? ''}
-                onChange={handleInputChange}
-                className="w-full p-3 text-sm border rounded-lg focus:outline-none focus:ring-1 focus:ring-[#FF7A85] focus:border-transparent"
-              />
-            </div>
-          </div>
-        );
+  return (
+    <div className=" max-w-md mx-auto bg-white rounded-md ">
+      <h2 className="text-xl font-semibold mb-4 text-center">출생년도를 입력해주세요</h2>
+      <p className="text-sm text-gray-600 mb-4 text-center">연령에 따라 일일 권장 칼로리 섭취량이 달라집니다</p>
+      <br />
+      <div className="mb-4">
+        <label className="block text-sm mb-2 font-medium text-gray-700">출생년도</label>
+        <input
+          type="text"
+          name="year_of_birth"
+          placeholder="예) 1990"
+          value={surveyData.year_of_birth ?? ''}
+          onChange={handleInputChange}
+          className="w-full p-3 text-sm border rounded-lg focus:outline-none focus:ring-1 focus:ring-[#FF7A85] focus:border-transparent"
+        />
+        {surveyData.year_of_birth !== null && !/^(19|20)\d{2}$/.test(surveyData.year_of_birth.toString()) && (
+          <p className="text-red-500 text-sm mt-1">1900년대 또는 2000년대의 4자리 연도로 입력해주세요.</p>
+        )}
+      </div>
+    </div>
+  );
       case '성별':
         return (
           <div className="flex flex-col items-center">
@@ -369,7 +372,9 @@ const InfoResearch = (): JSX.Element => {
   };
 
   return (
+
     <div className="flex flex-col items-center justify-center py-10">
+
       {isLoading && <Loading />}
       <div
         className={`w-[1360px] max-w-2xl flex flex-col items-center mx-auto p-8 bg-white rounded-xl shadow-lg ${
@@ -390,7 +395,9 @@ const InfoResearch = (): JSX.Element => {
           {currentStepIndex > 0 && (
             <Button
               onClick={preStep}
+
               className="flex w-56 h-12 items-center justify-center py-3 text-base text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-1 focus:ring-gray-400 transition duration-200"
+
             >
               이전
             </Button>
@@ -399,7 +406,9 @@ const InfoResearch = (): JSX.Element => {
             <Button
               onClick={nextStep}
               disabled={!isStepValid()}
+
               className="flex w-56 h-12  items-center justify-center text-base bg-[#FF7A85] text-white py-3 rounded-lg hover:bg-[#FF7A85] transition duration-300"
+
             >
               다음
             </Button>
@@ -407,7 +416,7 @@ const InfoResearch = (): JSX.Element => {
             <Button
               onClick={saveDataToSupabase}
               disabled={!isStepValid()}
-              className="flex w-56 h-12 ml-14 items-center justify-center text-base bg-[#FF7A85] text-white py-3 rounded-lg hover:bg-[#FF7A85] transition duration-300"
+ className="flex w-56 h-12 ml-14 items-center justify-center text-base bg-[#FF7A85] text-white py-3 rounded-lg hover:bg-[#FF7A85] transition duration-300"
             >
               결과보기
             </Button>
