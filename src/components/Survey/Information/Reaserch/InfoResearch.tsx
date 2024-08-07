@@ -242,7 +242,7 @@ const InfoResearch = (): JSX.Element => {
   const isStepValid = (): boolean => {
     switch (steps[currentStepIndex]) {
       case '출생년도':
-        return surveyData.year_of_birth !== null && !/^(19|20)\d{3}$/.test(surveyData.year_of_birth.toString());
+        return surveyData.year_of_birth !== null && /^(19|20)\d{2}$/.test(surveyData.year_of_birth.toString());
       case '성별':
         return !!surveyData.gender;
       case '신장 및 체중':
@@ -262,27 +262,27 @@ const InfoResearch = (): JSX.Element => {
   const renderStep = () => {
     switch (steps[currentStepIndex]) {
       case '출생년도':
-        return (
-          <div className=" max-w-md mx-auto bg-white rounded-md ">
-            <h2 className="text-xl font-semibold mb-4 text-center">출생년도를 입력해주세요</h2>
-            <p className="text-sm text-gray-600 mb-4 text-center">연령에 따라 일일 권장 칼로리 섭취량이 달라집니다</p>
-            <br />
-            <div className="mb-4">
-              <label className="block text-sm mb-2 font-medium text-gray-700">출생년도</label>
-              <input
-                type="text"
-                name="year_of_birth"
-                placeholder="예) 19xx년"
-                value={surveyData.year_of_birth ?? ''}
-                onChange={handleInputChange}
-                className="w-full p-3 text-sm border rounded-lg focus:outline-none focus:ring-1 focus:ring-[#FF7A85] focus:border-transparent"
-              />
-              {surveyData.year_of_birth !== null && !/^(19|20)\d{2}$/.test(surveyData.year_of_birth.toString()) && (
-                <p className="text-red-500 text-sm mt-1">19xx 또는 20xx 형식으로 입력해주세요.</p>
-              )}
-            </div>
-          </div>
-        );
+  return (
+    <div className=" max-w-md mx-auto bg-white rounded-md ">
+      <h2 className="text-xl font-semibold mb-4 text-center">출생년도를 입력해주세요</h2>
+      <p className="text-sm text-gray-600 mb-4 text-center">연령에 따라 일일 권장 칼로리 섭취량이 달라집니다</p>
+      <br />
+      <div className="mb-4">
+        <label className="block text-sm mb-2 font-medium text-gray-700">출생년도</label>
+        <input
+          type="text"
+          name="year_of_birth"
+          placeholder="예) 1990"
+          value={surveyData.year_of_birth ?? ''}
+          onChange={handleInputChange}
+          className="w-full p-3 text-sm border rounded-lg focus:outline-none focus:ring-1 focus:ring-[#FF7A85] focus:border-transparent"
+        />
+        {surveyData.year_of_birth !== null && !/^(19|20)\d{2}$/.test(surveyData.year_of_birth.toString()) && (
+          <p className="text-red-500 text-sm mt-1">1900년대 또는 2000년대의 4자리 연도로 입력해주세요.</p>
+        )}
+      </div>
+    </div>
+  );
       case '성별':
         return (
           <div className="flex flex-col items-center">
