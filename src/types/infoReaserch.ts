@@ -13,7 +13,15 @@ export type SurveyData = {
 };
 
 export type FullSurveyData = Pick<SurveyData, 'birthYear' | 'gender' | 'height' | 'weight' | 'purpose'>;
-export type InformationInsertDataType = Pick<InfomationTable, 'year_of_birth' | 'gender' | 'height' | 'purpose' | 'weight'>;
+// export type InformationInsertDataType = Pick<InfomationTable, 'year_of_birth' | 'gender' | 'height' | 'purpose' | 'weight'>;
+export type InformationInsertDataType = {
+  year_of_birth: number | null;
+  gender: string;
+  height: number | null;
+  weight: number | null;
+  purpose: string;
+};
+
 
 export type UserType = {
   userId?: string;

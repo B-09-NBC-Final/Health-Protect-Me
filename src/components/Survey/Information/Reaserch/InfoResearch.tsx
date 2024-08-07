@@ -17,10 +17,10 @@ const InfoResearch = (): JSX.Element => {
   const setUser = useUserStore((state) => state.setUser);
   const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
   const [surveyData, setSurveyData] = useState<InformationInsertDataType>({
-    year_of_birth: 0,
+    year_of_birth: null,
     gender: '',
-    height: 0,
-    weight: 0,
+    height: null,
+    weight: null,
     purpose: ''
   });
 
@@ -205,6 +205,10 @@ const InfoResearch = (): JSX.Element => {
         throw new Error('AI 결과 파싱에 실패했습니다.');
       }
 
+      const year_of_birth = surveyData.year_of_birth ? Number(surveyData.year_of_birth) : null;
+      const weight = surveyData.weight ? Number(surveyData.weight) : null;
+      const height = surveyData.height ? Number(surveyData.height) : null;
+
       const { data, error } = await supabase.from('information').insert({
         year_of_birth: surveyData.year_of_birth,
         weight: surveyData.weight,
@@ -242,7 +246,7 @@ const InfoResearch = (): JSX.Element => {
   const isStepValid = (): boolean => {
     switch (steps[currentStepIndex]) {
       case '출생년도':
-        return surveyData.year_of_birth !== null && /^19\d{2}$/.test(surveyData.year_of_birth.toString());
+        return surveyData.year_of_birth !== null && !/^(19|20)\d{3}$/.test(surveyData.year_of_birth.toString());
       case '성별':
         return !!surveyData.gender;
       case '신장 및 체중':
@@ -277,6 +281,9 @@ const InfoResearch = (): JSX.Element => {
                 onChange={handleInputChange}
                 className="w-full p-3 text-sm border rounded-lg focus:outline-none focus:ring-1 focus:ring-[#FF7A85] focus:border-transparent"
               />
+              {surveyData.year_of_birth !== null && !/^(19|20)\d{2}$/.test(surveyData.year_of_birth.toString()) && (
+                <p className="text-red-500 text-sm mt-1">19xx 또는 20xx 형식으로 입력해주세요.</p>
+              )}
             </div>
           </div>
         );
@@ -368,56 +375,54 @@ const InfoResearch = (): JSX.Element => {
     }
   };
 
-    return (
-      <div className="min-h-screen bg-[#F8FAF8] flex flex-col items-center justify-center py-10">
-        {isLoading && <Loading />}
-        <div
-          className={`w-[1360px] max-w-2xl flex flex-col items-center mx-auto p-8 bg-white rounded-xl shadow-lg ${
-            isLoading ? 'opacity-50' : ''
-          }`}
-        >
-          <h1 className="text-3xl font-bold mb-8 text-center text-gray-800">{steps[currentStepIndex]}</h1>
-          <div className="w-full mb-8 bg-gray-200 rounded-full h-2">
-            <div
-              className="bg-red-400 h-2 rounded-full transition-all duration-500 ease-in-out"
-              style={{ width: `${((currentStepIndex + 1) / steps.length) * 100}%` }}
-            ></div>
-          </div>
-
-          {renderStep()}
-
-          <div className="mt-36 flex items-center justify-center w-full gap-10">
-            {currentStepIndex > 0 && (
-              <Button
-                onClick={preStep}
-                className="flex w-56 h-12 items-center justify-center py-3 text-lg text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-1 focus:ring-gray-400 transition duration-200"
-              >
-                이전
-              </Button>
-            )}
-            {currentStepIndex < steps.length - 1 ? (
-              <Button
-                onClick={nextStep}
-                disabled={!isStepValid()}
-                className="flex w-56 h-12  items-center justify-center bg-[#FF7A85] text-white py-3 rounded-lg hover:bg-[#FF7A85] transition duration-300"
-              >
-                다음
-              </Button>
-            ) : (
-              <Button
-                onClick={saveDataToSupabase}
-                disabled={!isStepValid()}
-                className="flex w-56 h-12 ml-14 items-center justify-center bg-[#FF7A85] text-white py-3 rounded-lg hover:bg-[#FF7A85] transition duration-300"
-              >
-                결과보기
-              </Button>
-            )}
-          </div>
+  return (
+    <div className="min-h-screen bg-[#F8FAF8] flex flex-col items-center justify-center py-10">
+      {isLoading && <Loading />}
+      <div
+        className={`w-[1360px] max-w-2xl flex flex-col items-center mx-auto p-8 bg-white rounded-xl shadow-lg ${
+          isLoading ? 'opacity-50' : ''
+        }`}
+      >
+        <h1 className="text-3xl font-bold mb-8 text-center text-gray-800">{steps[currentStepIndex]}</h1>
+        <div className="w-full mb-8 bg-gray-200 rounded-full h-2">
+          <div
+            className="bg-red-400 h-2 rounded-full transition-all duration-500 ease-in-out"
+            style={{ width: `${((currentStepIndex + 1) / steps.length) * 100}%` }}
+          ></div>
         </div>
 
-      </div>
-    );
-  };
+        {renderStep()}
 
+        <div className="mt-36 flex items-center justify-center w-full gap-10">
+          {currentStepIndex > 0 && (
+            <Button
+              onClick={preStep}
+              className="flex w-56 h-12 items-center justify-center py-3 text-lg text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-1 focus:ring-gray-400 transition duration-200"
+            >
+              이전
+            </Button>
+          )}
+          {currentStepIndex < steps.length - 1 ? (
+            <Button
+              onClick={nextStep}
+              disabled={!isStepValid()}
+              className="flex w-56 h-12  items-center justify-center bg-[#FF7A85] text-white py-3 rounded-lg hover:bg-[#FF7A85] transition duration-300"
+            >
+              다음
+            </Button>
+          ) : (
+            <Button
+              onClick={saveDataToSupabase}
+              disabled={!isStepValid()}
+              className="flex w-56 h-12 ml-14 items-center justify-center bg-[#FF7A85] text-white py-3 rounded-lg hover:bg-[#FF7A85] transition duration-300"
+            >
+              결과보기
+            </Button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default InfoResearch;
