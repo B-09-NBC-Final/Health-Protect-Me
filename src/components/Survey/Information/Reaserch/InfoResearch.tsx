@@ -372,7 +372,9 @@ const InfoResearch = (): JSX.Element => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8FAF8] flex flex-col items-center justify-center py-10">
+
+    <div className="flex flex-col items-center justify-center py-10">
+
       {isLoading && <Loading />}
       <div
         className={`w-[1360px] max-w-2xl flex flex-col items-center mx-auto p-8 bg-white rounded-xl shadow-lg ${
@@ -393,7 +395,9 @@ const InfoResearch = (): JSX.Element => {
           {currentStepIndex > 0 && (
             <Button
               onClick={preStep}
-              className="flex w-56 h-12 items-center justify-center py-3 text-lg text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-1 focus:ring-gray-400 transition duration-200"
+
+              className="flex w-56 h-12 items-center justify-center py-3 text-base text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-1 focus:ring-gray-400 transition duration-200"
+
             >
               이전
             </Button>
@@ -402,7 +406,9 @@ const InfoResearch = (): JSX.Element => {
             <Button
               onClick={nextStep}
               disabled={!isStepValid()}
-              className="flex w-56 h-12  items-center justify-center bg-[#FF7A85] text-white py-3 rounded-lg hover:bg-[#FF7A85] transition duration-300"
+
+              className="flex w-56 h-12  items-center justify-center text-base bg-[#FF7A85] text-white py-3 rounded-lg hover:bg-[#FF7A85] transition duration-300"
+
             >
               다음
             </Button>
@@ -410,7 +416,7 @@ const InfoResearch = (): JSX.Element => {
             <Button
               onClick={saveDataToSupabase}
               disabled={!isStepValid()}
-              className="flex w-56 h-12 ml-14 items-center justify-center bg-[#FF7A85] text-white py-3 rounded-lg hover:bg-[#FF7A85] transition duration-300"
+ className="flex w-56 h-12 ml-14 items-center justify-center text-base bg-[#FF7A85] text-white py-3 rounded-lg hover:bg-[#FF7A85] transition duration-300"
             >
               결과보기
             </Button>
