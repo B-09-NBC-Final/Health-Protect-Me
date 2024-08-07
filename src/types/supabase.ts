@@ -50,49 +50,43 @@ export type Database = {
       }
       information: {
         Row: {
-          allergy: string | null
           created_at: string
-          disease: string | null
           gender: string
-          height: number
+          height: number | null
           id: string
           purpose: string
           result_diet: string | null
           result_exercise: string | null
-          sleep_time: number | null
+          sync_user_data: boolean
           user_id: string | null
-          weight: number
-          year_of_birth: number
+          weight: number | null
+          year_of_birth: number | null
         }
         Insert: {
-          allergy?: string | null
           created_at?: string
-          disease?: string | null
           gender: string
-          height: number
+          height?: number | null
           id?: string
           purpose: string
           result_diet?: string | null
           result_exercise?: string | null
-          sleep_time?: number | null
+          sync_user_data?: boolean
           user_id?: string | null
-          weight: number
-          year_of_birth: number
+          weight?: number | null
+          year_of_birth?: number | null
         }
         Update: {
-          allergy?: string | null
           created_at?: string
-          disease?: string | null
           gender?: string
-          height?: number
+          height?: number | null
           id?: string
           purpose?: string
           result_diet?: string | null
           result_exercise?: string | null
-          sleep_time?: number | null
+          sync_user_data?: boolean
           user_id?: string | null
-          weight?: number
-          year_of_birth?: number
+          weight?: number | null
+          year_of_birth?: number | null
         }
         Relationships: [
           {
@@ -233,7 +227,6 @@ export type Database = {
     }
   }
 }
-export type InfomationTable = Database['public']['Tables']['information']['Insert']
 
 type PublicSchema = Database[Extract<keyof Database, "public">]
 

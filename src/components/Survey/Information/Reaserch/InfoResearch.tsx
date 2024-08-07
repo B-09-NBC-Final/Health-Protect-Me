@@ -3,10 +3,10 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Step, Gender, DietGoal, InformationInsertDataType } from '@/types/infoReaserch';
 import { Button } from '@/components/ui/button';
 import { createClient } from '@/supabase/client';
-import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { useUserStore } from '@/store/userStore';
 import Loading from '@/components/LoadingPage/Loading';
+import { useRouter } from 'next/navigation';
 
 const supabase = createClient();
 
@@ -205,12 +205,8 @@ const InfoResearch = (): JSX.Element => {
         throw new Error('AI 결과 파싱에 실패했습니다.');
       }
 
-      const year_of_birth = surveyData.year_of_birth ? Number(surveyData.year_of_birth) : null;
-      const weight = surveyData.weight ? Number(surveyData.weight) : null;
-      const height = surveyData.height ? Number(surveyData.height) : null;
-
       const { data, error } = await supabase.from('information').insert({
-        year_of_birth: surveyData.year_of_birth,
+        year_of_birth: surveyData.year_of_birth ? parseInt(surveyData.year_of_birth.toString(),10): null,
         weight: surveyData.weight,
         gender: surveyData.gender,
         height: surveyData.height,
