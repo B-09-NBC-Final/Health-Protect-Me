@@ -368,56 +368,54 @@ const InfoResearch = (): JSX.Element => {
     }
   };
 
-    return (
-      <div className="min-h-screen bg-[#F8FAF8] flex flex-col items-center justify-center py-10">
-        {isLoading && <Loading />}
-        <div
-          className={`w-[1360px] max-w-2xl flex flex-col items-center mx-auto p-8 bg-white rounded-xl shadow-lg ${
-            isLoading ? 'opacity-50' : ''
-          }`}
-        >
-          <h1 className="text-3xl font-bold mb-8 text-center text-gray-800">{steps[currentStepIndex]}</h1>
-          <div className="w-full mb-8 bg-gray-200 rounded-full h-2">
-            <div
-              className="bg-red-400 h-2 rounded-full transition-all duration-500 ease-in-out"
-              style={{ width: `${((currentStepIndex + 1) / steps.length) * 100}%` }}
-            ></div>
-          </div>
-
-          {renderStep()}
-
-          <div className="mt-36 flex items-center justify-center w-full gap-10">
-            {currentStepIndex > 0 && (
-              <Button
-                onClick={preStep}
-                className="flex w-56 h-12 items-center justify-center py-3 text-lg text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-1 focus:ring-gray-400 transition duration-200"
-              >
-                이전
-              </Button>
-            )}
-            {currentStepIndex < steps.length - 1 ? (
-              <Button
-                onClick={nextStep}
-                disabled={!isStepValid()}
-                className="flex w-56 h-12  items-center justify-center bg-[#FF7A85] text-white py-3 rounded-lg hover:bg-[#FF7A85] transition duration-300"
-              >
-                다음
-              </Button>
-            ) : (
-              <Button
-                onClick={saveDataToSupabase}
-                disabled={!isStepValid()}
-                className="flex w-56 h-12 ml-14 items-center justify-center bg-[#FF7A85] text-white py-3 rounded-lg hover:bg-[#FF7A85] transition duration-300"
-              >
-                결과보기
-              </Button>
-            )}
-          </div>
+  return (
+    <div className="flex flex-col items-center justify-center py-10">
+      {isLoading && <Loading />}
+      <div
+        className={`w-[1360px] max-w-2xl flex flex-col items-center mx-auto p-8 bg-white rounded-xl shadow-lg ${
+          isLoading ? 'opacity-50' : ''
+        }`}
+      >
+        <h1 className="text-3xl font-bold mb-8 text-center text-gray-800">{steps[currentStepIndex]}</h1>
+        <div className="w-full mb-8 bg-gray-200 rounded-full h-2">
+          <div
+            className="bg-red-400 h-2 rounded-full transition-all duration-500 ease-in-out"
+            style={{ width: `${((currentStepIndex + 1) / steps.length) * 100}%` }}
+          ></div>
         </div>
 
-      </div>
-    );
-  };
+        {renderStep()}
 
+        <div className="mt-36 flex items-center justify-center w-full gap-10">
+          {currentStepIndex > 0 && (
+            <Button
+              onClick={preStep}
+              className="flex w-56 h-12 items-center justify-center py-3 text-base text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-1 focus:ring-gray-400 transition duration-200"
+            >
+              이전
+            </Button>
+          )}
+          {currentStepIndex < steps.length - 1 ? (
+            <Button
+              onClick={nextStep}
+              disabled={!isStepValid()}
+              className="flex w-56 h-12  items-center justify-center text-base bg-[#FF7A85] text-white py-3 rounded-lg hover:bg-[#FF7A85] transition duration-300"
+            >
+              다음
+            </Button>
+          ) : (
+            <Button
+              onClick={saveDataToSupabase}
+              disabled={!isStepValid()}
+              className="flex w-56 h-12 ml-14 items-center justify-center text-base bg-[#FF7A85] text-white py-3 rounded-lg hover:bg-[#FF7A85] transition duration-300"
+            >
+              결과보기
+            </Button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default InfoResearch;

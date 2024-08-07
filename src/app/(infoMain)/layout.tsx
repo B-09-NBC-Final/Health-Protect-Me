@@ -5,12 +5,11 @@ import Footer from '@/components/Common/Footer';
 const InfoMainLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
-      <div className="relative ">
+      <div className="relative min-h-screen flex flex-col">
         <Header />
-        <main className="bg-default">
-          <div  className="min-h-main-height">{children}</div>
+        <main className="pt-15 bg-default">
+          <div className="max-w-[1440px] mx-auto min-h-main-height flex justify-center items-center">{children}</div>
         </main>
-
         <Footer />
       </div>
     </>
