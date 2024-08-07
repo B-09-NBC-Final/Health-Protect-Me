@@ -7,7 +7,7 @@ import { uuid } from 'uuidv4';
 import iconImage from '@/assets/icons/icon_image.svg';
 import iconClose from '@/assets/icons/icon_close.svg';
 import { useRouter } from 'next/navigation';
-import Button from '@/components/common/Button';
+import Button from '@/components/Common/Button';
 import {
   AlertDialog,
   AlertDialogAction,

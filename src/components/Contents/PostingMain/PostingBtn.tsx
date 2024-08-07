@@ -1,6 +1,6 @@
 'use client';
 
-import Button from '@/components/common/Button';
+import Button from '@/components/Common/Button';
 import { useRouter } from 'next/navigation';
 
 const PostingMainBtn = () => {

@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/supabase/client';
 import { v4 as uuidv4 } from 'uuid';
-import Button from '@/components/common/Button';
+import Button from '@/components/Common/Button';
 
 type ModalProps = {
   show: boolean;
@@ -95,7 +95,6 @@ const ProfileEdit = ({
 
       if (!userId) {
         throw new Error('사용자 ID를 찾을 수 없습니다.');
-        console.log(userId);
       }
 
       let avatarUrl = profileImage;

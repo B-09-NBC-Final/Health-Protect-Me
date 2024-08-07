@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import ClientRootLayout from '@/app/clientRootLayout';
 import { Inter } from 'next/font/google';
+import UserProvider from '../providers/UserProveider'
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -14,7 +14,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="ko">
       <body className={inter.className}>
-        <ClientRootLayout>{children}</ClientRootLayout>
+        <UserProvider>{children}</UserProvider>
       </body>
     </html>
   );
