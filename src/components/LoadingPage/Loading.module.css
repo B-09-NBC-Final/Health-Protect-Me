@@ -47,7 +47,7 @@
 .loadingText span {
   display: inline-block;
   opacity: 0;
-  animation: textPulse 3s ease-in-out infinite;
+  animation: textPulse 4s ease-in-out infinite;
 }
 
 @keyframes rotate {
