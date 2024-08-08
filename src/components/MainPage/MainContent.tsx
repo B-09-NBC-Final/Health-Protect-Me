@@ -45,7 +45,14 @@ const MainContent = () => {
             hover="hover:shadow-main-btn-hover hover:bg-pramary600"
           ></Button>
         </div>
-        <Image src={Thumbnail} alt="간편하게, 나만을 위한 맞춤형 건강 솔루션" width={790} height={606} />
+        <Image
+          src={Thumbnail}
+          alt="간편하게, 나만을 위한 맞춤형 건강 솔루션"
+          width={790}
+          height={606}
+          placeholder="blur"
+          blurDataURL="data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mN88vR5PQAIlgMxdSRmwgAAAABJRU5ErkJggg=="
+        />
       </div>
     </section>
   );
