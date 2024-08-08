@@ -2,14 +2,14 @@ import { create } from 'zustand';
 
 type UserState = {
   userId: string;
+  nickname: string;
+  profile_url: string;
+  profileImage: string | null;
+  email: string;
   height: number | null;
   weight: number | null;
   goal: string;
-  nickname: string;
-  profileImage: string;
   is_survey_done: boolean;
-  email: string;
-  profile_url: string;
 };
 
 type UserStoreState = {
@@ -18,7 +18,6 @@ type UserStoreState = {
   clearUser: () => void;
 };
 
-// Zustand 스토어 생성
 export const useUserStore = create<UserStoreState>((set) => ({
   user: null,
   setUser: (payload) =>
