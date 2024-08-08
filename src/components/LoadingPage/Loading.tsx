@@ -1,5 +1,5 @@
+'use client'
 import styles from './Loading.module.css'
-
 const LoadingPage = () => {
   return (
     <div className={styles.loadingContainer}>
