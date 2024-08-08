@@ -130,7 +130,10 @@ const InforDetailPage = () => {
         <h1 className="text-2xl font-medium mb-2">오늘의 추천 식단</h1>
         <div>
           {syncUserData === false && (
-            <p>정보가 바뀌었네요! 식단을 다시 받아 보시겠어요?</p>
+            <div className='flex'>
+              <p className='text-red-500'>정보가 바뀌었네요! 식단을 다시 받아 보시겠어요?</p>
+              <button>다시 제공받기</button>
+            </div>
           )}
         </div>
         <p className="text-gray600 mb-6">AI 분석을 바탕으로 매일 맞춤 식단을 추천해 드려요</p>
