@@ -6,29 +6,58 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import PostingMainBtn from './PostingBtn';
+import { useQuery } from '@tanstack/react-query';
 
 type MyPost = Post & { users: { nickname: string } | null };
 
+const ITEMS_PER_PAGE = 4;
+
 const PostingList = () => {
-  const [posts, setPosts] = useState<MyPost[]>();
+  // const [posts, setPosts] = useState<MyPost[]>();
   const [selectedCategory, setSelectedCategory] = useState('전체 글 보기');
+  const [page, setPage] = useState(1);
   const categories = ['전체 글 보기', '잡담', '질문', '정보'];
   const supabase = createClient();
   const dayjs = require('dayjs');
   const formatDate = (dateString: string) => dayjs(dateString).format('YY.MM.DD');
 
   const getPosts = async () => {
-    const { data: posts, error } = await supabase.from('posts').select('*, users(nickname)');
-    if (error) {
-      console.log('getPost error', error);
-      return;
-    }
-    setPosts(posts);
+    const { data: posts } = await supabase.from('posts').select('*, users(nickname)');
+    return posts;
   };
 
-  useEffect(() => {
-    getPosts();
-  }, []);
+  const getPostsCount = async () => {
+    const { count } = await supabase.from('posts').select('*', { count: 'exact', head: true });
+    return count;
+  };
+
+  // const totalPages = Math.ceil(posts.totalCount / ITEMS_PER_PAGE);
+
+  const {
+    data: posts,
+    isPending,
+    isError
+  } = useQuery({
+    queryKey: ['posts'],
+    queryFn: getPosts
+  });
+
+  const {
+    data: totalCount,
+    isPending: countLoading,
+    isError: countError
+  } = useQuery({
+    queryKey: ['postsCount'],
+    queryFn: getPostsCount
+  });
+
+  if (isPending || countLoading) {
+    return <div>로딩중입니다...</div>;
+  }
+
+  if (isError || countError) {
+    return <div>데이터 조회 중 오류가 발생했습니다.</div>;
+  }
 
   const filteredPosts =
     selectedCategory === '전체 글 보기' ? posts : posts?.filter((post) => post.category === selectedCategory);
