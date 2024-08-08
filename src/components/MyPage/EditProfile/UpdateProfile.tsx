@@ -8,7 +8,7 @@ import Button from '@/components/Common/Button'
 import Modal from './Modal/EditModal'
 import ProfileImage from './Form/ProfileImg'
 import ProfileForm from './Form/EditProfileForm'
-import { useUserStore } from '@/store/userStore' 
+import { useUserStore } from '@/store/userStore'
 import LoadingPage from '@/components/LoadingPage/Loading'
 
 export const deleteUser = async () => {
@@ -109,10 +109,11 @@ const UpdateProfile = (): JSX.Element => {
         throw new Error(userUpdateError.message)
       }
 
-      const { error: infoUpdateError } = await supabase
+      // 정보 업데이트 시 sync_user_data 필드도 false로 설정
+      const { data: aa, error: infoUpdateError } = await supabase
         .from('information')
-        .update({ height: user.height, weight: user.weight, purpose: user.goal })
-        .eq('user_id', user.userId)
+        .update({ weight: user.weight, purpose: user.goal, sync_user_data: false })
+        .eq('user_id', user.userId);
 
       if (infoUpdateError) {
         throw new Error(infoUpdateError.message)
