@@ -1,5 +1,6 @@
 'use client'
 import styles from './Loading.module.css'
+
 const LoadingPage = () => {
   return (
     <div className={styles.loadingContainer}>
@@ -11,7 +12,7 @@ const LoadingPage = () => {
       </div>
       <div className={styles.loadingText}>
         {'Loading...'.split('').map((char, index) => (
-          <span key={index} style={{ animationDelay: `${0.1 * (index + 1)}s` }}>
+          <span key={index} style={{ animationDelay: `${0.1 * index}s` }}>
             {char}
           </span>
         ))}

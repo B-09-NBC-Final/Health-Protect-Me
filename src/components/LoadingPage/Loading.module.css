@@ -31,21 +31,23 @@
   animation: bloom 2s ease-in-out infinite alternate;
 }
 
-.petal1 { transform: rotate(0deg); }
-.petal2 { transform: rotate(90deg); }
-.petal3 { transform: rotate(180deg); }
-.petal4 { transform: rotate(270deg); }
+.petal1 { --rotation: 0deg; }
+.petal2 { --rotation: 90deg; }
+.petal3 { --rotation: 180deg; }
+.petal4 { --rotation: 270deg; }
 
 .loadingText {
   margin-top: 20px;
   font-size: 24px;
   font-weight: bold;
+  color: #FF7A85;
+  text-shadow: 0 0 10px rgba(255, 122, 133, 0.5);
 }
 
 .loadingText span {
   display: inline-block;
   opacity: 0;
-  animation: fadeIn 0.3s ease-in-out forwards;
+  animation: textPulse 3s ease-in-out infinite;
 }
 
 @keyframes rotate {
@@ -67,12 +69,15 @@
   }
 }
 
-@keyframes fadeIn {
-  0% { opacity: 0; transform: translateY(10px); }
-  100% { opacity: 1; transform: translateY(0); }
+@keyframes textPulse {
+  0%, 100% { 
+    opacity: 0; 
+    transform: translateY(10px);
+    filter: blur(5px);
+  }
+  50% { 
+    opacity: 1; 
+    transform: translateY(0);
+    filter: blur(0);
+  }
 }
-
-.petal1 { --rotation: 0deg; }
-.petal2 { --rotation: 90deg; }
-.petal3 { --rotation: 180deg; }
-.petal4 { --rotation: 270deg; }
