@@ -244,7 +244,7 @@ const InforDetailPage = () => {
             </div>
           </div>
         </div>
-        <div className="flex flex-col items-start gap-6 relative self-stretch w-full flex-[0_0_auto]">
+        <div className="flex flex-col items-start gap-6 relative w-full flex-[0_0_auto]">
           <Card className="flex px-10 py-6 self-stretch w-full flex-col items-start gap-6 relative flex-[0_0_auto] bg-color-background-content rounded-[20px] shadow-floating">
             <div className="inline-flex flex-col items-start gap-1 relative flex-[0_0_auto]">
               <div className="inline-flex items-center gap-1 relative flex-[0_0_auto]">

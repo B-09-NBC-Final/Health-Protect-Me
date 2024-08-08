@@ -1,6 +1,6 @@
 'use client';
 
-// global.css?
+import LoadingPage from '@/components/LoadingPage/Loading';
 import { useUserStore } from '@/store/userStore';
 import { createClient } from '@/supabase/client';
 import { useRouter, usePathname } from 'next/navigation';
@@ -70,7 +70,7 @@ export default function ClientRootLayout({ children }: { children: React.ReactNo
   }, [supabase, setUser, clearUser, pathname, router]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <LoadingPage/>
   }
 
   return <>{children}</>;
