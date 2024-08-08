@@ -11,7 +11,7 @@ const Header = () => {
 
   return (
     <header className="fixed w-full bg-white z-10 h-[57px]">
-      <div className="w-full mx-auto max-w-container-l m:max-w-container-m s:max-w-container-s flex justify-between items-center h-full">
+      <div className="inner_wrap flex justify-between items-center px-10 py-4 h-full">
         <div className="flex items-center">
           <Link href={'/'}>
             <Image src={logo} alt="logo" width={100} height={28} />
