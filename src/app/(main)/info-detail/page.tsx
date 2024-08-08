@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { createClient } from '@/supabase/client';
 import { useUserStore } from '@/store/userStore';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
+import { Card, CardHeader, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 import Image from 'next/image';
 import carbohydrate from '@/assets/icons/carbohydrate.png';
 import protein from '@/assets/icons/protein.png';
