@@ -37,6 +37,7 @@ const InforDetailPage = () => {
     effect: '',
     caution: ''
   });
+  const [syncUserData, setSyncUserData] = useState<boolean | null>(null);
 
   useEffect(() => {
     if (user) {
@@ -49,6 +50,20 @@ const InforDetailPage = () => {
       if (!userId) return; // userId가 없으면 fetchData 실행하지 않음
 
       const supabase = createClient();
+
+      // sync_user_data 상태 가져오기
+      const { data: syncData, error: syncError } = await supabase
+        .from('information')
+        .select('sync_user_data')
+        .eq('user_id', userId)
+        .single();
+
+      if (syncError) {
+        console.error('Error fetching sync user data status:', syncError);
+        setSyncUserData(false);
+      } else {
+        setSyncUserData(syncData.sync_user_data);
+      }
 
       const { data: userData, error: userError } = await supabase
         .from('information')
@@ -113,6 +128,14 @@ const InforDetailPage = () => {
     <div className="border-gray100 border border-solid rounded-xl py-[24px] px-10 bg-white">
       <div>
         <h1 className="text-2xl font-medium mb-2">오늘의 추천 식단</h1>
+        <div>
+          {syncUserData === false && (
+            <div className='flex'>
+              <p className='text-red-500'>정보가 바뀌었네요! 식단을 다시 받아 보시겠어요?</p>
+              <button>다시 제공받기</button>
+            </div>
+          )}
+        </div>
         <p className="text-gray600 mb-6">AI 분석을 바탕으로 매일 맞춤 식단을 추천해 드려요</p>
         <div className="inline-flex gap-9 flex-col items-start flex-[0_0_auto] pb-14">
           <div className="flex gap-10">
