@@ -14,16 +14,16 @@ const ProfileDropdown = () => {
     setIsOpen(!isOpen);
   };
 
-  const handleClickOutside = (event: MouseEvent) => {
+  const clickOutside = (event: MouseEvent) => {
     if (dropdownRef.current && event.target instanceof Node && !dropdownRef.current.contains(event.target)) {
       setIsOpen(false);
     }
   };
 
   useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('mousedown', clickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('mousedown', clickOutside);
     };
   }, []);
 
