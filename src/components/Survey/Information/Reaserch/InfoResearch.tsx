@@ -5,8 +5,8 @@ import { Button } from '@/components/ui/button';
 import { createClient } from '@/supabase/client';
 import { toast } from 'react-toastify';
 import { useUserStore } from '@/store/userStore';
-import Loading from '@/components/LoadingPage/Loading';
 import { useRouter } from 'next/navigation';
+import Loading from '@/components/LoadingPage/Loading';
 
 const supabase = createClient();
 
@@ -374,7 +374,6 @@ const InfoResearch = (): JSX.Element => {
   return (
 
     <div className="flex flex-col items-center justify-center py-10">
-
       {isLoading && <Loading />}
       <div
         className={`w-[1360px] max-w-2xl flex flex-col items-center mx-auto p-8 bg-white rounded-xl shadow-lg ${
