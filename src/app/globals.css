@@ -182,4 +182,11 @@ html {
   .pt-15 {
     padding-top: 3.75rem !important;
   }
+
+  .letter-spacing {
+    letter-spacing: -0.35px;
+  }
+  .color-dropdown {
+    color: #404145;
+  }
 }
