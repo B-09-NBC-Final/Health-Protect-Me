@@ -89,6 +89,7 @@ const config = {
       },
       backgroundColor: {
         gray100: '#F1F2F2',
+        gray200: '#e4e5e7',
         pramary100: '#FFF6F2',
         pramary500: '#FF7A85',
         pramary600: '#F5637C',
