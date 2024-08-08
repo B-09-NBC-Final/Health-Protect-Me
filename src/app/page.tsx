@@ -15,7 +15,7 @@ const MainPage = () => {
     <>
       <Header />
       <main className="w-full bg-default">
-        <div className="w-full bg-red-300 mx-auto max-w-container-l m:max-w-container-m s:max-w-container-s">
+        <div className="w-full mx-auto max-w-container-l m:max-w-container-m s:max-w-container-s">
           <MainContent />
           <section className="swiper-area">
             <div className="inner_wrap flex justify-between">
