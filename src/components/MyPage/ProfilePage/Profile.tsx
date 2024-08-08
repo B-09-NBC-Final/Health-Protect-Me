@@ -5,8 +5,9 @@ import Image from 'next/image';
 import { createClient } from '@/supabase/client';
 import { useUserStore } from '@/store/userStore';
 import Button from '@/components/Common/Button';
+import defaultimg from '@/assets/image/defaultimg.png';
 
-const DEFAULT_PROFILE_IMAGE = '/path/to/default-profile-image.jpg';
+const DEFAULT_PROFILE_IMAGE = defaultimg;
 
 const calculateBMI = (height: number | null, weight: number | null): number | null => {
   if (height === null || weight === null) return null;
@@ -66,7 +67,7 @@ const Profile = () => {
         weight: userInfo.weight,
         goal: userInfo.purpose,
         nickname: userProfile.nickname,
-        profileImage: userProfile.profile_url || DEFAULT_PROFILE_IMAGE
+        profileImage: userProfile.profile_url || DEFAULT_PROFILE_IMAGE.src
       };
 
       setUser(data);
