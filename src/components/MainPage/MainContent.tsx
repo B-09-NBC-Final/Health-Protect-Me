@@ -11,10 +11,24 @@ const MainContent = () => {
   const checkDiet = async () => {
     const supabase = createClient();
     const authToken = await supabase.auth.getSession();
-    if (!authToken.data.session) {
+    if (!authToken.data.session === null) {
       router.push('/login');
-    } else {
+      return;
+    }
+
+    const userId = authToken.data.session!.user.id;
+
+    const { data, error } = await supabase.from('users').select('is_survey_done').eq('user_id', userId).single();
+
+    if (error) {
+      console.error('Error fetching user data:', error);
+      return;
+    }
+
+    if (data.is_survey_done) {
       router.push('/info-detail');
+    } else {
+      router.push('/info');
     }
   };
   return (
