@@ -6,6 +6,7 @@ import { createClient } from '@/supabase/client';
 import { Post, User } from '@/types';
 import Defaultimg from '@/assets/image/defaultimg.png';
 import KebabMenu from '@/components/Common/KebabMenu';
+import Skeleton from '@/components/Common/Skeleton';
 
 const PostingDetailPost = ({ params }: { params: { id: string } }) => {
   const { id } = params;
@@ -13,6 +14,7 @@ const PostingDetailPost = ({ params }: { params: { id: string } }) => {
   const [post, setPost] = useState<Post | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [userPurpose, setUserPurpose] = useState<string | null>(null);
+  const [imageLoaded, setImageLoaded] = useState(false);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const postDate = new Date(post?.created_at as string);
   const postYear = String(postDate.getFullYear()).slice(-2);
@@ -90,25 +92,43 @@ const PostingDetailPost = ({ params }: { params: { id: string } }) => {
   return (
     <>
       <div className="w-[800px] mx-auto">
-        <span className="text-primary600 border-primary500 border border-solid py-1 px-2 mb-3 rounded bg-white">
-          {post?.category}
-        </span>
+        {post ? (
+          <span className="text-primary600 border-primary500 border border-solid py-1 px-2 mb-3 rounded bg-white">
+            {post?.category}
+          </span>
+        ) : (
+          <Skeleton className="!w-[50px] !h-[24px] rounded-xl" />
+        )}
+
         <div className="flex justify-between">
-          <p className="text-gray900 font-semibold mt-2">{post?.title}</p>
+          {post ? (
+            <p className="text-gray900 font-semibold mt-2">{post?.title}</p>
+          ) : (
+            <Skeleton className="!w-[100px] !h-[24px] rounded-xl mt-2" />
+          )}
           {currentUser && post && currentUser.user_id === post.user_id && (
             <i>
               <KebabMenu params={params} />
             </i>
           )}
         </div>
-        <p className="text-gray600 text-sm pb-4 border-b border-gray200 border-solid">{dateOnly}</p>
-        <Image
-          src={post?.image_url[0] as string}
-          alt=""
-          width={580}
-          height={380}
-          className="object-cover mt-6 rounded !w-[580px] !h-[380px]"
-        />
+        {post ? (
+          <p className="text-gray600 text-sm pb-4 border-b border-gray200 border-solid">{dateOnly}</p>
+        ) : (
+          <Skeleton className="!w-[80px] !h-[20px] rounded-xl mt-2" />
+        )}
+        {post ? (
+          <Image
+            src={post?.image_url[0] as string}
+            alt=""
+            width={580}
+            height={380}
+            className="object-cover mt-6 rounded !w-[580px] !h-[380px]"
+          />
+        ) : (
+          <Skeleton className="!w-[580px] !h-[380px] rounded mt-8" />
+        )}
+
         {post?.image_url[1] ? (
           <Image
             src={post?.image_url[1] as string}
@@ -118,6 +138,7 @@ const PostingDetailPost = ({ params }: { params: { id: string } }) => {
             className="object-cover mt-6 rounded !w-[580px] !h-[380px]"
           />
         ) : null}
+
         {post?.image_url[2] ? (
           <Image
             src={post?.image_url[2] as string}
@@ -127,7 +148,8 @@ const PostingDetailPost = ({ params }: { params: { id: string } }) => {
             className="object-cover mt-6 rounded !w-[580px] !h-[380px]"
           />
         ) : null}
-        <p className="mt-6">{post?.content}</p>
+
+        {post ? <p className="mt-6">{post?.content}</p> : <Skeleton className="!w-[350px] !h-[24px] rounded-xl mt-6" />}
 
         <div className="inline-flex border border-gray100 border-solid rounded-2xl pl-3 py-6 pr-6 mt-10 bg-gray-50">
           <Image
@@ -138,8 +160,16 @@ const PostingDetailPost = ({ params }: { params: { id: string } }) => {
             className="rounded-xl"
           />
           <div className="flex flex-col ml-3 text-gray900">
-            <p className="text-sm mb-1">{user?.nickname}</p>
-            <span className="text-xs text-backgroundInfo">{userPurpose}</span>
+            {post ? (
+              <p className="text-sm mb-1">{user?.nickname}</p>
+            ) : (
+              <Skeleton className="!w-[80px] !h-[20px] rounded-xl mb-1" />
+            )}
+            {post ? (
+              <span className="text-xs text-backgroundInfo">{userPurpose}</span>
+            ) : (
+              <Skeleton className="!w-[50px] !h-[20px] rounded-xl" />
+            )}
           </div>
         </div>
       </div>
