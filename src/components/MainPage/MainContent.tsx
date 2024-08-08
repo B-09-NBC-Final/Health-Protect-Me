@@ -11,7 +11,7 @@ const MainContent = () => {
   const checkDiet = async () => {
     const supabase = createClient();
     const authToken = await supabase.auth.getSession();
-    if (!authToken.data.session === null) {
+    if (authToken.data.session === null) {
       router.push('/login');
       return;
     }
