@@ -89,6 +89,7 @@ const config = {
       },
       backgroundColor: {
         gray100: '#F1F2F2',
+        gray200: '#e4e5e7',
         pramary100: '#FFF6F2',
         pramary500: '#FF7A85',
         pramary600: '#F5637C',
@@ -103,10 +104,18 @@ const config = {
       },
       height: {
         'main-height': 'calc(100vh - 57px)'
-        
       },
       minHeight: {
         'main-height': 'calc(100vh - 194px)'
+      },
+      screens: {
+        m: { max: '1200px' },
+        s: { max: '768px' }
+      },
+      maxWidth: {
+        'container-l': '1360px',
+        'container-m': '744px',
+        'container-s': '360px'
       }
     }
   },

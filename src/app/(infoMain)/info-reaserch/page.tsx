@@ -5,6 +5,7 @@ const InfoReaserchPage = () => {
   return (
     <div>
       <InfoResearch />
+      
     </div>
   );
 };

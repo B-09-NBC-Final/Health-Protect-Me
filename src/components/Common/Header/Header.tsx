@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useUserStore } from '@/store/userStore';
-import Dropdown from './Dropdown';
+import Dropdown from '@/utils/Dropdown';
 import Image from 'next/image';
 import logo from '@/assets/icons/Vector.svg';
 

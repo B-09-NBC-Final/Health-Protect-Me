@@ -5,8 +5,8 @@ import { Button } from '@/components/ui/button';
 import { createClient } from '@/supabase/client';
 import { toast } from 'react-toastify';
 import { useUserStore } from '@/store/userStore';
-import Loading from '@/components/LoadingPage/Loading';
 import { useRouter } from 'next/navigation';
+import Loading from '@/components/LoadingPage/Loading';
 
 const supabase = createClient();
 
@@ -29,7 +29,7 @@ const InfoResearch = (): JSX.Element => {
     result_exercise: ''
   });
 
-  const steps: Step[] = ['출생년도', '성별', '신장 및 체중', '식단 목적'];
+  const steps: Step[] = ['출생연도', '성별', '신장 및 체중', '식단 목적'];
   const stepRefs = useRef<React.RefObject<HTMLDivElement>[]>(steps.map(() => React.createRef()));
 
   const nextStep = (): void => {
@@ -241,7 +241,7 @@ const InfoResearch = (): JSX.Element => {
 
   const isStepValid = (): boolean => {
     switch (steps[currentStepIndex]) {
-      case '출생년도':
+      case '출생연도':
         return surveyData.year_of_birth !== null && /^(19|20)\d{2}$/.test(surveyData.year_of_birth.toString());
       case '성별':
         return !!surveyData.gender;
@@ -261,14 +261,14 @@ const InfoResearch = (): JSX.Element => {
 
   const renderStep = () => {
     switch (steps[currentStepIndex]) {
-      case '출생년도':
+      case '출생연도':
   return (
     <div className=" max-w-md mx-auto bg-white rounded-md ">
-      <h2 className="text-xl font-semibold mb-4 text-center">출생년도를 입력해주세요</h2>
+      <h2 className="text-xl font-semibold mb-4 text-center">출생연도를 입력해주세요</h2>
       <p className="text-sm text-gray-600 mb-4 text-center">연령에 따라 일일 권장 칼로리 섭취량이 달라집니다</p>
       <br />
       <div className="mb-4">
-        <label className="block text-sm mb-2 font-medium text-gray-700">출생년도</label>
+        <label className="block text-sm mb-2 font-medium text-gray-700">출생연도</label>
         <input
           type="text"
           name="year_of_birth"
@@ -278,7 +278,7 @@ const InfoResearch = (): JSX.Element => {
           className="w-full p-3 text-sm border rounded-lg focus:outline-none focus:ring-1 focus:ring-[#FF7A85] focus:border-transparent"
         />
         {surveyData.year_of_birth !== null && !/^(19|20)\d{2}$/.test(surveyData.year_of_birth.toString()) && (
-          <p className="text-red-500 text-sm mt-1">1900년대 또는 2000년대의 4자리 연도로 입력해주세요.</p>
+          <p className="text-red-500 text-sm mt-1">1900년대 또는 2000년대 4자리로 입력해주세요</p>
         )}
       </div>
     </div>
@@ -327,7 +327,7 @@ const InfoResearch = (): JSX.Element => {
                 className="w-2/3 p-3 text-sm border rounded-lg focus:outline-none focus:ring-1 focus:ring-[#FF7A85] focus:border-transparent"
               />
               {surveyData.height && !/^1\d{2}$/.test(surveyData.height.toString()) && (
-                <p className="text-red-500 text-sm mt-1">1xx 형식으로 입력해주세요.</p>
+                <p className="text-red-500 text-sm mt-1">100~199cm 사이로 입력해주세요</p>
               )}
             </div>
             <div className="mb-4 w-full  ">
@@ -341,7 +341,7 @@ const InfoResearch = (): JSX.Element => {
                 className="w-2/3 p-3 text-sm border rounded-lg focus:outline-none focus:ring-1 focus:ring-[#FF7A85] focus:border-transparent"
               />
               {surveyData.weight && !/^\d{2,3}$/.test(surveyData.weight.toString()) && (
-                <p className="text-red-500 text-sm mt-1">2자리 또는 3자리 숫자로 입력해주세요.</p>
+                <p className="text-red-500 text-sm mt-1">30~200kg 사이로 입력해주세요</p>
               )}
             </div>
           </div>
@@ -374,7 +374,6 @@ const InfoResearch = (): JSX.Element => {
   return (
 
     <div className="flex flex-col items-center justify-center py-10">
-
       {isLoading && <Loading />}
       <div
         className={`w-[1360px] max-w-2xl flex flex-col items-center mx-auto p-8 bg-white rounded-xl shadow-lg ${

@@ -10,7 +10,7 @@ import Header from '@/components/Common/Header/Header';
 import Footer from '@/components/Common/Footer';
 
 const MainPage = () => {
-  console.log(process.env.NEXT_PUBLIC_BASE_URL)
+  console.log(process.env.NEXT_PUBLIC_BASE_URL);
   return (
     <>
       <Header />
@@ -73,6 +73,7 @@ const MainPage = () => {
           <MainBanner />
         </section>
       </main>
+
       <Footer />
     </>
   );
