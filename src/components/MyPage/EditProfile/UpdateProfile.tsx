@@ -72,8 +72,7 @@ const UpdateProfile = (): JSX.Element => {
       console.error('Error fetching user data:', userError || infoError)
       return
     }
-
-    setNickname(userData.nickname)
+     setNickname(userData.nickname)
     setProfileImage(userData.profile_url)
     setHeight(infoData.height)
     setWeight(infoData.weight)
