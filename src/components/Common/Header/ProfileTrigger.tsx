@@ -1,5 +1,5 @@
 import React from 'react';
-import ProfileImg from '@/utils/ProfileImg';
+import ProfileImg from '@/components/Common/ProfileImg';
 import Defaultimg from '@/assets/image/defaultimg.png';
 import { useUserStore } from '@/store/userStore';
 
