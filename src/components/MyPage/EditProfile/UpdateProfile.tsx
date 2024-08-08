@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/supabase/client'
 import { v4 as uuidv4 } from 'uuid'
@@ -8,6 +8,8 @@ import Button from '@/components/Common/Button'
 import Modal from './Modal/EditModal'
 import ProfileImage from './Form/ProfileImg'
 import ProfileForm from './Form/EditProfileForm'
+import { useUserStore } from '@/store/userStore' 
+import LoadingPage from '@/components/LoadingPage/Loading'
 
 export const deleteUser = async () => {
   const supabase = createClient()
@@ -34,14 +36,10 @@ export const deleteUser = async () => {
 
 const UpdateProfile = (): JSX.Element => {
   const supabase = createClient()
-  const [nickname, setNickname] = useState<string>('')
-  const [height, setHeight] = useState<number>(0)
-  const [weight, setWeight] = useState<number>(0)
-  const [goal, setGoal] = useState<string>('')
-  const [profileImage, setProfileImage] = useState<string>('')
-  const [imageFile, setImageFile] = useState<File | null>(null)
-  const [showModal, setShowModal] = useState<boolean>(false)
   const router = useRouter()
+  const { user, setUser, clearUser } = useUserStore()
+  const [showModal, setShowModal] = React.useState<boolean>(false)
+  const [imageFile, setImageFile] = React.useState<File | null>(null)
 
   useEffect(() => {
     fetchUserData()
@@ -72,23 +70,24 @@ const UpdateProfile = (): JSX.Element => {
       console.error('Error fetching user data:', userError || infoError)
       return
     }
-     setNickname(userData.nickname)
-    setProfileImage(userData.profile_url)
-    setHeight(infoData.height)
-    setWeight(infoData.weight)
-    setGoal(infoData.purpose)
+
+    setUser({
+      userId,
+      nickname: userData.nickname,
+      profileImage: userData.profile_url,
+      height: infoData.height,
+      weight: infoData.weight,
+      goal: infoData.purpose
+    })
   }
 
   const handleSave = async (): Promise<void> => {
     try {
-      const { data: sessionData } = await supabase.auth.getSession()
-      const userId = sessionData.session?.user.id
-
-      if (!userId) {
+      if (!user || !user.userId) {
         throw new Error('사용자 ID를 찾을 수 없습니다.')
       }
 
-      let avatarUrl = profileImage
+      let avatarUrl = user.profileImage
 
       if (imageFile) {
         const { data: avatarData, error } = await supabase.storage
@@ -103,8 +102,8 @@ const UpdateProfile = (): JSX.Element => {
 
       const { error: userUpdateError } = await supabase
         .from('users')
-        .update({ nickname, profile_url: avatarUrl })
-        .eq('user_id', userId)
+        .update({ nickname: user.nickname, profile_url: avatarUrl })
+        .eq('user_id', user.userId)
 
       if (userUpdateError) {
         throw new Error(userUpdateError.message)
@@ -112,13 +111,14 @@ const UpdateProfile = (): JSX.Element => {
 
       const { error: infoUpdateError } = await supabase
         .from('information')
-        .update({ height, weight, purpose: goal })
-        .eq('user_id', userId)
+        .update({ height: user.height, weight: user.weight, purpose: user.goal })
+        .eq('user_id', user.userId)
 
       if (infoUpdateError) {
         throw new Error(infoUpdateError.message)
       }
 
+      setUser({ profileImage: avatarUrl })
       router.push('/my-page')
     } catch (error) {
       console.error('Failed to save user data:', error)
@@ -132,6 +132,7 @@ const UpdateProfile = (): JSX.Element => {
   const handleDeleteAccount = async (): Promise<void> => {
     try {
       await deleteUser()
+      clearUser()
       router.replace('/')
     } catch (error) {
       console.error('Failed to delete user account:', error)
@@ -144,7 +145,7 @@ const UpdateProfile = (): JSX.Element => {
       setImageFile(file)
       const reader = new FileReader()
       reader.onloadend = () => {
-        setProfileImage(reader.result as string)
+        setUser({ profileImage: reader.result as string })
       }
       reader.readAsDataURL(file)
     }
@@ -158,20 +159,22 @@ const UpdateProfile = (): JSX.Element => {
     setShowModal(false)
   }
 
+  if (!user) return <div><LoadingPage /></div>
+
   return (
     <section className="w-[1360px] max-w-md mx-auto">
       <h1 className="w-[400px] h-8 mb-4 mx-4 text-2xl font-bold">프로필 수정</h1>
       <div className="flex flex-col items-center text-center mb-8 w-full px-4">
-        <ProfileImage profileImage={profileImage} onImageUpload={handleImageUpload} />
+        <ProfileImage profileImage={user.profileImage || ''} onImageUpload={handleImageUpload} />
         <ProfileForm
-          nickname={nickname}
-          setNickname={setNickname}
-          height={height}
-          setHeight={setHeight}
-          weight={weight}
-          setWeight={setWeight}
-          goal={goal}
-          setGoal={setGoal}
+          nickname={user.nickname || ''}
+          setNickname={(nickname: string) => setUser({ nickname })}
+          height={user.height ? user.height.toString() : ''}
+          setHeight={(height: string) => setUser({ height: parseFloat(height) || null })}
+          weight={user.weight ? user.weight.toString() : ''}
+          setWeight={(weight: string) => setUser({ weight: parseFloat(weight) || null })}
+          goal={user.goal || ''}
+          setGoal={(goal: string) => setUser({ goal })}
           onSave={handleSave}
           onCancel={handleCancel}
         />
