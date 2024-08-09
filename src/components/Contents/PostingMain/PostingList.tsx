@@ -18,11 +18,18 @@ const PostingList = () => {
   const dayjs = require('dayjs');
   const formatDate = (dateString: string) => dayjs(dateString).format('YY.MM.DD');
 
-  const getPosts = async () => {
-    const { data, count } = await supabase
-      .from('posts')
-      .select('*, users(nickname)', { count: 'exact' })
-      .range(ITEMS_PER_PAGE * (page - 1), ITEMS_PER_PAGE * (page - 1) + ITEMS_PER_PAGE - 1);
+  const getPosts = async (selected: string) => {
+    const { data, count } =
+      selected === '전체 글 보기'
+        ? await supabase
+            .from('posts')
+            .select('*, users(nickname)', { count: 'exact' })
+            .range(ITEMS_PER_PAGE * (page - 1), ITEMS_PER_PAGE * (page - 1) + ITEMS_PER_PAGE - 1)
+        : await supabase
+            .from('posts')
+            .select('*, users(nickname)', { count: 'exact' })
+            .eq('category', selected)
+            .range(ITEMS_PER_PAGE * (page - 1), ITEMS_PER_PAGE * (page - 1) + ITEMS_PER_PAGE - 1);
     return { data, count };
   };
 
@@ -31,20 +38,21 @@ const PostingList = () => {
     isPending,
     isError
   } = useQuery({
-    queryKey: ['posts', page],
-    queryFn: getPosts
+    queryKey: ['posts', page, selectedCategory],
+    queryFn: () => getPosts(selectedCategory)
   });
 
+  useEffect(() => {
+    setPage(1);
+  }, [selectedCategory]);
+
   if (isPending) {
-    return <div>로딩중입니다...</div>;
+    return null;
   }
 
   if (isError) {
     return <div>데이터 조회 중 오류가 발생했습니다.</div>;
   }
-
-  const filteredPosts =
-    selectedCategory === '전체 글 보기' ? posts.data : posts.data?.filter((post) => post.category === selectedCategory);
 
   const totalPages = Math.ceil((posts.count as number) / ITEMS_PER_PAGE);
 
@@ -70,18 +78,18 @@ const PostingList = () => {
       </div>
       <div className="border border-solid rounded-xl border-gray300 w-[1032px] ml-20 px-10 py-6 bg-white">
         <h2 className="mb-4 text-2xl text-gray900 font-medium">건강한 식단 이야기</h2>
-        {filteredPosts?.length === 0 ? (
+        {posts.data?.length === 0 ? (
           <p className="text-gray600 mt-2">
             아직 작성된 글이 존재하지 않아요. <br />첫 번째 글을 작성하고 커뮤니티를 시작해보세요!
           </p>
         ) : (
           <>
             <ul>
-              {filteredPosts?.map((item, index: number) => (
+              {posts.data?.map((item, index: number) => (
                 <li
                   key={index}
                   className={`${
-                    index < filteredPosts.length - 1 ? 'border-b' : ''
+                    index < (posts.data?.length || 0) - 1 ? 'border-b' : ''
                   }   border-gray200 pb-4 mb-4 cursor-pointer`}
                 >
                   <Link href={`/posting-detail/${item?.id}`} className="flex">
