@@ -83,11 +83,11 @@ const Profile = () => {
 
   const handleNavigateToEdit = (): void => {
     setButtonClicked(true);
-    const { height, weight, goal, nickname, profileImage } = user || {};
+    const { height, weight, goal, nickname, profile_url } = user || {};
     router.push(
       `/my-page/edit?height=${height || ''}&weight=${
         weight || ''
-      }&goal=${goal}&nickname=${nickname}&profileImage=${encodeURIComponent(profileImage || '')}`
+      }&goal=${goal}&nickname=${nickname}&profileImage=${encodeURIComponent(profile_url || '')}`
     );
   };
 
@@ -103,7 +103,7 @@ const Profile = () => {
       <div className="w-[120px] h-[120px] rounded-full object-cover flex items-center justify-center mb-4">
         <Image
           className="rounded-full object-cover"
-          src={user.profileImage || DEFAULT_PROFILE_IMAGE}
+          src={user.profile_url || DEFAULT_PROFILE_IMAGE}
           alt="Profile"
           width={'120'}
           height={'120'}
@@ -133,14 +133,6 @@ const Profile = () => {
         </div>
       </div>
       <div className="flex justify-center mt-10">
-        {/* <button
-          className={`flex h-10 py-2 px-3 justify-center items-center gap-1 self-stretch w-80 text-sm font-semibold border rounded-lg ${
-            buttonClicked ? 'border-[#B7B9BD] bg-[#FAFAFA]' : 'border-[#D5D6D8] bg-white'
-          }`}
-          onClick={handleNavigateToEdit}
-        >
-          프로필 수정
-        </button> */}
         <Button
           buttonName="프로필 수정하기"
           onClick={handleNavigateToEdit}
