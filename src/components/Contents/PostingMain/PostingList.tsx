@@ -75,39 +75,41 @@ const PostingList = () => {
             아직 작성된 글이 존재하지 않아요. <br />첫 번째 글을 작성하고 커뮤니티를 시작해보세요!
           </p>
         ) : (
-          <ul>
-            {filteredPosts?.map((item, index: number) => (
-              <li
-                key={index}
-                className={`${
-                  index < filteredPosts.length - 1 ? 'border-b' : ''
-                }   border-gray200 pb-4 mb-4 cursor-pointer`}
-              >
-                <Link href={`/posting-detail/${item?.id}`} className="flex">
-                  <Image
-                    src={item.image_url[0]}
-                    alt=""
-                    width={128}
-                    height={128}
-                    className="!w-[128px] !h-[128px] rounded-lg"
-                  />
-                  <div className="flex flex-col justify-between ml-5 w-full">
-                    <div>
-                      <span className="text-sm font-semibold text-primary600 mb-2">{item.category}</span>
-                      <p className="text-gray900 font-semibold">{item.title}</p>
-                      <p className="line-clamp-2 text-gray800 text-sm">{item.content}</p>
+          <>
+            <ul>
+              {filteredPosts?.map((item, index: number) => (
+                <li
+                  key={index}
+                  className={`${
+                    index < filteredPosts.length - 1 ? 'border-b' : ''
+                  }   border-gray200 pb-4 mb-4 cursor-pointer`}
+                >
+                  <Link href={`/posting-detail/${item?.id}`} className="flex">
+                    <Image
+                      src={item.image_url[0]}
+                      alt=""
+                      width={128}
+                      height={128}
+                      className="!w-[128px] !h-[128px] rounded-lg"
+                    />
+                    <div className="flex flex-col justify-between ml-5 w-full">
+                      <div>
+                        <span className="text-sm font-semibold text-primary600 mb-2">{item.category}</span>
+                        <p className="text-gray900 font-semibold">{item.title}</p>
+                        <p className="line-clamp-2 text-gray800 text-sm">{item.content}</p>
+                      </div>
+                      <div className="flex justify-between w-full">
+                        <p className="text-xs text-gray600">{item.users?.nickname}</p>
+                        <p className="text-xs text-gray600 pr-3">{formatDate(item.created_at)}</p>
+                      </div>
                     </div>
-                    <div className="flex justify-between w-full">
-                      <p className="text-xs text-gray600">{item.users?.nickname}</p>
-                      <p className="text-xs text-gray600 pr-3">{formatDate(item.created_at)}</p>
-                    </div>
-                  </div>
-                </Link>
-              </li>
-            ))}
-          </ul>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <Pagination page={page} setPage={setPage} totalPages={totalPages} />
+          </>
         )}
-        <Pagination page={page} setPage={setPage} totalPages={totalPages} />
       </div>
     </>
   );
