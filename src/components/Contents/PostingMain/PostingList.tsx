@@ -7,40 +7,27 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import PostingMainBtn from './PostingBtn';
 import { useQuery } from '@tanstack/react-query';
+import Pagination from '@/components/Common/Pagination';
 
 type MyPost = Post & { users: { nickname: string } | null };
 
 const ITEMS_PER_PAGE = 4;
 
 const PostingList = () => {
-  // const [posts, setPosts] = useState<MyPost[]>();
   const [selectedCategory, setSelectedCategory] = useState('전체 글 보기');
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(2);
   const categories = ['전체 글 보기', '잡담', '질문', '정보'];
   const supabase = createClient();
   const dayjs = require('dayjs');
   const formatDate = (dateString: string) => dayjs(dateString).format('YY.MM.DD');
 
-  const getPosts = async () => {
-    const { data: posts } = await supabase.from('posts').select('*, users(nickname)');
-    return posts;
-  };
-
   const getPostsCount = async () => {
-    const { count } = await supabase.from('posts').select('*', { count: 'exact', head: true });
-    return count;
+    const { data: pagination, count } = await supabase
+      .from('posts')
+      .select('*, users(nickname)', { count: 'exact' })
+      .range(ITEMS_PER_PAGE * (page - 1), ITEMS_PER_PAGE * (page - 1) + ITEMS_PER_PAGE - 1);
+    return { pagination, count };
   };
-
-  // const totalPages = Math.ceil(posts.totalCount / ITEMS_PER_PAGE);
-
-  const {
-    data: posts,
-    isPending,
-    isError
-  } = useQuery({
-    queryKey: ['posts'],
-    queryFn: getPosts
-  });
 
   const {
     data: totalCount,
@@ -51,17 +38,23 @@ const PostingList = () => {
     queryFn: getPostsCount
   });
 
-  if (isPending || countLoading) {
+  if (countLoading) {
     return <div>로딩중입니다...</div>;
   }
 
-  if (isError || countError) {
+  if (countError) {
     return <div>데이터 조회 중 오류가 발생했습니다.</div>;
   }
 
   const filteredPosts =
-    selectedCategory === '전체 글 보기' ? posts : posts?.filter((post) => post.category === selectedCategory);
+    selectedCategory === '전체 글 보기'
+      ? totalCount.pagination
+      : totalCount.pagination?.filter((post) => post.category === selectedCategory);
 
+  const totalPages = Math.ceil((totalCount.count as number) / ITEMS_PER_PAGE);
+
+  console.log(totalPages);
+  console.log(totalCount.pagination);
   return (
     <>
       <div className="w-[248px]">
@@ -121,6 +114,7 @@ const PostingList = () => {
             ))}
           </ul>
         )}
+        <Pagination page={page} setPage={setPage} totalPages={totalPages} />
       </div>
     </>
   );
