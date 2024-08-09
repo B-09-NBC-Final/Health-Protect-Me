@@ -47,30 +47,10 @@ export default function ClientRootLayout({ children }: { children: React.ReactNo
     };
 
     checkSession();
-
-    const {
-      data: { subscription }
-    } = supabase.auth.onAuthStateChange((event, session) => {
-      if (session) {
-        setUser({
-          userId: session.user.id,
-          email: session.user.email,
-          profile_url: session.user.user_metadata?.avatar_url || '',
-          nickname: session.user.user_metadata?.nickname || '',
-          is_survey_done: session.user.user_metadata?.is_survey_done || false
-        });
-      } else {
-        redicrectToLogin();
-      }
-    });
-
-    return () => {
-      subscription.unsubscribe();
-    };
   }, [supabase, setUser, clearUser, pathname, router]);
 
   if (loading) {
-    return <LoadingPage/>
+    return <LoadingPage />;
   }
 
   return <>{children}</>;

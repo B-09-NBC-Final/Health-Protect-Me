@@ -10,6 +10,7 @@ import ProfileImage from './Form/ProfileImg';
 import ProfileForm from './Form/EditProfileForm';
 import { useUserStore } from '@/store/userStore';
 import LoadingPage from '@/components/LoadingPage/Loading';
+import revalidate from '@/actions/revalidate';
 
 export const deleteUser = async () => {
   const supabase = createClient();
@@ -74,7 +75,7 @@ const UpdateProfile = (): JSX.Element => {
     setUser({
       userId,
       nickname: userData.nickname,
-      profileImage: userData.profile_url,
+      profile_url: userData.profile_url,
       height: infoData.height,
       weight: infoData.weight,
       goal: infoData.purpose
@@ -87,7 +88,7 @@ const UpdateProfile = (): JSX.Element => {
         throw new Error('사용자 ID를 찾을 수 없습니다.');
       }
 
-      let avatarUrl = user.profileImage;
+      let avatarUrl = user.profile_url;
 
       if (imageFile) {
         const { data: avatarData, error } = await supabase.storage
@@ -96,9 +97,17 @@ const UpdateProfile = (): JSX.Element => {
         if (error) {
           throw new Error(`Error uploading file: ${error.message}`);
         }
+
         const { data: publicUrlData } = supabase.storage.from('avatars').getPublicUrl(avatarData.path);
+
         avatarUrl = publicUrlData.publicUrl;
+        console.log('avatarUrl', avatarUrl);
+        await revalidate();
+        setUser({ ...user, profile_url: avatarUrl });
       }
+      const { error } = await supabase.auth.updateUser({
+        data: { name: user.nickname, avatar_url: avatarUrl }
+      });
 
       const { error: userUpdateError } = await supabase
         .from('users')
@@ -121,7 +130,27 @@ const UpdateProfile = (): JSX.Element => {
         throw new Error(infoUpdateError.message);
       }
 
-      setUser({ profileImage: avatarUrl });
+      const { data: updatedUserData, error: fetchError } = await supabase
+        .from('users')
+        .select('*')
+        .eq('user_id', user.userId)
+        .single();
+
+      if (updatedUserData) {
+        setUser({
+          userId: updatedUserData.user_id,
+          nickname: updatedUserData.nickname,
+          profile_url: updatedUserData.profile_url,
+          height: user.height,
+          weight: user.weight,
+          goal: user.goal,
+          email: user.email,
+          is_survey_done: user.is_survey_done
+        });
+      } else {
+        console.error('Failed to fetch updated user data: updatedUserData is null');
+      }
+
       router.push('/my-page');
     } catch (error) {
       console.error('Failed to save user data:', error);
@@ -148,7 +177,7 @@ const UpdateProfile = (): JSX.Element => {
       setImageFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
-        setUser({ profileImage: reader.result as string });
+        setUser({ ...user, profile_url: reader.result as string });
       };
       reader.readAsDataURL(file);
     }
@@ -173,7 +202,7 @@ const UpdateProfile = (): JSX.Element => {
     <section className="w-[1360px] max-w-md mx-auto">
       <h1 className="w-[400px] h-8 mb-4 mx-4 text-2xl font-bold">프로필 수정</h1>
       <div className="flex flex-col items-center text-center mb-8 w-full px-4">
-        <ProfileImage profileImage={user.profileImage || ''} onImageUpload={handleImageUpload} />
+        <ProfileImage profile_url={user.profile_url || ''} onImageUpload={handleImageUpload} />
         <ProfileForm
           nickname={user.nickname || ''}
           setNickname={(nickname: string) => setUser({ nickname })}
