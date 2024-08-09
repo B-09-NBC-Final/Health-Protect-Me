@@ -2,11 +2,12 @@ import Image, { StaticImageData } from 'next/image';
 import Defaultimg from '@/assets/image/defaultimg.png';
 import { useUserStore } from '@/store/userStore';
 type UserProfileProps = {
+  src: string | StaticImageData;
   width: number;
   height: number;
 };
 
-const UserProfile: React.FC<UserProfileProps> = ({ width, height }) => {
+const UserProfile = ({ width, height }: UserProfileProps): JSX.Element => {
   const { user } = useUserStore((state) => state);
   console.log('user.profile_url', user?.profile_url);
   return (
