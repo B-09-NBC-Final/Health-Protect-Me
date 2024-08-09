@@ -335,7 +335,7 @@ const InforDetailPage = () => {
             <Card className="!flex-[0_0_auto] shadow-floating overflow-hidden w-[400px]">
               <CardHeader className="!text-color-text-sub">
                 <CardDescription style={{ color: '#3E9B2E', fontWeight: '600' }}>아침</CardDescription>
-                <CardDescription className="text-black h-10 text-base">{meal[0].menu}</CardDescription>
+                <CardDescription className="text-black h-[60px] text-base">{meal[0].menu}</CardDescription>
                 <p style={{ color: '#76797F', marginTop: '8px' }}>{meal[0].calories.replace('&칼로리:', '')}</p>
               </CardHeader>
               <CardContent className="overflow-auto max-h-[200px]">
@@ -361,7 +361,7 @@ const InforDetailPage = () => {
             <Card className="!flex-[0_0_auto] shadow-floating w-[400px]">
               <CardHeader className="!text-color-text-sub">
                 <CardDescription style={{ color: '#3E9B2E', fontWeight: '600' }}>점심</CardDescription>
-                <CardDescription className="text-black h-10 text-base">{meal[1].menu}</CardDescription>
+                <CardDescription className="text-black h-[60px] text-base">{meal[1].menu}</CardDescription>
                 <p style={{ color: '#76797F', marginTop: '8px' }}>{meal[0].calories.replace('&칼로리:', '')}</p>
               </CardHeader>
               <CardContent>
@@ -387,7 +387,7 @@ const InforDetailPage = () => {
             <Card className="!flex-[0_0_auto] shadow-floating w-[400px]">
               <CardHeader className="!text-color-text-sub">
                 <CardDescription style={{ color: '#3E9B2E', fontWeight: '600' }}>저녁</CardDescription>
-                <CardDescription className="text-black h-10 text-base">{meal[2].menu}</CardDescription>
+                <CardDescription className="text-black h-[60px] text-base">{meal[2].menu}</CardDescription>
                 <p style={{ color: '#76797F', marginTop: '8px' }}>{meal[0].calories.replace('&칼로리:', '')}</p>
               </CardHeader>
               <CardContent>
