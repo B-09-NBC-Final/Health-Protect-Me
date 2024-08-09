@@ -22,20 +22,11 @@ const nextConfig = {
         hostname: 't1.kakaocdn.net'
       }
     ],
-    domains: ['t1.kakaocdn.net'],
   },
   env: {
     SUPABASE_URL: process.env.SUPABASE_URL,
     SUPABASE_KEY: process.env.SUPABASE_KEY
   }
 };
-
-// module.exports = {
-//   experimental: {
-//     appDir: true,
-//     serverComponents: true,
-//     runtime: 'nodejs',
-//   },
-// };
 
 export default nextConfig;
