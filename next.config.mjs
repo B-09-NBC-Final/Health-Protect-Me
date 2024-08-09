@@ -30,12 +30,4 @@ const nextConfig = {
   }
 };
 
-// module.exports = {
-//   experimental: {
-//     appDir: true,
-//     serverComponents: true,
-//     runtime: 'nodejs',
-//   },
-// };
-
 export default nextConfig;
