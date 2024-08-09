@@ -3,17 +3,17 @@ import Image from 'next/image';
 import defaultimg from '@/assets/image/defaultimg.png';
 
 type ProfileImageProps = {
-  profileImage: string;
+  profile_url?: string;
   onImageUpload: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-const ProfileImage: React.FC<ProfileImageProps> = ({ profileImage, onImageUpload }) => {
+const ProfileImage: React.FC<ProfileImageProps> = ({ profile_url, onImageUpload }) => {
   return (
     <div className="flex justify-between items-center w-full mb-10">
       <div className="w-24 h-24 rounded-full bg-gray-300 flex items-center justify-center relative">
         <Image
           className="rounded-full cursor-pointer"
-          src={profileImage || defaultimg}
+          src={profile_url || defaultimg}
           alt="Profile"
           width={120}
           height={120}
