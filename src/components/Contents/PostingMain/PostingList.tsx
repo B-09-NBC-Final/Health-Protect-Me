@@ -1,15 +1,12 @@
 'use client';
 
 import { createClient } from '@/supabase/client';
-import { Post } from '@/types';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import PostingMainBtn from './PostingBtn';
 import { useQuery } from '@tanstack/react-query';
 import Pagination from '@/components/Common/Pagination';
-
-type MyPost = Post & { users: { nickname: string } | null };
 
 const ITEMS_PER_PAGE = 4;
 
@@ -21,40 +18,36 @@ const PostingList = () => {
   const dayjs = require('dayjs');
   const formatDate = (dateString: string) => dayjs(dateString).format('YY.MM.DD');
 
-  const getPostsCount = async () => {
-    const { data: pagination, count } = await supabase
+  const getPosts = async () => {
+    const { data, count } = await supabase
       .from('posts')
       .select('*, users(nickname)', { count: 'exact' })
       .range(ITEMS_PER_PAGE * (page - 1), ITEMS_PER_PAGE * (page - 1) + ITEMS_PER_PAGE - 1);
-    return { pagination, count };
+    return { data, count };
   };
 
   const {
-    data: totalCount,
-    isPending: countLoading,
-    isError: countError
+    data: posts,
+    isPending,
+    isError
   } = useQuery({
-    queryKey: ['postsCount'],
-    queryFn: getPostsCount
+    queryKey: ['posts', page],
+    queryFn: getPosts
   });
 
-  if (countLoading) {
+  if (isPending) {
     return <div>로딩중입니다...</div>;
   }
 
-  if (countError) {
+  if (isError) {
     return <div>데이터 조회 중 오류가 발생했습니다.</div>;
   }
 
   const filteredPosts =
-    selectedCategory === '전체 글 보기'
-      ? totalCount.pagination
-      : totalCount.pagination?.filter((post) => post.category === selectedCategory);
+    selectedCategory === '전체 글 보기' ? posts.data : posts.data?.filter((post) => post.category === selectedCategory);
 
-  const totalPages = Math.ceil((totalCount.count as number) / ITEMS_PER_PAGE);
+  const totalPages = Math.ceil((posts.count as number) / ITEMS_PER_PAGE);
 
-  console.log(totalPages);
-  console.log(totalCount.pagination);
   return (
     <>
       <div className="w-[248px]">
