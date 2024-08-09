@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { createClient } from '@/supabase/client';
 import { useUserStore } from '@/store/userStore';
-import { Card, CardHeader, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 import Image from 'next/image';
 import carbohydrate from '@/assets/icons/carbohydrate.png';
 import protein from '@/assets/icons/protein.png';
@@ -38,6 +38,7 @@ const InforDetailPage = () => {
     caution: ''
   });
   const [syncUserData, setSyncUserData] = useState<boolean | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -47,7 +48,7 @@ const InforDetailPage = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      if (!userId) return; // userId가 없으면 fetchData 실행하지 않음
+      if (!userId) return;
 
       const supabase = createClient();
 
@@ -67,46 +68,238 @@ const InforDetailPage = () => {
 
       const { data: userData, error: userError } = await supabase
         .from('information')
-        .select('user_id')
-        .eq('user_id', userId)
-        .single();
-
-      const { data: dietData, error: dietError } = await supabase
-        .from('information')
-        .select('result_diet')
-        .eq('user_id', userId)
-        .single();
-
-      const { data: exerciseData, error: exerciseError } = await supabase
-        .from('information')
-        .select('result_exercise')
+        .select('year_of_birth, weight, gender, height, purpose, user_id')
         .eq('user_id', userId)
         .single();
 
       if (userError) setError(userError);
-      if (dietError) setError(dietError);
-      if (exerciseError) setError(exerciseError);
 
-      if (userData) setUserId(userData.user_id || '');
+      if (userData) {
+        setUserId(userData.user_id || '');
 
-      if (dietData) {
-        setResultDiet(dietData.result_diet || '');
-        const parsedDietData = JSON.parse(dietData.result_diet || '[]');
-        if (parsedDietData.length > 0) {
-          const { breakfast, lunch, dinner, totalCalories } = parsedDietData[0];
-          setMeal([breakfast, lunch, dinner, { menu: '', ratio: '', calories: totalCalories }]);
+        // 기존의 식단과 운동 결과를 가져오는 로직
+        const { data: dietData, error: dietError } = await supabase
+          .from('information')
+          .select('result_diet')
+          .eq('user_id', userId)
+          .single();
+
+        const { data: exerciseData, error: exerciseError } = await supabase
+          .from('information')
+          .select('result_exercise')
+          .eq('user_id', userId)
+          .single();
+
+        if (dietError) setError(dietError);
+        if (exerciseError) setError(exerciseError);
+
+        if (dietData) {
+          setResultDiet(dietData.result_diet || '');
+          const parsedDietData = JSON.parse(dietData.result_diet || '[]');
+          if (parsedDietData.length > 0) {
+            const { breakfast, lunch, dinner, totalCalories } = parsedDietData[0];
+            setMeal([breakfast, lunch, dinner, { menu: '', ratio: '', calories: totalCalories }]);
+          }
         }
-      }
 
-      if (exerciseData) {
-        setResultExercise(exerciseData.result_exercise || '');
-        const work = JSON.parse(exerciseData.result_exercise || '');
-        setWork(work);
+        if (exerciseData) {
+          setResultExercise(exerciseData.result_exercise || '');
+          const work = JSON.parse(exerciseData.result_exercise || '');
+          setWork(work);
+        }
+
+        // GPT API 호출하여 새로운 식단 및 운동 결과 받기
+        await callGPTAPI(userData);
       }
     };
 
     fetchData();
   }, [userId]);
+
+  // GPT API 호출 함수
+  const callGPTAPI = async (userData: any) => {
+    setIsLoading(true);
+    try {
+      const response = await fetch('/api/gpt', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          year_of_birth: userData.year_of_birth,
+          weight: userData.weight,
+          gender: userData.gender,
+          height: userData.height,
+          purpose: userData.purpose
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('API 요청에 실패하였습니다.');
+      }
+
+      const content = await response.json();
+      console.log("content", content);
+      const parsedResults = parseAiResults(content.data);
+
+      console.log("parsedResults", parsedResults);
+
+      if (!parsedResults) {
+        throw new Error('AI 결과 파싱에 실패했습니다.');
+      }
+
+      // 새로운 식단 및 운동 결과로 상태를 업데이트합니다
+      const parsedDietData = JSON.parse(parsedResults.result_diet || '[]');
+      if (parsedDietData.length > 0) {
+        const { breakfast, lunch, dinner, totalCalories } = parsedDietData[0];
+        setMeal([breakfast, lunch, dinner, { menu: '', ratio: '', calories: totalCalories }]);
+      }
+
+      const parsedExerciseData = JSON.parse(parsedResults.result_exercise || '');
+      setWork(parsedExerciseData);
+
+      // Supabase에 저장
+      await saveResultsToSupabase(parsedResults);
+
+    } catch (error) {
+      console.error('API 요청 중 오류:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // AI 결과 파싱 함수
+  const parseAiResults = (result: string) => {
+    if (!result) return null;
+    console.log("result", result);
+    const days = result.split('@').slice(1);
+    const dietPlans = days.map((day) => parseDiet(day));
+    const exercise = parseExercise(days[0].split('~추천운동')[1]);
+    console.log(exercise);
+
+    return {
+      result_diet: JSON.stringify(dietPlans),
+      result_exercise: JSON.stringify(exercise)
+    };
+  };
+
+  // 식단 파싱 함수
+  const parseDiet = (dayString: string) => {
+    const sections = dayString.split('\n');
+    const diet = {
+      day: '',
+      breakfast: { menu: '', ratio: '', calories: '' },
+      lunch: { menu: '', ratio: '', calories: '' },
+      dinner: { menu: '', ratio: '', calories: '' },
+      totalCalories: ''
+    };
+
+    let currentMeal = null;
+
+    sections.forEach((line) => {
+      if (line.startsWith('@')) diet.day = line.substring(1).trim();
+      else if (line.startsWith('#')) {
+        currentMeal = diet.breakfast;
+        if (line.startsWith('#?메뉴:')) currentMeal.menu += line.substring(7).trim() + '\n';
+        else if (line.startsWith('#-')) currentMeal.menu += line.substring(1).trim() + '\n';
+        else if (line.startsWith('#$')) currentMeal.ratio = line.substring(1).trim();
+        else if (line.startsWith('#&')) currentMeal.calories = line.substring(1).trim();
+      } else if (line.startsWith('^')) {
+        currentMeal = diet.lunch;
+        if (line.startsWith('^?메뉴:')) currentMeal.menu += line.substring(7).trim() + '\n';
+        else if (line.startsWith('^-')) currentMeal.menu += line.substring(1).trim() + '\n';
+        else if (line.startsWith('^$')) currentMeal.ratio = line.substring(1).trim();
+        else if (line.startsWith('^&')) currentMeal.calories = line.substring(1).trim();
+      } else if (line.startsWith('!')) {
+        currentMeal = diet.dinner;
+        if (line.startsWith('!?메뉴:')) currentMeal.menu += line.substring(7).trim() + '\n';
+        else if (line.startsWith('!-')) currentMeal.menu += line.substring(1).trim() + '\n';
+        else if (line.startsWith('!$')) currentMeal.ratio = line.substring(1).trim();
+        else if (line.startsWith('!&')) currentMeal.calories = line.substring(1).trim();
+      } else if (line.startsWith('*')) diet.totalCalories = line.substring(1).trim();
+    });
+
+    return diet;
+  };
+
+  // 운동 파싱 함수
+  const parseExercise = (exerciseString: string) => {
+    if (!exerciseString) return null;
+    const lines = exerciseString.split('\n');
+    const exercise = {
+      type: '',
+      method: '',
+      tip: '',
+      duration: '',
+      effect: '',
+      caution: ''
+    };
+
+    let currentKey: keyof typeof exercise | null = null;
+
+    lines.forEach((line) => {
+      if (line.startsWith('운동종류:')) {
+        exercise.type = line.substring(5).trim();
+        currentKey = 'type';
+      } else if (line.startsWith('운동방법:')) {
+        exercise.method = line.substring(5).trim();
+        currentKey = 'method';
+      } else if (line.startsWith('운동 팁:')) {
+        exercise.tip = line.substring(5).trim();
+        currentKey = 'tip';
+      } else if (line.startsWith('운동 횟수 및 시간:')) {
+        exercise.duration = line.substring(11).trim();
+        currentKey = 'duration';
+      } else if (line.startsWith('운동의 영향:')) {
+        exercise.effect = line.substring(7).trim();
+        currentKey = 'effect';
+      } else if (line.startsWith('주의사항:')) {
+        exercise.caution = line.substring(5).trim();
+        currentKey = 'caution';
+      } else if (currentKey === 'method' && line.trim() !== '') {
+        exercise.method += '\n' + line.trim();
+      }
+    });
+
+    if (exercise.method.startsWith('\n')) {
+      exercise.method = exercise.method.substring(1).trim();
+    }
+
+    return exercise;
+  };
+
+  // Supabase에 결과 저장 함수
+  const saveResultsToSupabase = async (parsedResults: { result_diet: string; result_exercise: string }) => {
+    const supabase = createClient();
+    const { data, error } = await supabase
+      .from('information')
+      .update({
+        result_diet: parsedResults.result_diet,
+        result_exercise: parsedResults.result_exercise,
+        sync_user_data: true
+      })
+      .eq('user_id', userId);
+
+    if (error) {
+      throw new Error('결과를 저장하는 중 오류가 발생했습니다.');
+    }
+  };
+
+  const resetGptCall = async () => {
+    const supabase = createClient();
+
+    const { data: userData, error: userError } = await supabase
+      .from('information')
+      .select('year_of_birth, weight, gender, height, purpose, user_id')
+      .eq('user_id', userId)
+      .single();
+
+    await callGPTAPI(userData);
+
+    // 페이지 새로고침
+    // window.location.reload();
+  }
+
 
   if (meal.length === 0 || !work) return null;
 
@@ -132,7 +325,7 @@ const InforDetailPage = () => {
           {syncUserData === false && (
             <div className='flex'>
               <p className='text-red-500'>정보가 바뀌었네요! 식단을 다시 받아 보시겠어요?</p>
-              <button>다시 제공받기</button>
+              <button onClick={resetGptCall}>식단 다시 받기</button>
             </div>
           )}
         </div>

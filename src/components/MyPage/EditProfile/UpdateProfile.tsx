@@ -1,5 +1,17 @@
 'use client';
 
+<<<<<<< HEAD
+import React, { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+import { createClient } from '@/supabase/client'
+import { v4 as uuidv4 } from 'uuid'
+import Button from '@/components/Common/Button'
+import Modal from './Modal/EditModal'
+import ProfileImage from './Form/ProfileImg'
+import ProfileForm from './Form/EditProfileForm'
+import { useUserStore } from '@/store/userStore'
+import LoadingPage from '@/components/LoadingPage/Loading'
+=======
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/supabase/client';
@@ -10,6 +22,7 @@ import ProfileImage from './Form/ProfileImg';
 import ProfileForm from './Form/EditProfileForm';
 import { useUserStore } from '@/store/userStore';
 import LoadingPage from '@/components/LoadingPage/Loading';
+>>>>>>> 903fdc1dc11ef36ce2a7cb4d3a3007a46435ef69
 
 export const deleteUser = async () => {
   const supabase = createClient();
@@ -112,9 +125,13 @@ const UpdateProfile = (): JSX.Element => {
       // 정보 업데이트 시 sync_user_data 필드도 false로 설정
       const { data, error: infoUpdateError } = await supabase
         .from('information')
+<<<<<<< HEAD
+        .update({ weight: user.weight, purpose: user.goal, sync_user_data: false })
+=======
 
         .update({ weight: user.weight, purpose: user.goal, sync_user_data: false })
 
+>>>>>>> 903fdc1dc11ef36ce2a7cb4d3a3007a46435ef69
         .eq('user_id', user.userId);
 
       if (infoUpdateError) {
