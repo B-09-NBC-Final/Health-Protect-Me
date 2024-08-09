@@ -22,7 +22,6 @@ const nextConfig = {
         hostname: 't1.kakaocdn.net'
       }
     ],
-    domains: ['t1.kakaocdn.net'],
   },
   env: {
     SUPABASE_URL: process.env.SUPABASE_URL,
