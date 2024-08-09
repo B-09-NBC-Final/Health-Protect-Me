@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { createClient } from '@/supabase/client';
 import { useUserStore } from '@/store/userStore';
-import { Card, CardHeader, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 import Image from 'next/image';
 import carbohydrate from '@/assets/icons/carbohydrate.png';
 import protein from '@/assets/icons/protein.png';
@@ -10,7 +10,6 @@ import fat from '@/assets/icons/fat.png';
 import running from '@/assets/icons/running_man.png';
 import dumbbel from '@/assets/icons/dumbbel.png';
 import clock from '@/assets/icons/clock.png';
-import { Result } from 'postcss';
 
 type PostgrestError = {
   message: string;
@@ -49,7 +48,7 @@ const InforDetailPage = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      if (!userId) return; // userId가 없으면 fetchData 실행하지 않음
+      if (!userId) return;
 
       const supabase = createClient();
 
@@ -140,17 +139,24 @@ const InforDetailPage = () => {
       }
 
       const content = await response.json();
+      console.log("content", content);
       const parsedResults = parseAiResults(content.data);
 
-      console.log("content", content);
       console.log("parsedResults", parsedResults);
 
       if (!parsedResults) {
         throw new Error('AI 결과 파싱에 실패했습니다.');
       }
 
-      setResultDiet(parsedResults.result_diet);
-      setResultExercise(parsedResults.result_exercise);
+      // 새로운 식단 및 운동 결과로 상태를 업데이트합니다
+      const parsedDietData = JSON.parse(parsedResults.result_diet || '[]');
+      if (parsedDietData.length > 0) {
+        const { breakfast, lunch, dinner, totalCalories } = parsedDietData[0];
+        setMeal([breakfast, lunch, dinner, { menu: '', ratio: '', calories: totalCalories }]);
+      }
+
+      const parsedExerciseData = JSON.parse(parsedResults.result_exercise || '');
+      setWork(parsedExerciseData);
 
       // Supabase에 저장
       await saveResultsToSupabase(parsedResults);
@@ -165,10 +171,11 @@ const InforDetailPage = () => {
   // AI 결과 파싱 함수
   const parseAiResults = (result: string) => {
     if (!result) return null;
-
+    console.log("result", result);
     const days = result.split('@').slice(1);
     const dietPlans = days.map((day) => parseDiet(day));
     const exercise = parseExercise(days[0].split('~추천운동')[1]);
+    console.log(exercise);
 
     return {
       result_diet: JSON.stringify(dietPlans),
@@ -278,6 +285,22 @@ const InforDetailPage = () => {
     }
   };
 
+  const resetGptCall = async () => {
+    const supabase = createClient();
+
+    const { data: userData, error: userError } = await supabase
+      .from('information')
+      .select('year_of_birth, weight, gender, height, purpose, user_id')
+      .eq('user_id', userId)
+      .single();
+
+    await callGPTAPI(userData);
+
+    // 페이지 새로고침
+    // window.location.reload();
+  }
+
+
   if (meal.length === 0 || !work) return null;
 
   const extractRatios = (ratioString: string) => {
@@ -302,7 +325,7 @@ const InforDetailPage = () => {
           {syncUserData === false && (
             <div className='flex'>
               <p className='text-red-500'>정보가 바뀌었네요! 식단을 다시 받아 보시겠어요?</p>
-              <button onClick={() => callGPTAPI(user)}>식단 다시 받기</button>
+              <button onClick={resetGptCall}>식단 다시 받기</button>
             </div>
           )}
         </div>

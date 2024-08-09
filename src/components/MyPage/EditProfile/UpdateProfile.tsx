@@ -110,7 +110,7 @@ const UpdateProfile = (): JSX.Element => {
       }
 
       // 정보 업데이트 시 sync_user_data 필드도 false로 설정
-      const { data: aa, error: infoUpdateError } = await supabase
+      const { data, error: infoUpdateError } = await supabase
         .from('information')
         .update({ weight: user.weight, purpose: user.goal, sync_user_data: false })
         .eq('user_id', user.userId);
