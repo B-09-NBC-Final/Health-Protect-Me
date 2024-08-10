@@ -1,308 +1,3 @@
-// 'use client';
-// import React, { useState, useEffect } from 'react';
-// import { createClient } from '@/supabase/client';
-// import { useUserStore } from '@/store/userStore';
-// import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
-// import Image from 'next/image';
-// import carbohydrate from '@/assets/icons/carbohydrate.png';
-// import protein from '@/assets/icons/protein.png';
-// import fat from '@/assets/icons/fat.png';
-// import running from '@/assets/icons/running_man.png';
-// import dumbbel from '@/assets/icons/dumbbel.png';
-// import clock from '@/assets/icons/clock.png';
-
-// type PostgrestError = {
-//   message: string;
-// };
-
-// const InforDetailPage = () => {
-//   const [resultDiet, setResultDiet] = useState('');
-//   const [resultExercise, setResultExercise] = useState('');
-//   const [error, setError] = useState<PostgrestError | null>(null);
-//   const [userId, setUserId] = useState('');
-//   const { user } = useUserStore();
-//   const [meal, setMeal] = useState<{ calories: string; menu: string; ratio: string }[]>([]);
-//   const [work, setWork] = useState<{
-//     type: string;
-//     method: string;
-//     tip: string;
-//     duration: string;
-//     effect: string;
-//     caution: string;
-//   }>({
-//     type: '',
-//     method: '',
-//     tip: '',
-//     duration: '',
-//     effect: '',
-//     caution: ''
-//   });
-//   const [syncUserData, setSyncUserData] = useState<boolean | null>(null);
-//   const [isLoading, setIsLoading] = useState(false);
-//   const [shouldCallGptApi, setShouldCallGptApi] = useState(false);
-
-//   useEffect(() => {
-//     if (user) {
-//       setUserId(user.userId);
-//     }
-//   }, [user]);
-
-//   useEffect(() => {
-//     const fetchData = async () => {
-//       if (!userId) return;
-
-//       const supabase = createClient();
-
-//       const { data: syncData, error: syncError } = await supabase
-//         .from('information')
-//         .select('sync_user_data')
-//         .eq('user_id', userId)
-//         .single();
-
-//       if (syncError) {
-//         console.error('Error fetching sync user data status:', syncError);
-//         setSyncUserData(false);
-//       } else {
-//         setSyncUserData(syncData.sync_user_data);
-//       }
-
-//       // 기존의 수정되지않은 유저 정보 불러오기
-//       const { data: userData, error: userError } = await supabase
-//         .from('information')
-//         .select('year_of_birth, weight, gender, height, purpose, user_id')
-//         .eq('user_id', userId)
-//         .single();
-
-//       if (userError) setError(userError);
-
-//       if (userData) {
-//         setUserId(userData.user_id || '');
-
-//         if (shouldCallGptApi) {
-//           await callGPTAPI(userData);
-//         } else {
-//           const { data: dietData, error: dietError } = await supabase
-//             .from('information')
-//             .select('result_diet')
-//             .eq('user_id', userId)
-//             .single();
-
-//           const { data: exerciseData, error: exerciseError } = await supabase
-//             .from('information')
-//             .select('result_exercise')
-//             .eq('user_id', userId)
-//             .single();
-
-//           if (dietData) {
-//             setResultDiet(dietData.result_diet || '');
-//             const parsedDietData = JSON.parse(dietData.result_diet || '[]');
-//             if (parsedDietData.length > 0) {
-//               const { breakfast, lunch, dinner, totalCalories } = parsedDietData[0];
-//               setMeal([breakfast, lunch, dinner, { menu: '', ratio: '', calories: totalCalories }]);
-//             }
-//           }
-
-//           if (exerciseData) {
-//             setResultExercise(exerciseData.result_exercise || '');
-//             const work = JSON.parse(exerciseData.result_exercise || '');
-//             setWork(work);
-//           }
-//         }
-//       }
-//     };
-
-//     fetchData();
-//   }, [userId, shouldCallGptApi]);
-
-//   // gpt 호출
-//   const callGPTAPI = async (userData: { year_of_birth: number | null; weight: number | null; gender: string; height: number | null; purpose: string; user_id: string | null; }) => {
-//     setIsLoading(true);
-//     console.log("callGPTAPI");
-//     try {
-//       const response = await fetch('/api/gpt', {
-//         method: 'POST',
-//         headers: {
-//           'Content-Type': 'application/json'
-//         },
-//         body: JSON.stringify({
-//           year_of_birth: userData.year_of_birth,
-//           weight: userData.weight,
-//           gender: userData.gender,
-//           height: userData.height,
-//           purpose: userData.purpose
-//         })
-//       });
-
-//       if (!response.ok) {
-//         throw new Error('API 요청에 실패하였습니다.');
-//       }
-
-//       const content = await response.json();
-//       console.log("content", content);
-//       const parsedResults = parseAiResults(content.data);
-
-//       console.log("parsedResults", parsedResults);
-
-//       if (!parsedResults) {
-//         throw new Error('AI 결과 파싱에 실패했습니다.');
-//       }
-
-//       const parsedDietData = JSON.parse(parsedResults.result_diet || '[]');
-//       if (parsedDietData.length > 0) {
-//         const { breakfast, lunch, dinner, totalCalories } = parsedDietData[0];
-//         setMeal([breakfast, lunch, dinner, { menu: '', ratio: '', calories: totalCalories }]);
-//       }
-
-//       const parsedExerciseData = JSON.parse(parsedResults.result_exercise || '');
-//       setWork(parsedExerciseData);
-
-//       await saveResultsToSupabase(parsedResults);
-
-//     } catch (error) {
-//       console.error('API 요청 중 오류:', error);
-//     } finally {
-//       setIsLoading(false);
-//       setShouldCallGptApi(false);
-//     }
-//   };
-
-//   // ai의 식단과 운동 나누기
-//   const parseAiResults = (result: string) => {
-//     if (!result) return null;
-//     const days = result.split('@').slice(1);
-//     const dietPlans = days.map((day) => parseDiet(day));
-//     const exercise = parseExercise(days[0].split('~추천운동')[1]);
-//     console.log(exercise);
-
-//     return {
-//       result_diet: JSON.stringify(dietPlans),
-//       result_exercise: JSON.stringify(exercise)
-//     };
-//   };
-
-//   // 식사 쪼개기
-//   const parseDiet = (dayString: string) => {
-//     const sections = dayString.split('\n');
-//     const diet = {
-//       day: '',
-//       breakfast: { menu: '', ratio: '', calories: '' },
-//       lunch: { menu: '', ratio: '', calories: '' },
-//       dinner: { menu: '', ratio: '', calories: '' },
-//       totalCalories: ''
-//     };
-
-//     let currentMeal = null;
-
-//     sections.forEach((line) => {
-//       if (line.startsWith('@')) diet.day = line.substring(1).trim();
-//       else if (line.startsWith('#')) {
-//         currentMeal = diet.breakfast;
-//         if (line.startsWith('#?메뉴:')) currentMeal.menu += line.substring(7).trim() + '\n';
-//         else if (line.startsWith('#-')) currentMeal.menu += line.substring(1).trim() + '\n';
-//         else if (line.startsWith('#$')) currentMeal.ratio = line.substring(1).trim();
-//         else if (line.startsWith('#&')) currentMeal.calories = line.substring(1).trim();
-//       } else if (line.startsWith('^')) {
-//         currentMeal = diet.lunch;
-//         if (line.startsWith('^?메뉴:')) currentMeal.menu += line.substring(7).trim() + '\n';
-//         else if (line.startsWith('^-')) currentMeal.menu += line.substring(1).trim() + '\n';
-//         else if (line.startsWith('^$')) currentMeal.ratio = line.substring(1).trim();
-//         else if (line.startsWith('^&')) currentMeal.calories = line.substring(1).trim();
-//       } else if (line.startsWith('!')) {
-//         currentMeal = diet.dinner;
-//         if (line.startsWith('!?메뉴:')) currentMeal.menu += line.substring(7).trim() + '\n';
-//         else if (line.startsWith('!-')) currentMeal.menu += line.substring(1).trim() + '\n';
-//         else if (line.startsWith('!$')) currentMeal.ratio = line.substring(1).trim();
-//         else if (line.startsWith('!&')) currentMeal.calories = line.substring(1).trim();
-//       } else if (line.startsWith('*')) diet.totalCalories = line.substring(1).trim();
-//     });
-
-//     return diet;
-//   };
-
-//   // 추천 운동 쪼개기
-//   const parseExercise = (exerciseString: string) => {
-//     if (!exerciseString) return null;
-//     const lines = exerciseString.split('\n');
-//     const exercise = {
-//       type: '',
-//       method: '',
-//       tip: '',
-//       duration: '',
-//       effect: '',
-//       caution: ''
-//     };
-
-//     let currentKey: keyof typeof exercise | null = null;
-
-//     lines.forEach((line) => {
-//       if (line.startsWith('운동종류:')) {
-//         exercise.type = line.substring(5).trim();
-//         currentKey = 'type';
-//       } else if (line.startsWith('운동방법:')) {
-//         exercise.method = line.substring(5).trim();
-//         currentKey = 'method';
-//       } else if (line.startsWith('운동 팁:')) {
-//         exercise.tip = line.substring(5).trim();
-//         currentKey = 'tip';
-//       } else if (line.startsWith('운동 횟수 및 시간:')) {
-//         exercise.duration = line.substring(11).trim();
-//         currentKey = 'duration';
-//       } else if (line.startsWith('운동의 영향:')) {
-//         exercise.effect = line.substring(7).trim();
-//         currentKey = 'effect';
-//       } else if (line.startsWith('주의사항:')) {
-//         exercise.caution = line.substring(5).trim();
-//         currentKey = 'caution';
-//       } else if (currentKey === 'method' && line.trim() !== '') {
-//         exercise.method += '\n' + line.trim();
-//       }
-//     });
-
-//     if (exercise.method.startsWith('\n')) {
-//       exercise.method = exercise.method.substring(1).trim();
-//     }
-
-//     return exercise;
-//   };
-
-//   // supabase에 result 다시 저장
-//   const saveResultsToSupabase = async (parsedResults: { result_diet: string; result_exercise: string }) => {
-//     const supabase = createClient();
-//     const { data, error } = await supabase
-//       .from('information')
-//       .update({
-//         result_diet: parsedResults.result_diet,
-//         result_exercise: parsedResults.result_exercise,
-//         sync_user_data: true
-//       })
-//       .eq('user_id', userId);
-
-//     if (error) {
-//       throw new Error('결과를 저장하는 중 오류가 발생했습니다.');
-//     }
-//   };
-
-//   // gpt 호출 초기화
-//   const resetGptCall = async () => {
-//     setShouldCallGptApi(true);
-//   }
-
-//   if (meal.length === 0 || !work) return null;
-
-//   const extractRatios = (ratioString: string) => {
-//     const ratios = ratioString.match(/\d+/g);
-//     return {
-//       carbohydrates: ratios ? parseInt(ratios[0], 10) : 0,
-//       proteins: ratios ? parseInt(ratios[1], 10) : 0,
-//       fats: ratios ? parseInt(ratios[2], 10) : 0
-//     };
-//   };
-
-//   // 각 끼니의 탄단지 비율 쪼개기
-//   const breakfastRatios = extractRatios(meal[0].ratio);
-//   const lunchRatios = extractRatios(meal[1].ratio);
-//   const dinnerRatios = extractRatios(meal[2].ratio);
-
 'use client'
 import React, { useState, useEffect } from 'react';
 import { createClient } from '@/supabase/client';
@@ -373,8 +68,7 @@ const InforDetailPage = () => {
       setCurrentDay((prevDay) => (prevDay + 1) % 7);
     };
 
-    // Set a timer to simulate midnight after 5 seconds
-    const timer = setTimeout(simulateMidnight, 5000); // 5초 후에 자정 시뮬레이션
+    const timer = setTimeout(simulateMidnight, 5000); // 5초 후에 자정 시뮬레이션/
 
     return () => clearTimeout(timer);
   }, [currentDate]);
@@ -385,7 +79,6 @@ const InforDetailPage = () => {
 
       const supabase = createClient();
 
-      // Fetch sync_user_data status
       const { data: syncData, error: syncError } = await supabase
         .from('information')
         .select('sync_user_data')
@@ -399,7 +92,6 @@ const InforDetailPage = () => {
         setSyncUserData(syncData.sync_user_data);
       }
 
-      // Fetch existing user data
       const { data: userData, error: userError } = await supabase
         .from('information')
         .select('year_of_birth, weight, gender, height, purpose, user_id')
@@ -414,7 +106,6 @@ const InforDetailPage = () => {
         if (shouldCallGptApi) {
           await callGPTAPI(userData);
         } else {
-          // Fetch existing diet and exercise results
           const { data: dietData, error: dietError } = await supabase
             .from('information')
             .select('result_diet')
@@ -450,7 +141,7 @@ const InforDetailPage = () => {
     fetchData();
   }, [userId, shouldCallGptApi, currentDay]);
 
-  // GPT API call function
+  // GPT API c
   const callGPTAPI = async (userData: any) => {
     setIsLoading(true);
     try {
@@ -502,7 +193,7 @@ const InforDetailPage = () => {
     }
   };
 
-  // Parse AI results function
+  // ai 결과 식단과 운동 나누기
   const parseAiResults = (result: string) => {
     if (!result) return null;
     const days = result.split('@').slice(1);
@@ -515,7 +206,7 @@ const InforDetailPage = () => {
     };
   };
 
-  // Diet parsing function
+  // 식단 쪼개기
   const parseDiet = (dayString: string) => {
     const sections = dayString.split('\n');
     const diet = {
@@ -554,7 +245,7 @@ const InforDetailPage = () => {
     return diet;
   };
 
-  // Exercise parsing function
+  // 운동 쪼개기
   const parseExercise = (exerciseString: string) => {
     if (!exerciseString) return null;
     const lines = exerciseString.split('\n');
@@ -600,7 +291,7 @@ const InforDetailPage = () => {
     return exercise;
   };
 
-  // Save results to Supabase
+  // supabase에 바뀐 식단과 운동 저장
   const saveResultsToSupabase = async (parsedResults: { result_diet: string; result_exercise: string }) => {
     const supabase = createClient();
     const { data, error } = await supabase
@@ -617,7 +308,7 @@ const InforDetailPage = () => {
     }
   };
 
-  // Reset GPT call function
+  // gpt 재호출
   const resetGptCall = async () => {
     setShouldCallGptApi(true);
   }
@@ -633,7 +324,7 @@ const InforDetailPage = () => {
     };
   };
 
-  // Split ratios for each meal
+  // 각 식사의 탄단지 쪼개기
   const breakfastRatios = extractRatios(meal[0].ratio);
   const lunchRatios = extractRatios(meal[1].ratio);
   const dinnerRatios = extractRatios(meal[2].ratio);
