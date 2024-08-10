@@ -1,8 +1,8 @@
-'use client';
+'use client'
 import React, { useState, useEffect } from 'react';
 import { createClient } from '@/supabase/client';
 import { useUserStore } from '@/store/userStore';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
+import { Card, CardHeader, CardDescription, CardContent } from '@/components/ui/card';
 import Image from 'next/image';
 import carbohydrate from '@/assets/icons/carbohydrate.png';
 import protein from '@/assets/icons/protein.png';
@@ -39,6 +39,9 @@ const InforDetailPage = () => {
   });
   const [syncUserData, setSyncUserData] = useState<boolean | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [shouldCallGptApi, setShouldCallGptApi] = useState(false);
+  const [currentDay, setCurrentDay] = useState(0);
+  const [currentDate, setCurrentDate] = useState(new Date());
 
   useEffect(() => {
     if (user) {
@@ -47,12 +50,35 @@ const InforDetailPage = () => {
   }, [user]);
 
   useEffect(() => {
+    const timer = setInterval(() => {
+      const now = new Date();
+      if (now.getDate() !== currentDate.getDate()) {
+        setCurrentDate(now);
+        setCurrentDay((prevDay) => (prevDay + 1) % 7);
+      }
+    }, 60000); // Check every minute
+
+    return () => clearInterval(timer);
+  }, [currentDate]);
+
+  useEffect(() => {
+    const simulateMidnight = () => {
+      const simulatedNow = new Date(currentDate.getTime() + 24 * 60 * 60 * 1000); // 24시간 후로 설정
+      setCurrentDate(simulatedNow);
+      setCurrentDay((prevDay) => (prevDay + 1) % 7);
+    };
+
+    const timer = setTimeout(simulateMidnight, 5000); // 5초 후에 자정 시뮬레이션/
+
+    return () => clearTimeout(timer);
+  }, [currentDate]);
+
+  useEffect(() => {
     const fetchData = async () => {
       if (!userId) return;
 
       const supabase = createClient();
 
-      // sync_user_data 상태 가져오기
       const { data: syncData, error: syncError } = await supabase
         .from('information')
         .select('sync_user_data')
@@ -77,46 +103,45 @@ const InforDetailPage = () => {
       if (userData) {
         setUserId(userData.user_id || '');
 
-        // 기존의 식단과 운동 결과를 가져오는 로직
-        const { data: dietData, error: dietError } = await supabase
-          .from('information')
-          .select('result_diet')
-          .eq('user_id', userId)
-          .single();
+        if (shouldCallGptApi) {
+          await callGPTAPI(userData);
+        } else {
+          const { data: dietData, error: dietError } = await supabase
+            .from('information')
+            .select('result_diet')
+            .eq('user_id', userId)
+            .single();
 
-        const { data: exerciseData, error: exerciseError } = await supabase
-          .from('information')
-          .select('result_exercise')
-          .eq('user_id', userId)
-          .single();
+          const { data: exerciseData, error: exerciseError } = await supabase
+            .from('information')
+            .select('result_exercise')
+            .eq('user_id', userId)
+            .single();
 
-        if (dietError) setError(dietError);
-        if (exerciseError) setError(exerciseError);
+          if (dietData) {
+            setResultDiet(dietData.result_diet || '');
+            const parsedDietData = JSON.parse(dietData.result_diet || '[]');
+            if (parsedDietData.length > 0) {
+              const dayData = parsedDietData[currentDay];
+              setMeal([dayData.breakfast, dayData.lunch, dayData.dinner, { menu: '', ratio: '', calories: dayData.totalCalories }]);
+            }
+          }
 
-        if (dietData) {
-          setResultDiet(dietData.result_diet || '');
-          const parsedDietData = JSON.parse(dietData.result_diet || '[]');
-          if (parsedDietData.length > 0) {
-            const { breakfast, lunch, dinner, totalCalories } = parsedDietData[0];
-            setMeal([breakfast, lunch, dinner, { menu: '', ratio: '', calories: totalCalories }]);
+          if (exerciseData) {
+            setResultExercise(exerciseData.result_exercise || '');
+            const parsedExerciseData = JSON.parse(exerciseData.result_exercise || '[]');
+            if (parsedExerciseData.length > 0) {
+              setWork(parsedExerciseData[currentDay]);
+            }
           }
         }
-
-        if (exerciseData) {
-          setResultExercise(exerciseData.result_exercise || '');
-          const work = JSON.parse(exerciseData.result_exercise || '');
-          setWork(work);
-        }
-
-        // GPT API 호출하여 새로운 식단 및 운동 결과 받기
-        await callGPTAPI(userData);
       }
     };
 
     fetchData();
-  }, [userId]);
+  }, [userId, shouldCallGptApi, currentDay]);
 
-  // GPT API 호출 함수
+  // GPT API c
   const callGPTAPI = async (userData: any) => {
     setIsLoading(true);
     try {
@@ -139,51 +164,49 @@ const InforDetailPage = () => {
       }
 
       const content = await response.json();
-      console.log("content", content);
       const parsedResults = parseAiResults(content.data);
-
-      console.log("parsedResults", parsedResults);
 
       if (!parsedResults) {
         throw new Error('AI 결과 파싱에 실패했습니다.');
       }
 
-      // 새로운 식단 및 운동 결과로 상태를 업데이트합니다
+      // Update state with new diet and exercise results
       const parsedDietData = JSON.parse(parsedResults.result_diet || '[]');
       if (parsedDietData.length > 0) {
-        const { breakfast, lunch, dinner, totalCalories } = parsedDietData[0];
-        setMeal([breakfast, lunch, dinner, { menu: '', ratio: '', calories: totalCalories }]);
+        const dayData = parsedDietData[currentDay];
+        setMeal([dayData.breakfast, dayData.lunch, dayData.dinner, { menu: '', ratio: '', calories: dayData.totalCalories }]);
       }
 
-      const parsedExerciseData = JSON.parse(parsedResults.result_exercise || '');
-      setWork(parsedExerciseData);
+      const parsedExerciseData = JSON.parse(parsedResults.result_exercise || '[]');
+      if (parsedExerciseData.length > 0) {
+        setWork(parsedExerciseData[currentDay]);
+      }
 
-      // Supabase에 저장
+      // Save results to Supabase
       await saveResultsToSupabase(parsedResults);
 
     } catch (error) {
       console.error('API 요청 중 오류:', error);
     } finally {
       setIsLoading(false);
+      setShouldCallGptApi(false);
     }
   };
 
-  // AI 결과 파싱 함수
+  // ai 결과 식단과 운동 나누기
   const parseAiResults = (result: string) => {
     if (!result) return null;
-    console.log("result", result);
     const days = result.split('@').slice(1);
     const dietPlans = days.map((day) => parseDiet(day));
-    const exercise = parseExercise(days[0].split('~추천운동')[1]);
-    console.log(exercise);
+    const exercises = days.map((day) => parseExercise(day.split('~추천운동')[1]));
 
     return {
       result_diet: JSON.stringify(dietPlans),
-      result_exercise: JSON.stringify(exercise)
+      result_exercise: JSON.stringify(exercises)
     };
   };
 
-  // 식단 파싱 함수
+  // 식단 쪼개기
   const parseDiet = (dayString: string) => {
     const sections = dayString.split('\n');
     const diet = {
@@ -222,7 +245,7 @@ const InforDetailPage = () => {
     return diet;
   };
 
-  // 운동 파싱 함수
+  // 운동 쪼개기
   const parseExercise = (exerciseString: string) => {
     if (!exerciseString) return null;
     const lines = exerciseString.split('\n');
@@ -268,7 +291,7 @@ const InforDetailPage = () => {
     return exercise;
   };
 
-  // Supabase에 결과 저장 함수
+  // supabase에 바뀐 식단과 운동 저장
   const saveResultsToSupabase = async (parsedResults: { result_diet: string; result_exercise: string }) => {
     const supabase = createClient();
     const { data, error } = await supabase
@@ -285,21 +308,10 @@ const InforDetailPage = () => {
     }
   };
 
+  // gpt 재호출
   const resetGptCall = async () => {
-    const supabase = createClient();
-
-    const { data: userData, error: userError } = await supabase
-      .from('information')
-      .select('year_of_birth, weight, gender, height, purpose, user_id')
-      .eq('user_id', userId)
-      .single();
-
-    await callGPTAPI(userData);
-
-    // 페이지 새로고침
-    // window.location.reload();
+    setShouldCallGptApi(true);
   }
-
 
   if (meal.length === 0 || !work) return null;
 
@@ -312,7 +324,7 @@ const InforDetailPage = () => {
     };
   };
 
-  // 각 식사에서 비율 분리
+  // 각 식사의 탄단지 쪼개기
   const breakfastRatios = extractRatios(meal[0].ratio);
   const lunchRatios = extractRatios(meal[1].ratio);
   const dinnerRatios = extractRatios(meal[2].ratio);
@@ -332,6 +344,7 @@ const InforDetailPage = () => {
         <p className="text-gray600 mb-6">AI 분석을 바탕으로 매일 맞춤 식단을 추천해 드려요</p>
         <div className="inline-flex gap-9 flex-col items-start flex-[0_0_auto] pb-14">
           <div className="flex gap-10">
+            {/* card radius 20으로 바꾸기, 메뉴랑 칼로리 붙여서 마진값 4 카드 안 위아래 padding 16으로 바꿈 */}
             <Card className="!flex-[0_0_auto] shadow-floating overflow-hidden w-[400px]">
               <CardHeader className="!text-color-text-sub">
                 <CardDescription style={{ color: '#3E9B2E', fontWeight: '600' }}>아침</CardDescription>
