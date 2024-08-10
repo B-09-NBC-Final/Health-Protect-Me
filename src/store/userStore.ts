@@ -3,8 +3,7 @@ import { create } from 'zustand';
 type UserState = {
   userId: string;
   nickname: string;
-  profile_url: string;
-  profileImage: string | null;
+  profile_url: string | null;
   email: string;
   height: number | null;
   weight: number | null;
