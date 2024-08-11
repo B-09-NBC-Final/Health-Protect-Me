@@ -290,9 +290,9 @@ const InfoResearch = (): JSX.Element => {
 
       case '성별':
         return (
-          <div className="flex flex-col items-center">
+          <div className="flex flex-col items-center mb-2">
             <h2 className="text-xl font-semibold mb-2 text-center text-gray-900">성별을 선택해 주세요</h2>
-            <p className="text-sm text-gray-600 mb-6 text-center">성별에 따라 일일 권장 칼로리 섭취량이 달라집니다</p>
+            <p className="text-sm text-gray-600 mb-4 text-center">성별에 따라 일일 권장 칼로리 섭취량이 달라집니다</p>
             <div className="flex w-3/4 space-x-2 gap-4 ">
               <button
                 onClick={() => handleGenderSelect('남')}
