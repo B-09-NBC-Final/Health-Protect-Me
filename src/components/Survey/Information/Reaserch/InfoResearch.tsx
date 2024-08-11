@@ -290,13 +290,13 @@ const InfoResearch = (): JSX.Element => {
 
       case '성별':
         return (
-          <div className="flex flex-col items-center mb-2">
+          <div className="flex flex-col mb-2">
             <h2 className="text-xl font-semibold mb-2 text-center text-gray-900">성별을 선택해 주세요</h2>
             <p className="text-sm text-gray-600 mb-4 text-center">성별에 따라 일일 권장 칼로리 섭취량이 달라집니다</p>
-            <div className="flex w-3/4 space-x-2 gap-4 ">
+            <div className="flex  space-x-2 gap-4 ">
               <button
                 onClick={() => handleGenderSelect('남')}
-                className={`flex-1 text-center  py-2 px-4 text-base border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-red-400 transition duration-200 ${
+                className={` w-48 h-12 py-3 px-4 text-base border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-red-400 transition duration-200 ${
                   surveyData.gender === '남' ? 'bg-[#FFF6F2] text-black' : 'bg-white text-gray-700'
                 }`}
               >
@@ -304,7 +304,7 @@ const InfoResearch = (): JSX.Element => {
               </button>
               <button
                 onClick={() => handleGenderSelect('여')}
-                className={`flex-1 text-center w-full py-3 px-4 text-base border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-400 transition duration-200 ${
+                className={` w-48 h-12 py-3 px-4 text-base border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-400 transition duration-200 ${
                   surveyData.gender === '여' ? 'bg-[#FFF6F2] text-black' : 'bg-white text-gray-700'
                 }`}
               >
@@ -386,12 +386,12 @@ const InfoResearch = (): JSX.Element => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center mt-20">
+    <div className="flex flex-col items-center justify-center">
       {isLoading && <Loading />}
-      <div className={`w-[1360px] max-w-2xl flex flex-col items-center mx-auto p-8 ${isLoading ? 'opacity-50' : ''}`}>
+      <div className={`w-[1360px] max-w-2xl flex flex-col items-center mx-auto ${isLoading ? 'opacity-50' : ''}`}>
         {/* 최상단에 있던 목차 제목의 요소를 시각적으로 숨기고 기능엔 문제없이 할 수 있도록 css 적용 */}
         <h1 className="text-3xl font-bold mb-8 text-center text-gray-800 sr-only">{steps[currentStepIndex]}</h1>
-        <div className="w-full mb-8 bg-gray-200 rounded-full h-2">
+        <div className="w-full mb-10 mt-20 bg-gray-200 rounded-full h-2">
           <div
             className="bg-red-400 h-2 rounded-full transition-all duration-500 ease-in-out"
             style={{ width: `${((currentStepIndex + 1) / steps.length) * 100}%` }}
