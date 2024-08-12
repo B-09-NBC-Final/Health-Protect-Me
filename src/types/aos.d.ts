@@ -1,5 +1,5 @@
 declare module 'aos' {
-  export interface AosOptions {
+  export type AosOptions = {
     duration?: number;
     offset?: number;
     easing?: string;
