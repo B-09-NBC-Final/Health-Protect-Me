@@ -206,7 +206,7 @@ const InfoResearch = (): JSX.Element => {
       }
 
       const { data, error } = await supabase.from('information').insert({
-        year_of_birth: surveyData.year_of_birth ? parseInt(surveyData.year_of_birth.toString(),10): null,
+        year_of_birth: surveyData.year_of_birth ? parseInt(surveyData.year_of_birth.toString(), 10) : null,
         weight: surveyData.weight,
         gender: surveyData.gender,
         height: surveyData.height,
@@ -250,7 +250,7 @@ const InfoResearch = (): JSX.Element => {
           surveyData.height !== null &&
           /^1\d{2}$/.test(surveyData.height.toString()) &&
           surveyData.weight !== null &&
-          /^\d{2,3}$/.test(surveyData.weight.toString())
+          /^\d{2,3}$/.test(surveyData.weight.toString()) 
         );
       case '식단 목적':
         return !!surveyData.purpose;
@@ -262,37 +262,41 @@ const InfoResearch = (): JSX.Element => {
   const renderStep = () => {
     switch (steps[currentStepIndex]) {
       case '출생연도':
-  return (
-    <div className=" max-w-md mx-auto bg-white rounded-md ">
-      <h2 className="text-xl font-semibold mb-4 text-center">출생연도를 입력해주세요</h2>
-      <p className="text-sm text-gray-600 mb-4 text-center">연령에 따라 일일 권장 칼로리 섭취량이 달라집니다</p>
-      <br />
-      <div className="mb-4">
-        <label className="block text-sm mb-2 font-medium text-gray-700">출생연도</label>
-        <input
-          type="text"
-          name="year_of_birth"
-          placeholder="예) 1990"
-          value={surveyData.year_of_birth ?? ''}
-          onChange={handleInputChange}
-          className="w-full p-3 text-sm border rounded-lg focus:outline-none focus:ring-1 focus:ring-[#FF7A85] focus:border-transparent"
-        />
-        {surveyData.year_of_birth !== null && !/^(19|20)\d{2}$/.test(surveyData.year_of_birth.toString()) && (
-          <p className="text-red-500 text-sm mt-1">1900년대 또는 2000년대 4자리로 입력해주세요</p>
-        )}
-      </div>
-    </div>
-  );
+        return (
+          <div>
+            <h2 className="text-xl font-semibold mb-2 text-center text-gray-900">출생연도를 입력해주세요</h2>
+            <p className="text-sm text-gray-600 mb-4 text-center">연령에 따라 일일 권장 칼로리 섭취량이 달라집니다</p>
+            <br />
+            <div className="mb-4">
+              <label className="block text-sm mb-2 font-medium text-gray-700">출생연도</label>
+              <input
+                type="text"
+                name="year_of_birth"
+                placeholder="예) 1990"
+                value={surveyData.year_of_birth ?? ''}
+                onChange={handleInputChange}
+                className={`w-full p-3 text-sm border rounded-lg focus:outline-none focus:ring-1 ${
+                  surveyData.year_of_birth !== null && !/^(19|20)\d{2}$/.test(surveyData.year_of_birth.toString())
+                    ? 'focus:ring-red-500 focus:border-red-500'
+                    : 'focus:ring-[#49BA43] focus:border-[#49BA43]'
+                }`}
+              />
+              {surveyData.year_of_birth !== null && !/^(19|20)\d{2}$/.test(surveyData.year_of_birth.toString()) && (
+                <p className="text-red-500 text-sm mt-1">1900년대 또는 2000년대 4자리로 입력해주세요</p>
+              )}
+            </div>
+          </div>
+        );
+
       case '성별':
         return (
-          <div className="flex flex-col items-center">
-            <h2 className="text-xl font-semibold mb-2 text-center">성별을 선택해 주세요</h2>
-            <p className="text-sm text-gray-600 mb-6 text-center">성별에 따라 일일 권장 칼로리 섭취량이 달라집니다</p>
-
-            <div className="flex w-3/4 space-x-2 gap-4 ">
+          <div className="flex flex-col mb-2">
+            <h2 className="text-xl font-semibold mb-2 text-center text-gray-900">성별을 선택해 주세요</h2>
+            <p className="text-sm text-gray-600 mb-10 text-center">성별에 따라 일일 권장 칼로리 섭취량이 달라집니다</p>
+            <div className="flex  space-x-2 gap-4 ">
               <button
                 onClick={() => handleGenderSelect('남')}
-                className={`flex-1 text-center  py-2 px-4 text-base border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-red-400 transition duration-200 ${
+                className={` w-48 h-12 py-3 px-4 text-base border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-red-400 transition duration-200 ${
                   surveyData.gender === '남' ? 'bg-[#FFF6F2] text-black' : 'bg-white text-gray-700'
                 }`}
               >
@@ -300,7 +304,7 @@ const InfoResearch = (): JSX.Element => {
               </button>
               <button
                 onClick={() => handleGenderSelect('여')}
-                className={`flex-1 text-center w-full py-3 px-4 text-base border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-400 transition duration-200 ${
+                className={` w-48 h-12 py-3 px-4 text-base border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-400 transition duration-200 ${
                   surveyData.gender === '여' ? 'bg-[#FFF6F2] text-black' : 'bg-white text-gray-700'
                 }`}
               >
@@ -309,47 +313,57 @@ const InfoResearch = (): JSX.Element => {
             </div>
           </div>
         );
-      case '신장 및 체중':
-        return (
-          <div ref={stepRefs.current[2]} className="mb-4 flex flex-col justify-center items-center text-center">
-            <h2 className="text-xl font-semibold mb-2 text-center">신장과 체중을 입력해주세요</h2>
-            <p className="text-sm text-gray-600 mb-10 text-center">
-              신장과 체중에 따라 일일 권장 칼로리 섭취량이 달라집니다
-            </p>
-            <div className="mb-4 w-full  ">
-              <label className="w-60 block text-sm mb-2 font-medium text-gray-700">신장</label>
-              <input
-                type="text"
-                name="height"
-                placeholder="cm (예: 170)"
-                value={surveyData.height ?? ''}
-                onChange={handleInputChange}
-                className="w-2/3 p-3 text-sm border rounded-lg focus:outline-none focus:ring-1 focus:ring-[#FF7A85] focus:border-transparent"
-              />
-              {surveyData.height && !/^1\d{2}$/.test(surveyData.height.toString()) && (
-                <p className="text-red-500 text-sm mt-1">100~199cm 사이로 입력해주세요</p>
-              )}
+        case '신장 및 체중':
+          return (
+            <div ref={stepRefs.current[2]} className=" flex-col justify-center items-center text-center">
+              <h2 className="text-xl font-semibold mb-2 text-center text-gray-900">신장과 체중을 입력해주세요</h2>
+              <p className="text-sm text-gray-600 mb-10 text-center">
+                신장과 체중에 따라 일일 권장 칼로리 섭취량이 달라집니다
+              </p>
+              <div className="mb-6   ">
+                <label className="flex text-sm font-normal text-gray-700">신장</label>
+                <input
+                  type="text"
+                  name="height"
+                  placeholder="cm (예: 170)"
+                  value={surveyData.height ?? ''}
+                  onChange={handleInputChange}
+                  className={`w-full p-3 text-sm border rounded focus:outline-none focus:ring-1 ${
+                    surveyData.height !== null && !/^1\d{2}$/.test(surveyData.height.toString())
+                      ? 'border-red-500 focus:ring-red-500 focus:border-red-500'
+                      : 'focus:ring-[#49BA43] focus:border-[#49BA43]'
+                  }`}   
+                />
+                {surveyData.height !== null && !/^1\d{2}$/.test(surveyData.height.toString()) && (
+                  <p className="text-red-500 text-sm">100~199cm 사이로 입력해주세요</p>
+                )}
+              </div>
+              <div >
+                <label className="flex text-sm font-normal text-gray-700">체중</label>
+                <input
+                  type="text"
+                  name="weight"
+                  placeholder="kg (예: 65)"
+                  value={surveyData.weight ?? ''}
+                  onChange={handleInputChange}
+                  className={`w-full p-3 text-sm border rounded focus:outline-none focus:ring-1 ${
+                    surveyData.weight !== null && !/^\d{2,3}$/.test(surveyData.weight.toString())
+                      ? 'border-red-500 focus:ring-red-500 focus:border-red-500'
+                      : 'focus:ring-[#49BA43] focus:border-[#49BA43]'
+                  }`}
+                />
+                {surveyData.weight !== null && !/^\d{2,3}$/.test(surveyData.weight.toString()) && (
+                  <p className="text-red-500 text-sm">30kg~200kg 사이로 입력해주세요</p>
+                )}
+              </div>
             </div>
-            <div className="mb-4 w-full  ">
-              <label className=" w-60 block text-sm mb-2 font-medium text-gray-700">체중</label>
-              <input
-                type="text"
-                name="weight"
-                placeholder="kg (예: 65)"
-                value={surveyData.weight ?? ''}
-                onChange={handleInputChange}
-                className="w-2/3 p-3 text-sm border rounded-lg focus:outline-none focus:ring-1 focus:ring-[#FF7A85] focus:border-transparent"
-              />
-              {surveyData.weight && !/^\d{2,3}$/.test(surveyData.weight.toString()) && (
-                <p className="text-red-500 text-sm mt-1">30~200kg 사이로 입력해주세요</p>
-              )}
-            </div>
-          </div>
-        );
+          );
       case '식단 목적':
         return (
           <div ref={stepRefs.current[4]} className="mb-4">
-            <h2 className="text-xl font-semibold mb-2 text-center">식단을 통해 이루고자 하는 목표를 알려주세요</h2>
+            <h2 className="text-xl font-semibold mb-2 text-center text-gray-900">
+              식단을 통해 이루고자 하는 목표를 알려주세요
+            </h2>
             <p className="text-sm text-gray-600 mb-10 text-center">
               선택한 목표에 가장 최적화된 식단과 운동을 추천해 드려요
             </p>
@@ -372,16 +386,12 @@ const InfoResearch = (): JSX.Element => {
   };
 
   return (
-
-    <div className="flex flex-col items-center justify-center py-10">
+    <div className="flex flex-col items-center justify-center">
       {isLoading && <Loading />}
-      <div
-        className={`w-[1360px] max-w-2xl flex flex-col items-center mx-auto p-8 bg-white rounded-xl shadow-lg ${
-          isLoading ? 'opacity-50' : ''
-        }`}
-      >
-        <h1 className="text-3xl font-bold mb-8 text-center text-gray-800">{steps[currentStepIndex]}</h1>
-        <div className="w-full mb-8 bg-gray-200 rounded-full h-2">
+      <div className={`w-[1360px] max-w-2xl flex flex-col items-center mx-auto ${isLoading ? 'opacity-50' : ''}`}>
+        {/* 최상단에 있던 목차 제목의 요소를 시각적으로 숨기고 기능엔 문제없이 할 수 있도록 css 적용 */}
+        <h1 className="text-3xl font-bold mb-8 text-center text-gray-800 sr-only">{steps[currentStepIndex]}</h1>
+        <div className="w-full mb-10 mt-20 bg-gray-200 rounded-full h-2">
           <div
             className="bg-red-400 h-2 rounded-full transition-all duration-500 ease-in-out"
             style={{ width: `${((currentStepIndex + 1) / steps.length) * 100}%` }}
@@ -394,9 +404,7 @@ const InfoResearch = (): JSX.Element => {
           {currentStepIndex > 0 && (
             <Button
               onClick={preStep}
-
               className="flex w-56 h-12 items-center justify-center py-3 text-base text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-1 focus:ring-gray-400 transition duration-200"
-
             >
               이전
             </Button>
@@ -405,9 +413,7 @@ const InfoResearch = (): JSX.Element => {
             <Button
               onClick={nextStep}
               disabled={!isStepValid()}
-
               className="flex w-56 h-12  items-center justify-center text-base bg-[#FF7A85] text-white py-3 rounded-lg hover:bg-[#FF7A85] transition duration-300"
-
             >
               다음
             </Button>
@@ -415,7 +421,7 @@ const InfoResearch = (): JSX.Element => {
             <Button
               onClick={saveDataToSupabase}
               disabled={!isStepValid()}
- className="flex w-56 h-12 ml-14 items-center justify-center text-base bg-[#FF7A85] text-white py-3 rounded-lg hover:bg-[#FF7A85] transition duration-300"
+              className="flex w-56 h-12 items-center justify-center text-base bg-[#FF7A85] text-white py-3 rounded-lg hover:bg-[#FF7A85] transition duration-300"
             >
               결과보기
             </Button>
