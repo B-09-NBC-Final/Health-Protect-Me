@@ -1,3 +1,5 @@
+'use client';
+
 import MainContent from '@/components/MainPage/MainContent';
 import MainSwiper from '@/components/MainPage/MainSwiper';
 import Image from 'next/image';
@@ -8,8 +10,15 @@ import MainBanner from '@/components/MainPage/MainBanner';
 import MainSwiperReverse from '@/components/MainPage/MainSwiperReverse';
 import Header from '@/components/Common/Header/Header';
 import Footer from '@/components/Common/Footer';
+import { useEffect } from 'react';
+import 'aos/dist/aos.css';
+import AOS from 'aos';
 
 const MainPage = () => {
+  useEffect(() => {
+    AOS.init({ duration: 3000 });
+  }, []);
+
   console.log(process.env.NEXT_PUBLIC_BASE_URL);
   return (
     <>
@@ -39,10 +48,14 @@ const MainPage = () => {
                   균형잡힌 영양소 정보를 바탕으로 다양한 식단을 안내해 드려요.
                 </p>
               </div>
-              <Image src={main01} alt="간편하게, 나만을 위한 맞춤형 건강 솔루션" width={600} height={480} />
+              <div data-aos="fade-left">
+                <Image src={main01} alt="간편하게, 나만을 위한 맞춤형 건강 솔루션" width={600} height={480} />
+              </div>
             </li>
             <li className="flex justify-between pt-40">
-              <Image src={main02} alt="간편하게, 나만을 위한 맞춤형 건강 솔루션" width={600} height={480} />
+              <div data-aos="fade-right">
+                <Image src={main02} alt="간편하게, 나만을 위한 맞춤형 건강 솔루션" width={600} height={480} />
+              </div>
               <div className="w-[600px] pt-[156px]">
                 <p className="text-main-title2 text-gray900 font-medium leading-tight tracking-tight">
                   목표 달성을 <br />
@@ -65,7 +78,9 @@ const MainPage = () => {
                   비슷한 목표를 가진 사람들과 소통하고, 성공적인 경험을 나누어 보세요.
                 </p>
               </div>
-              <Image src={main03} alt="간편하게, 나만을 위한 맞춤형 건강 솔루션" width={600} height={480} />
+              <div data-aos="fade-left">
+                <Image src={main03} alt="간편하게, 나만을 위한 맞춤형 건강 솔루션" width={600} height={480} />
+              </div>
             </li>
           </ul>
         </section>
