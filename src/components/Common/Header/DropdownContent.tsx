@@ -9,6 +9,13 @@ const DropdownContent = () => {
         내 프로필
       </Link>
       <SocialLogout />
+      {/* 모바일버전 */}
+      <Link href={'/info-detail'} className="block md:hidden px-2 py-2 text-sm letter-spacing color-dropdown">
+        나만의 식단
+      </Link>
+      <Link href={'/posting-main'} className="block md:hidden px-2 py-2 text-sm letter-spacing color-dropdown">
+        커뮤니티
+      </Link>
     </div>
   );
 };

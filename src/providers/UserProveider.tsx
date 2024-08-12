@@ -33,13 +33,23 @@ export default function ClientRootLayout({ children }: { children: React.ReactNo
       if (error) {
         console.error('Error checking session:', error);
       } else if (session) {
-        setUser({
-          userId: session.user.id,
-          email: session.user.email,
-          profile_url: session.user.user_metadata?.avatar_url || '',
-          nickname: session.user.user_metadata?.nickname || '',
-          is_survey_done: session.user.user_metadata?.is_survey_done || false
-        });
+        const { data: userData, error: userError } = await supabase
+          .from('users')
+          .select('nickname, profile_url')
+          .eq('user_id', session.user.id)
+          .single();
+
+        if (userError) {
+          console.error('Error fetching user data:', userError);
+        } else {
+          setUser({
+            userId: session.user.id,
+            email: session.user.email,
+            profile_url: userData?.profile_url || '',
+            nickname: session.user.user_metadata?.nickname || '',
+            is_survey_done: session.user.user_metadata?.is_survey_done || false
+          });
+        }
       } else {
         redicrectToLogin();
       }
