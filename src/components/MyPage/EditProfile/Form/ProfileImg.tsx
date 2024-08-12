@@ -2,28 +2,28 @@ import React from 'react';
 import Image from 'next/image';
 import defaultimg from '@/assets/image/defaultimg.png';
 
-type ProfileImageProps = {
+interface ProfileImageProps {
   profile_url?: string;
   onImageUpload: (event: React.ChangeEvent<HTMLInputElement>) => void;
-};
+}
 
-const ProfileImage: React.FC<ProfileImageProps> = ({ profile_url, onImageUpload }) => {
+const ProfileImage = ({ profile_url, onImageUpload }: ProfileImageProps): JSX.Element => {
   return (
-    <div className="flex justify-between items-center w-full mb-10">
-      <div className="w-24 h-24 rounded-full bg-gray-300 flex items-center justify-center relative">
+    <div className="flex items-center mb-10">
+      <div className="h-24 w-24 rounded-full bg-gray-300 flex items-center justify-center relative mr-6">
         <Image
           className="rounded-full cursor-pointer"
           src={profile_url || defaultimg}
           alt="Profile"
-          width={120}
-          height={120}
+          width={96}
+          height={96}
           onClick={() => document.getElementById('fileInput')?.click()}
         />
         <input type="file" accept="image/*" id="fileInput" className="hidden" onChange={onImageUpload} />
       </div>
-      <div className="flex flex-col text-left">
-        <div className="w-[272px] mb-1">프로필 사진</div>
-        <div className="w-[272px] text-sm text-[#76797F]">5MB 이하의 PNG, JPG 파일을 올려주세요.</div>
+      <div className='flex flex-col items-start'>
+        <div className="mb-1">프로필 사진</div>
+        <div className="text-sm text-[#76797F]">5MB 이하의 PNG, JPG 파일을 올려주세요.</div>
       </div>
     </div>
   );
