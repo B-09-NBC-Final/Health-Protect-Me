@@ -223,10 +223,6 @@ const InforDetailPage = () => {
     updateDailyPlan();
   }, [currentDay, resultDiet, resultExercise]);
 
-  useEffect(() => {
-    setCurrentDay(1); // 예를 들어 3일 차 데이터 확인
-  }, []);
-
   // ai 결과 식단과 운동 나누기
   const parseAiResults = (result: string) => {
     if (!result) return null;
