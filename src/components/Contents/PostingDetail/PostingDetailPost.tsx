@@ -117,7 +117,8 @@ const PostingDetailPost = ({ params }: { params: { id: string } }) => {
         ) : (
           <Skeleton className="!w-[80px] !h-[20px] rounded-xl mt-2" />
         )}
-        {post ? (
+
+        {post?.image_url[0] ? (
           <Image
             src={post?.image_url[0] as string}
             alt=""
@@ -125,10 +126,7 @@ const PostingDetailPost = ({ params }: { params: { id: string } }) => {
             height={380}
             className="object-cover mt-6 rounded !w-[580px] !h-[380px]"
           />
-        ) : (
-          <Skeleton className="!w-[580px] !h-[380px] rounded mt-8" />
-        )}
-
+        ) : null}
         {post?.image_url[1] ? (
           <Image
             src={post?.image_url[1] as string}
