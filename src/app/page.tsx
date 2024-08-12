@@ -19,7 +19,6 @@ const MainPage = () => {
     AOS.init({ duration: 3000 });
   }, []);
 
-  console.log(process.env.NEXT_PUBLIC_BASE_URL);
   return (
     <>
       <Header />
