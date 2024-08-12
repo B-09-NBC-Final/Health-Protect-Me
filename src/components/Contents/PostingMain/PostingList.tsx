@@ -109,7 +109,7 @@ const PostingList = () => {
                       alt=""
                       width={128}
                       height={128}
-                      className="!w-[128px] !h-[128px] rounded-lg"
+                      className="!w-[128px] !h-[128px] rounded-lg shrink-0 object-cover"
                     />
                     <div className="flex flex-col justify-between ml-5 w-full">
                       <div>
