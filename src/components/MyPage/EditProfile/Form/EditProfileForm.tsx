@@ -29,6 +29,7 @@ const ProfileForm = ({
   const [isValid, setIsValid] = useState(false);
   const [heightError, setHeightError] = useState('');
   const [weightError, setWeightError] = useState('');
+  const [nicknameError, setNicknameError] = useState('');
 
   const getButtonClasses = (currentGoal: string) => {
     return currentGoal === goal
@@ -38,6 +39,11 @@ const ProfileForm = ({
 
   const handleNicknameChange = (value: string) => {
     setNickname(value);
+    if (value.length < 2 || value.length > 10) {
+      setNicknameError('닉네임은 2글자 이상 10글자 이하여야 합니다.');
+    } else {
+      setNicknameError('');
+    }
   };
 
   const handleHeightChange = (value: string) => {
@@ -68,8 +74,14 @@ const ProfileForm = ({
     }
   };
 
+  const getInputBorderColor = (value: string, error: string) => {
+    if (error) return 'border-red-500';
+    if (value && !error) return 'border-[#49BA43]';
+    return 'border-gray300';
+  };
+
   useEffect(() => {
-    const isNicknameValid = nickname.length >= 2;
+    const isNicknameValid = nickname.length >= 2 && nickname.length <= 10;
     const isHeightValid = height !== '' && !heightError;
     const isWeightValid = weight !== '' && !weightError;
     const isGoalValid = goal !== '';
@@ -86,24 +98,22 @@ const ProfileForm = ({
         <input
           type="text"
           id="nickname"
-          placeholder="닉네임 (2글자 이상)"
-          className="border border-gray300 border-solid p-3 rounded-sm w-full text-gray900 placeholder:text-gray500 hover:border-gray600 focus:outline-none focus:border-secondary600"
+          placeholder="닉네임 (2-10글자)"
+          className={`border ${getInputBorderColor(nickname, nicknameError)} border-solid p-3 rounded-sm w-full text-gray900 placeholder:text-gray500 hover:border-gray600 focus:outline-none focus:border-secondary600`}
           value={nickname}
           onChange={(e) => handleNicknameChange(e.target.value)}
         />
-        {nickname.length > 0 && nickname.length < 2 && (
-          <p className="flex text-red-500 text-sm mt-1">닉네임은 2글자 이상이어야 합니다.</p>
-        )}
+        {nicknameError && <p className="flex text-red-500 text-sm mt-1">{nicknameError}</p>}
       </div>
       <div className="mb-6">
         <label className="block text-left mb-1" htmlFor="height">
-          키
+          신장
         </label>
         <input
           type="text"
           id="height"
           placeholder="키 (100-299 cm)"
-          className="border border-gray300 border-solid p-3 rounded-sm w-full text-gray900 placeholder:text-gray500 hover:border-gray600 focus:outline-none focus:border-secondary600"
+          className={`border ${getInputBorderColor(height, heightError)} border-solid p-3 rounded-sm w-full text-gray900 placeholder:text-gray500 hover:border-gray600 focus:outline-none focus:border-secondary600`}
           value={height}
           onChange={(e) => handleHeightChange(e.target.value)}
         />
@@ -117,7 +127,7 @@ const ProfileForm = ({
           type="text"
           id="weight"
           placeholder="체중 (10-199 kg)"
-          className="border border-gray300 border-solid p-3 rounded-sm w-full text-gray900 placeholder:text-gray500 hover:border-gray600 focus:outline-none focus:border-secondary600"
+          className={`border ${getInputBorderColor(weight, weightError)} border-solid p-3 rounded-sm w-full text-gray900 placeholder:text-gray500 hover:border-gray600 focus:outline-none focus:border-secondary600`}
           value={weight}
           onChange={(e) => handleWeightChange(e.target.value)}
         />
@@ -156,7 +166,6 @@ const ProfileForm = ({
           boxShadow="shadow-none"
           onClick={isValid ? onSave : undefined}
           hover={isValid ? "hover:bg-[#F5637C] hover:text-white" : ""}
-          
         />
       </div>
     </form>
