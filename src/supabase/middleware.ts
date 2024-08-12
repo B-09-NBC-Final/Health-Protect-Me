@@ -9,6 +9,7 @@ export const updateSession = async (req: NextRequest) => {
 
   // 로그인 상태에서 접근할 수 없는 페이지는
   const restrictedPaths = ['/login'];
+  console.log('authToken', authToken);
   if (restrictedPaths.includes(pathname) && authToken) {
     return NextResponse.redirect(new URL('/', req.nextUrl.origin));
   }
