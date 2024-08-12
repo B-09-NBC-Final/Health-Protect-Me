@@ -292,7 +292,7 @@ const InfoResearch = (): JSX.Element => {
         return (
           <div className="flex flex-col mb-2">
             <h2 className="text-xl font-semibold mb-2 text-center text-gray-900">성별을 선택해 주세요</h2>
-            <p className="text-sm text-gray-600 mb-4 text-center">성별에 따라 일일 권장 칼로리 섭취량이 달라집니다</p>
+            <p className="text-sm text-gray-600 mb-10 text-center">성별에 따라 일일 권장 칼로리 섭취량이 달라집니다</p>
             <div className="flex  space-x-2 gap-4 ">
               <button
                 onClick={() => handleGenderSelect('남')}
@@ -315,45 +315,45 @@ const InfoResearch = (): JSX.Element => {
         );
         case '신장 및 체중':
           return (
-            <div ref={stepRefs.current[2]} className="mb-4 flex flex-col justify-center items-center text-center">
+            <div ref={stepRefs.current[2]} className=" flex-col justify-center items-center text-center">
               <h2 className="text-xl font-semibold mb-2 text-center text-gray-900">신장과 체중을 입력해주세요</h2>
               <p className="text-sm text-gray-600 mb-10 text-center">
                 신장과 체중에 따라 일일 권장 칼로리 섭취량이 달라집니다
               </p>
-              <div className="mb-4 w-full  ">
-                <label className="w-60 block text-sm mb-2 font-medium text-gray-700">신장</label>
+              <div className="mb-6   ">
+                <label className="flex text-sm font-normal text-gray-700">신장</label>
                 <input
                   type="text"
                   name="height"
                   placeholder="cm (예: 170)"
                   value={surveyData.height ?? ''}
                   onChange={handleInputChange}
-                  className={`w-2/3 p-3 text-sm border rounded-lg focus:outline-none focus:ring-1 ${
+                  className={`w-full p-3 text-sm border rounded focus:outline-none focus:ring-1 ${
                     surveyData.height !== null && !/^1\d{2}$/.test(surveyData.height.toString())
                       ? 'border-red-500 focus:ring-red-500 focus:border-red-500'
                       : 'focus:ring-[#49BA43] focus:border-[#49BA43]'
                   }`}   
                 />
                 {surveyData.height !== null && !/^1\d{2}$/.test(surveyData.height.toString()) && (
-                  <p className="text-red-500 text-sm mt-1">100~199cm 사이로 입력해주세요</p>
+                  <p className="text-red-500 text-sm">100~199cm 사이로 입력해주세요</p>
                 )}
               </div>
-              <div className="mb-4 w-full  ">
-                <label className=" w-60 block text-sm mb-2 font-medium text-gray-700">체중</label>
+              <div >
+                <label className="flex text-sm font-normal text-gray-700">체중</label>
                 <input
                   type="text"
                   name="weight"
                   placeholder="kg (예: 65)"
                   value={surveyData.weight ?? ''}
                   onChange={handleInputChange}
-                  className={`w-2/3 p-3 text-sm border rounded-lg focus:outline-none focus:ring-1 ${
+                  className={`w-full p-3 text-sm border rounded focus:outline-none focus:ring-1 ${
                     surveyData.weight !== null && !/^\d{2,3}$/.test(surveyData.weight.toString())
                       ? 'border-red-500 focus:ring-red-500 focus:border-red-500'
                       : 'focus:ring-[#49BA43] focus:border-[#49BA43]'
                   }`}
                 />
                 {surveyData.weight !== null && !/^\d{2,3}$/.test(surveyData.weight.toString()) && (
-                  <p className="text-red-500 text-sm mt-1">30kg~200kg 사이로 입력해주세요</p>
+                  <p className="text-red-500 text-sm">30kg~200kg 사이로 입력해주세요</p>
                 )}
               </div>
             </div>
@@ -421,7 +421,7 @@ const InfoResearch = (): JSX.Element => {
             <Button
               onClick={saveDataToSupabase}
               disabled={!isStepValid()}
-              className="flex w-56 h-12 ml-14 items-center justify-center text-base bg-[#FF7A85] text-white py-3 rounded-lg hover:bg-[#FF7A85] transition duration-300"
+              className="flex w-56 h-12 items-center justify-center text-base bg-[#FF7A85] text-white py-3 rounded-lg hover:bg-[#FF7A85] transition duration-300"
             >
               결과보기
             </Button>
