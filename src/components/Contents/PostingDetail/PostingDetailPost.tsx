@@ -14,7 +14,7 @@ const PostingDetailPost = ({ params }: { params: { id: string } }) => {
   const [post, setPost] = useState<Post | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [userPurpose, setUserPurpose] = useState<string | null>(null);
-  const [imageLoaded, setImageLoaded] = useState(false);
+  // const [imageLoaded, setImageLoaded] = useState(false);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const postDate = new Date(post?.created_at as string);
   const postYear = String(postDate.getFullYear()).slice(-2);

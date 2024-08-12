@@ -29,7 +29,7 @@ const PostingUpdateForm = ({ params }: { params: { id: string } }) => {
   const [uploadFile, setUploadFile] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
   const [imageError, setImageError] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  // const [error, setError] = useState<string | null>(null);
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const [isConfirmDialog, setIsConfirmDialog] = useState(false);
@@ -110,11 +110,6 @@ const PostingUpdateForm = ({ params }: { params: { id: string } }) => {
 
     if (content.length === 0 || content.length > 500) {
       showAlertMessage('내용은 1자 이상 500자 이하여야 합니다.');
-      return;
-    }
-
-    if (fileUrl.length === 0) {
-      showAlertMessage('최소 1개의 이미지를 업로드해주세요.');
       return;
     }
 
