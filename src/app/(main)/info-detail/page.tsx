@@ -41,7 +41,7 @@ const InforDetailPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [shouldCallGptApi, setShouldCallGptApi] = useState(false);
   const [currentDay, setCurrentDay] = useState(0);
-  const [currentDate, setCurrentDate] = useState(new Date());
+  const [createdAt, setCreatedAt] = useState<Date | null>(null);
 
   useEffect(() => {
     if (user) {
@@ -50,34 +50,31 @@ const InforDetailPage = () => {
   }, [user]);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      const now = new Date();
-      if (now.getDate() !== currentDate.getDate()) {
-        setCurrentDate(now);
-        setCurrentDay((prevDay) => (prevDay + 1) % 7);
-      }
-    }, 60000); // Check every minute
-
-    return () => clearInterval(timer);
-  }, [currentDate]);
-
-  useEffect(() => {
-    const simulateMidnight = () => {
-      const simulatedNow = new Date(currentDate.getTime() + 24 * 60 * 60 * 1000); // 24시간 후로 설정
-      setCurrentDate(simulatedNow);
-      setCurrentDay((prevDay) => (prevDay + 1) % 7);
-    };
-
-    const timer = setTimeout(simulateMidnight, 5000); // 5초 후에 자정 시뮬레이션/
-
-    return () => clearTimeout(timer);
-  }, [currentDate]);
-
-  useEffect(() => {
     const fetchData = async () => {
       if (!userId) return;
 
       const supabase = createClient();
+
+      const { data: infoData, error: infoError } = await supabase
+        .from('information')
+        .select('created_at')
+        .eq('user_id', userId)
+        .single();
+
+      if (infoError) {
+        console.error('Error fetching created_at date:', infoError);
+        return;
+      }
+
+      if (infoData && infoData.created_at) {
+        const createdAtDate = new Date(infoData.created_at);
+        setCreatedAt(createdAtDate);
+
+        const today = new Date();
+        const diffTime = Math.abs(today.getTime() - createdAtDate.getTime());
+        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+        setCurrentDay(diffDays % 7);
+      }
 
       const { data: syncData, error: syncError } = await supabase
         .from('information')
@@ -139,7 +136,7 @@ const InforDetailPage = () => {
     };
 
     fetchData();
-  }, [userId, shouldCallGptApi, currentDay]);
+  }, [userId, shouldCallGptApi]);
 
   // GPT API c
   const callGPTAPI = async (userData: any) => {
@@ -164,13 +161,13 @@ const InforDetailPage = () => {
       }
 
       const content = await response.json();
+      console.log(content);
       const parsedResults = parseAiResults(content.data);
 
       if (!parsedResults) {
         throw new Error('AI 결과 파싱에 실패했습니다.');
       }
 
-      // Update state with new diet and exercise results
       const parsedDietData = JSON.parse(parsedResults.result_diet || '[]');
       if (parsedDietData.length > 0) {
         const dayData = parsedDietData[currentDay];
@@ -182,7 +179,6 @@ const InforDetailPage = () => {
         setWork(parsedExerciseData[currentDay]);
       }
 
-      // Save results to Supabase
       await saveResultsToSupabase(parsedResults);
 
     } catch (error) {
@@ -192,6 +188,44 @@ const InforDetailPage = () => {
       setShouldCallGptApi(false);
     }
   };
+
+  // 자정에 currentDay를 업데이트
+  useEffect(() => {
+    const timer = setInterval(() => {
+      const now = new Date();
+      if (now.getHours() === 0 && now.getMinutes() === 0) {
+        setCurrentDay((prevDay) => (prevDay + 1) % 7);
+      }
+    }, 60000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  // currentDay가 변경될 때 식단과 운동을 업데이트
+  useEffect(() => {
+    const updateDailyPlan = () => {
+      if (resultDiet) {
+        const parsedDietData = JSON.parse(resultDiet);
+        if (parsedDietData.length > 0) {
+          const dayData = parsedDietData[currentDay];
+          setMeal([dayData.breakfast, dayData.lunch, dayData.dinner, { menu: '', ratio: '', calories: dayData.totalCalories }]);
+        }
+      }
+
+      if (resultExercise) {
+        const parsedExerciseData = JSON.parse(resultExercise);
+        if (parsedExerciseData.length > 0) {
+          setWork(parsedExerciseData[currentDay]);
+        }
+      }
+    };
+
+    updateDailyPlan();
+  }, [currentDay, resultDiet, resultExercise]);
+
+  useEffect(() => {
+    setCurrentDay(1); // 예를 들어 3일 차 데이터 확인
+  }, []);
 
   // ai 결과 식단과 운동 나누기
   const parseAiResults = (result: string) => {
