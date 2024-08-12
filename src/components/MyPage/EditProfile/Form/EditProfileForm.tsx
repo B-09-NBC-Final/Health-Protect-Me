@@ -103,7 +103,11 @@ const ProfileForm = ({
           value={nickname}
           onChange={(e) => handleNicknameChange(e.target.value)}
         />
-        {nicknameError && <p className="flex text-red-500 text-sm mt-1">{nicknameError}</p>}
+
+        {nickname.length > 0 && nickname.length < 2 && (
+          <p className="flex text-red-500 text-sm mt-1">닉네임은 2글자 이상이어야 합니다.</p>
+        )}
+
       </div>
       <div className="mb-6">
         <label className="block text-left mb-1" htmlFor="height">
