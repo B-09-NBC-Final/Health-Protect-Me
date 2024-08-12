@@ -122,18 +122,18 @@ const PostingDetailPost = ({ params }: { params: { id: string } }) => {
           <Image
             src={post?.image_url[0] as string}
             alt=""
-            width={580}
-            height={380}
-            className="object-cover mt-6 rounded !w-[580px] !h-[380px]"
+            width={420}
+            height={280}
+            className="object-cover mt-6 rounded !w-[420px] !h-[280px]"
           />
         ) : null}
         {post?.image_url[1] ? (
           <Image
             src={post?.image_url[1] as string}
             alt=""
-            width={580}
-            height={380}
-            className="object-cover mt-6 rounded !w-[580px] !h-[380px]"
+            width={420}
+            height={280}
+            className="object-cover mt-6 rounded !w-[420px] !h-[280px]"
           />
         ) : null}
 
@@ -141,9 +141,9 @@ const PostingDetailPost = ({ params }: { params: { id: string } }) => {
           <Image
             src={post?.image_url[2] as string}
             alt=""
-            width={580}
-            height={380}
-            className="object-cover mt-6 rounded !w-[580px] !h-[380px]"
+            width={420}
+            height={280}
+            className="object-cover mt-6 rounded !w-[420px] !h-[280px]"
           />
         ) : null}
 
