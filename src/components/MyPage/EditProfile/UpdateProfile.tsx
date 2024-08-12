@@ -199,8 +199,8 @@ const UpdateProfile = (): JSX.Element => {
     );
 
   return (
-    <section className="w-[1360px] max-w-md mx-auto">
-      <h1 className="w-[400px] h-8 mb-4 mx-4 text-2xl font-bold">프로필 수정</h1>
+    <section className="w-[1360px] ml-auto mx-auto">
+      <h1 className="flex w-[400px] h-8 mb-4 ml-[480px] text-2xl font-medium">프로필 수정</h1>
       <div className="flex flex-col items-center text-center mb-8 w-full px-4">
         <ProfileImage profile_url={user.profile_url || ''} onImageUpload={handleImageUpload} />
         <ProfileForm

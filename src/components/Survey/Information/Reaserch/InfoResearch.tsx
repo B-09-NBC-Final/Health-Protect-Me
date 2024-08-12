@@ -335,7 +335,7 @@ const InfoResearch = (): JSX.Element => {
                   }`}   
                 />
                 {surveyData.height !== null && !/^1\d{2}$/.test(surveyData.height.toString()) && (
-                  <p className="text-red-500 text-sm">100~199cm 사이로 입력해주세요</p>
+                  <p className="flex text-red-500 text-sm">100~199cm 사이로 입력해주세요</p>
                 )}
               </div>
               <div >
@@ -353,7 +353,7 @@ const InfoResearch = (): JSX.Element => {
                   }`}
                 />
                 {surveyData.weight !== null && !/^\d{2,3}$/.test(surveyData.weight.toString()) && (
-                  <p className="text-red-500 text-sm">30kg~200kg 사이로 입력해주세요</p>
+                  <p className="flex text-red-500 text-sm">30kg~200kg 사이로 입력해주세요</p>
                 )}
               </div>
             </div>

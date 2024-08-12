@@ -92,7 +92,7 @@ const ProfileForm = ({
           onChange={(e) => handleNicknameChange(e.target.value)}
         />
         {nickname.length > 0 && nickname.length < 2 && (
-          <p className="text-red-500 text-sm mt-1">닉네임은 2글자 이상이어야 합니다.</p>
+          <p className="flex text-red-500 text-sm mt-1">닉네임은 2글자 이상이어야 합니다.</p>
         )}
       </div>
       <div className="mb-6">
@@ -107,7 +107,7 @@ const ProfileForm = ({
           value={height}
           onChange={(e) => handleHeightChange(e.target.value)}
         />
-        {heightError && <p className="text-red-500 text-sm mt-1">{heightError}</p>}
+        {heightError && <p className="flex text-red-500 text-sm mt-1">{heightError}</p>}
       </div>
       <div className="mb-6">
         <label className="block text-left mb-1" htmlFor="weight">
@@ -121,7 +121,7 @@ const ProfileForm = ({
           value={weight}
           onChange={(e) => handleWeightChange(e.target.value)}
         />
-        {weightError && <p className="text-red-500 text-sm mt-1">{weightError}</p>}
+        {weightError && <p className="flex text-red-500 text-sm mt-1">{weightError}</p>}
       </div>
       <div className="mb-4">
         <label className="block text-left mb-1">나의 식단 목표</label>
