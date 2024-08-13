@@ -5,11 +5,13 @@ import 'swiper/css';
 import { Autoplay } from 'swiper/modules';
 import SwiperCore from 'swiper';
 import Image from 'next/image';
-import Card04 from '@/assets/image/img_main_card04.svg';
-import Card05 from '@/assets/image/img_main_card05.svg';
-import Card06 from '@/assets/image/img_main_card06.svg';
-import Card07 from '@/assets/image/img_main_card07.svg';
-import Card08 from '@/assets/image/img_main_card08.svg';
+import Card11 from '@/assets/image/img_main_card11.png';
+import Card12 from '@/assets/image/img_main_card12.png';
+import Card13 from '@/assets/image/img_main_card13.png';
+import Card14 from '@/assets/image/img_main_card14.png';
+import Card15 from '@/assets/image/img_main_card15.png';
+import Card16 from '@/assets/image/img_main_card16.png';
+import Card17 from '@/assets/image/img_main_card17.png';
 
 const MainSwiperReverse = () => {
   SwiperCore.use([Autoplay]);
@@ -21,7 +23,7 @@ const MainSwiperReverse = () => {
       slidesPerView={3.5}
       direction={'vertical'}
       loop={true}
-      speed={3000}
+      speed={2500}
       autoplay={{
         delay: 0,
         disableOnInteraction: false,
@@ -29,7 +31,7 @@ const MainSwiperReverse = () => {
       }}
     >
       <SwiperSlide className="relative cursor-pointer !h-[260px]">
-        <Image src={Card08} alt="" width={480} height={260} />
+        <Image src={Card11} alt="" width={480} height={260} />
         <div className="text-area">
           <div>
             <strong className="text-lg font-semibold mb-2">좀 더 다양한 종류를 추천해주면 좋겠네요.</strong>
@@ -42,7 +44,7 @@ const MainSwiperReverse = () => {
         </div>
       </SwiperSlide>
       <SwiperSlide className="relative cursor-pointer !h-[260px]">
-        <Image src={Card07} alt="" width={480} height={260} />
+        <Image src={Card12} alt="" width={480} height={260} />
         <div className="text-area">
           <div>
             <strong className="text-lg font-semibold mb-2">뭐 먹을지 고민할 필요가 없어요.</strong>
@@ -57,7 +59,7 @@ const MainSwiperReverse = () => {
         </div>
       </SwiperSlide>
       <SwiperSlide className="relative cursor-pointer !h-[260px]">
-        <Image src={Card06} alt="" width={480} height={260} />
+        <Image src={Card13} alt="" width={480} height={260} />
         <div className="text-area">
           <div>
             <strong className="text-lg font-semibold mb-2">회사에서 저녁 뭐 먹을지 고민을 하지 않게 되었습니다.</strong>
@@ -73,7 +75,7 @@ const MainSwiperReverse = () => {
         </div>
       </SwiperSlide>
       <SwiperSlide className="relative cursor-pointer !h-[260px]">
-        <Image src={Card05} alt="" width={480} height={260} />
+        <Image src={Card14} alt="" width={480} height={260} />
         <div className="text-area">
           <div>
             <strong className="text-lg font-semibold mb-2">식단 추천 너무 좋아요.</strong>
@@ -88,7 +90,37 @@ const MainSwiperReverse = () => {
         </div>
       </SwiperSlide>
       <SwiperSlide className="relative cursor-pointer !h-[260px]">
-        <Image src={Card04} alt="" width={480} height={260} />
+        <Image src={Card15} alt="" width={480} height={260} />
+        <div className="text-area">
+          <div>
+            <strong className="text-lg font-semibold mb-2">헬프미가 추천해준 저지방 햄버거</strong>
+            <p>저칼로리인데 생각보다 맛있어요!!</p>
+          </div>
+          <div>
+            <span>20대 여성</span>
+            <p>건강 감량 목표</p>
+          </div>
+        </div>
+      </SwiperSlide>
+      <SwiperSlide className="relative cursor-pointer !h-[260px]">
+        <Image src={Card16} alt="" width={480} height={260} />
+        <div className="text-area">
+          <div>
+            <strong className="text-lg font-semibold mb-2">두부 파스타를 만들었어요</strong>
+            <p>
+              평소에 파스타를 자주 먹었는데, 추천 식단에서 칼로리와 지방을 비슷하게 만들 수 있어서 두부를 사용해서
+              만들어 봤어요! 식감이 너무 좋았고 면이 소스와 잘 섞여서 정말 맛있었어요. 건강을 중요시하는 분들이나 새로운
+              맛을 시도해보고 싶은 분들께는 추천할 만한 레시피입니다.
+            </p>
+          </div>
+          <div>
+            <span>20대 여성</span>
+            <p>건강 감량 목표</p>
+          </div>
+        </div>
+      </SwiperSlide>
+      <SwiperSlide className="relative cursor-pointer !h-[260px]">
+        <Image src={Card17} alt="" width={480} height={260} />
         <div className="text-area">
           <div>
             <strong className="text-lg font-semibold mb-2">재료들로 만들어 먹었습니다.</strong>

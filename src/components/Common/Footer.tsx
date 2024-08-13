@@ -16,7 +16,6 @@ const Footer = () => {
             <Link href={'https://github.com/B-09-NBC-Final/Health-Protect-Me'}>
               <Image src={githubIcon} alt="GitHub" width={24} height={24} />
             </Link>
-            <Image src={instagramIcon} alt="Instagram" width={24} height={24} className="ml-3" />
           </div>
         </div>
 
