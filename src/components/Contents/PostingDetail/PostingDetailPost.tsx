@@ -14,7 +14,7 @@ const PostingDetailPost = ({ params }: { params: { id: string } }) => {
   const [post, setPost] = useState<Post | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [userPurpose, setUserPurpose] = useState<string | null>(null);
-  const [imageLoaded, setImageLoaded] = useState(false);
+  // const [imageLoaded, setImageLoaded] = useState(false);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const postDate = new Date(post?.created_at as string);
   const postYear = String(postDate.getFullYear()).slice(-2);
@@ -117,25 +117,23 @@ const PostingDetailPost = ({ params }: { params: { id: string } }) => {
         ) : (
           <Skeleton className="!w-[80px] !h-[20px] rounded-xl mt-2" />
         )}
-        {post ? (
+
+        {post?.image_url[0] ? (
           <Image
             src={post?.image_url[0] as string}
             alt=""
-            width={580}
-            height={380}
-            className="object-cover mt-6 rounded !w-[580px] !h-[380px]"
+            width={420}
+            height={280}
+            className="object-cover mt-6 rounded !w-[420px] !h-[280px]"
           />
-        ) : (
-          <Skeleton className="!w-[580px] !h-[380px] rounded mt-8" />
-        )}
-
+        ) : null}
         {post?.image_url[1] ? (
           <Image
             src={post?.image_url[1] as string}
             alt=""
-            width={580}
-            height={380}
-            className="object-cover mt-6 rounded !w-[580px] !h-[380px]"
+            width={420}
+            height={280}
+            className="object-cover mt-6 rounded !w-[420px] !h-[280px]"
           />
         ) : null}
 
@@ -143,9 +141,9 @@ const PostingDetailPost = ({ params }: { params: { id: string } }) => {
           <Image
             src={post?.image_url[2] as string}
             alt=""
-            width={580}
-            height={380}
-            className="object-cover mt-6 rounded !w-[580px] !h-[380px]"
+            width={420}
+            height={280}
+            className="object-cover mt-6 rounded !w-[420px] !h-[280px]"
           />
         ) : null}
 

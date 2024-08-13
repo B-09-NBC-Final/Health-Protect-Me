@@ -19,22 +19,28 @@ const Header = () => {
         </div>
         <nav>
           {user ? (
-            <ul className="flex items-center px-0 gap-10">
-              <li>
-                <Link href={'/info-detail'} className="hover-effect">
-                  나만의 식단
-                </Link>
-              </li>
-              <li>
-                <Link href={'/posting-main'} className="hover-effect">
-                  커뮤니티
-                </Link>
-              </li>
-              <div className="w-px h-5 bg-gray-300"></div>
-              <li className="flex items-center w-10 h-10">
+            <>
+              <ul className="hidden md:flex items-center px-0 gap-10 ">
+                <li>
+                  <Link href={'/info-detail'} className="hover-effect">
+                    나만의 식단
+                  </Link>
+                </li>
+                <li>
+                  <Link href={'/posting-main'} className="hover-effect">
+                    커뮤니티
+                  </Link>
+                </li>
+                <div className="w-px h-5 bg-gray-300"></div>
+                <li className="flex items-center w-10 h-10">
+                  <Dropdown />
+                </li>
+              </ul>
+              {/* 모바일버전 */}
+              <div className="md:hidden block">
                 <Dropdown />
-              </li>
-            </ul>
+              </div>
+            </>
           ) : (
             <ul className="flex items-center px-2 gap-10">
               <li>
