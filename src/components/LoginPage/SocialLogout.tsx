@@ -16,11 +16,14 @@ import {
 } from '@/components/ui/alert-dialog';
 
 const SignOutButton = () => {
+  console.log('실행');
+
   const { clearUser } = useUserStore((state) => state);
   const router = useRouter();
   const supabase = createClient();
 
   const signOut = async () => {
+    console.log('실행!');
     const { error } = await supabase.auth.signOut();
     clearUser();
     router.push('/');
@@ -29,9 +32,7 @@ const SignOutButton = () => {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <button className="block w-full text-left px-2 py-2 text-sm letter-spacing color-dropdown" onClick={signOut}>
-          로그아웃
-        </button>
+        <button className="block w-full text-left px-2 py-2 text-sm letter-spacing color-dropdown">로그아웃</button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
@@ -39,7 +40,14 @@ const SignOutButton = () => {
         </AlertDialogHeader>
         <AlertDialogFooter>
           {/* <AlertDialogCancel>아니요</AlertDialogCancel> */}
-          <AlertDialogAction onClick={() => signOut()}>확인</AlertDialogAction>
+          <AlertDialogAction
+            onClick={(e) => {
+              e.preventDefault();
+              signOut();
+            }}
+          >
+            확인
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
