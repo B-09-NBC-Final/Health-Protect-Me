@@ -32,23 +32,6 @@ const InfoResearch = (): JSX.Element => {
   const steps: Step[] = ['출생연도', '성별', '신장 및 체중', '식단 목적'];
   const stepRefs = useRef<React.RefObject<HTMLDivElement>[]>(steps.map(() => React.createRef()));
 
-  useEffect(() => {
-    const saveData = localStorage.getItem('surveyData');
-    if (saveData) {
-      setSurveyData(JSON.parse(saveData));
-    }
-
-    const saveStep = localStorage.getItem('currentStep');
-    if (saveStep) {
-      setCurrentStepIndex(parseInt(saveStep, 10));
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('surveyData', JSON.stringify(surveyData))
-    localStorage.setItem('currentStep', currentStepIndex.toString())
-  }, [surveyData, currentStepIndex])  
-
   const nextStep = (): void => {
     if (currentStepIndex < steps.length - 1) {
       setCurrentStepIndex(currentStepIndex + 1);
@@ -246,9 +229,6 @@ const InfoResearch = (): JSX.Element => {
         setUser({ is_survey_done: true });
       }
 
-      localStorage.removeItem('surveyData');
-      localStorage.removeItem('currentStep');
-
       toast.success('데이터가 성공적으로 저장되었습니다!');
       router.push('/info-detail');
     } catch (error) {
@@ -270,7 +250,7 @@ const InfoResearch = (): JSX.Element => {
           surveyData.height !== null &&
           /^1\d{2}$/.test(surveyData.height.toString()) &&
           surveyData.weight !== null &&
-          /^\d{2,3}$/.test(surveyData.weight.toString())
+          /^\d{2,3}$/.test(surveyData.weight.toString()) 
         );
       case '식단 목적':
         return !!surveyData.purpose;
@@ -333,51 +313,51 @@ const InfoResearch = (): JSX.Element => {
             </div>
           </div>
         );
-      case '신장 및 체중':
-        return (
-          <div ref={stepRefs.current[2]} className=" flex-col justify-center items-center text-center">
-            <h2 className="text-xl font-semibold mb-2 text-center text-gray-900">신장과 체중을 입력해주세요</h2>
-            <p className="text-sm text-gray-600 mb-10 text-center">
-              신장과 체중에 따라 일일 권장 칼로리 섭취량이 달라집니다
-            </p>
-            <div className="mb-6   ">
-              <label className="flex text-sm font-normal text-gray-700">신장</label>
-              <input
-                type="text"
-                name="height"
-                placeholder="cm (예: 170)"
-                value={surveyData.height ?? ''}
-                onChange={handleInputChange}
-                className={`w-full p-3 text-sm border rounded focus:outline-none focus:ring-1 ${
-                  surveyData.height !== null && !/^1\d{2}$/.test(surveyData.height.toString())
-                    ? 'border-red-500 focus:ring-red-500 focus:border-red-500'
-                    : 'focus:ring-[#49BA43] focus:border-[#49BA43]'
-                }`}
-              />
-              {surveyData.height !== null && !/^1\d{2}$/.test(surveyData.height.toString()) && (
-                <p className="flex text-red-500 text-sm">100~199cm 사이로 입력해주세요</p>
-              )}
+        case '신장 및 체중':
+          return (
+            <div ref={stepRefs.current[2]} className=" flex-col justify-center items-center text-center">
+              <h2 className="text-xl font-semibold mb-2 text-center text-gray-900">신장과 체중을 입력해주세요</h2>
+              <p className="text-sm text-gray-600 mb-10 text-center">
+                신장과 체중에 따라 일일 권장 칼로리 섭취량이 달라집니다
+              </p>
+              <div className="mb-6   ">
+                <label className="flex text-sm font-normal text-gray-700">신장</label>
+                <input
+                  type="text"
+                  name="height"
+                  placeholder="cm (예: 170)"
+                  value={surveyData.height ?? ''}
+                  onChange={handleInputChange}
+                  className={`w-full p-3 text-sm border rounded focus:outline-none focus:ring-1 ${
+                    surveyData.height !== null && !/^1\d{2}$/.test(surveyData.height.toString())
+                      ? 'border-red-500 focus:ring-red-500 focus:border-red-500'
+                      : 'focus:ring-[#49BA43] focus:border-[#49BA43]'
+                  }`}   
+                />
+                {surveyData.height !== null && !/^1\d{2}$/.test(surveyData.height.toString()) && (
+                  <p className="flex text-red-500 text-sm">100~199cm 사이로 입력해주세요</p>
+                )}
+              </div>
+              <div >
+                <label className="flex text-sm font-normal text-gray-700">체중</label>
+                <input
+                  type="text"
+                  name="weight"
+                  placeholder="kg (예: 65)"
+                  value={surveyData.weight ?? ''}
+                  onChange={handleInputChange}
+                  className={`w-full p-3 text-sm border rounded focus:outline-none focus:ring-1 ${
+                    surveyData.weight !== null && !/^\d{2,3}$/.test(surveyData.weight.toString())
+                      ? 'border-red-500 focus:ring-red-500 focus:border-red-500'
+                      : 'focus:ring-[#49BA43] focus:border-[#49BA43]'
+                  }`}
+                />
+                {surveyData.weight !== null && !/^\d{2,3}$/.test(surveyData.weight.toString()) && (
+                  <p className="flex text-red-500 text-sm">30kg~200kg 사이로 입력해주세요</p>
+                )}
+              </div>
             </div>
-            <div>
-              <label className="flex text-sm font-normal text-gray-700">체중</label>
-              <input
-                type="text"
-                name="weight"
-                placeholder="kg (예: 65)"
-                value={surveyData.weight ?? ''}
-                onChange={handleInputChange}
-                className={`w-full p-3 text-sm border rounded focus:outline-none focus:ring-1 ${
-                  surveyData.weight !== null && !/^\d{2,3}$/.test(surveyData.weight.toString())
-                    ? 'border-red-500 focus:ring-red-500 focus:border-red-500'
-                    : 'focus:ring-[#49BA43] focus:border-[#49BA43]'
-                }`}
-              />
-              {surveyData.weight !== null && !/^\d{2,3}$/.test(surveyData.weight.toString()) && (
-                <p className="flex text-red-500 text-sm">30kg~200kg 사이로 입력해주세요</p>
-              )}
-            </div>
-          </div>
-        );
+          );
       case '식단 목적':
         return (
           <div ref={stepRefs.current[4]} className="mb-4">

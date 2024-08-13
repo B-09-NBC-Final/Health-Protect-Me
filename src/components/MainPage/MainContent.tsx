@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import Thumbnail from '@/assets/image/img_thumbnail.png';
+import Thumbnail from '@/assets/image/img_thumbnail.svg';
 import Button from '@/components/Common/Button';
 import { createClient } from '@/supabase/client';
 import { useRouter } from 'next/navigation';
@@ -51,7 +51,8 @@ const MainContent = () => {
           alt="간편하게, 나만을 위한 맞춤형 건강 솔루션"
           width={790}
           height={606}
-          loading="eager"
+          placeholder="blur"
+          blurDataURL="data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mN88vR5PQAIlgMxdSRmwgAAAABJRU5ErkJggg=="
         />
       </div>
     </section>

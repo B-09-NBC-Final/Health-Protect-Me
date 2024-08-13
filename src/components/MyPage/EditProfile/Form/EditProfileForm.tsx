@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import Button from '@/components/Common/Button';
+import React, { useState, useEffect } from 'react'
+import Button from '@/components/Common/Button'
 
 type ProfileFormProps = {
-  nickname: string;
-  setNickname: (value: string) => void;
-  height: string;
-  setHeight: (value: string) => void;
-  weight: string;
-  setWeight: (value: string) => void;
-  goal: string;
-  setGoal: (value: string) => void;
-  onSave: () => void;
-  onCancel: () => void;
-};
+  nickname: string
+  setNickname: (value: string) => void
+  height: string
+  setHeight: (value: string) => void
+  weight: string
+  setWeight: (value: string) => void
+  goal: string
+  setGoal: (value: string) => void
+  onSave: () => void
+  onCancel: () => void
+}
 
 const ProfileForm = ({
   nickname,
@@ -24,7 +24,7 @@ const ProfileForm = ({
   goal,
   setGoal,
   onSave,
-  onCancel
+  onCancel,
 }: ProfileFormProps): React.ReactElement => {
   const [isValid, setIsValid] = useState(false);
   const [heightError, setHeightError] = useState('');
@@ -34,13 +34,13 @@ const ProfileForm = ({
   const getButtonClasses = (currentGoal: string) => {
     return currentGoal === goal
       ? 'flex w-32 h-12 py-3 px-4 justify-center items-center gap-2 rounded-lg border border-[#F5637C] bg-[#FFF6F2] text-[#404145] font-semibold'
-      : 'flex w-32 h-12 py-3 px-4 justify-center items-center gap-2 rounded-lg border border-[#B7B9BD] bg-white text-[#404145]';
-  };
+      : 'flex w-32 h-12 py-3 px-4 justify-center items-center gap-2 rounded-lg border border-[#B7B9BD] bg-white text-[#404145]'
+  }
 
   const handleNicknameChange = (value: string) => {
     setNickname(value);
     if (value.length < 2 || value.length > 10) {
-      setNicknameError('닉네임은 2글자 이상 10글자 이하 입니다..');
+      setNicknameError('닉네임은 2글자 이상 10글자 이하여야 합니다.');
     } else {
       setNicknameError('');
     }
@@ -81,7 +81,7 @@ const ProfileForm = ({
   };
 
   useEffect(() => {
-    const isNicknameValid = nickname.length >= 2 && nickname.length < 10;
+    const isNicknameValid = nickname.length >= 2 && nickname.length <= 10;
     const isHeightValid = height !== '' && !heightError;
     const isWeightValid = weight !== '' && !weightError;
     const isGoalValid = goal !== '';
@@ -98,16 +98,16 @@ const ProfileForm = ({
         <input
           type="text"
           id="nickname"
-          placeholder="닉네임 (2-9글자)"
-          className={`border ${getInputBorderColor(
-            nickname,
-            nicknameError
-          )} border-solid p-3 rounded-sm w-full text-gray900 placeholder:text-gray500 hover:border-gray600 focus:outline-none focus:border-secondary600`}
+          placeholder="닉네임 (2-10글자)"
+          className={`border ${getInputBorderColor(nickname, nicknameError)} border-solid p-3 rounded-sm w-full text-gray900 placeholder:text-gray500 hover:border-gray600 focus:outline-none focus:border-secondary600`}
           value={nickname}
           onChange={(e) => handleNicknameChange(e.target.value)}
         />
-        {nicknameError && <p className="flex text-red-500 text-sm mt-1">{nicknameError}</p>}
-      
+
+        {nickname.length > 0 && nickname.length < 2 && (
+          <p className="flex text-red-500 text-sm mt-1">닉네임은 2글자 이상이어야 합니다.</p>
+        )}
+
       </div>
       <div className="mb-6">
         <label className="block text-left mb-1" htmlFor="height">
@@ -117,10 +117,7 @@ const ProfileForm = ({
           type="text"
           id="height"
           placeholder="키 (100-299 cm)"
-          className={`border ${getInputBorderColor(
-            height,
-            heightError
-          )} border-solid p-3 rounded-sm w-full text-gray900 placeholder:text-gray500 hover:border-gray600 focus:outline-none focus:border-secondary600`}
+          className={`border ${getInputBorderColor(height, heightError)} border-solid p-3 rounded-sm w-full text-gray900 placeholder:text-gray500 hover:border-gray600 focus:outline-none focus:border-secondary600`}
           value={height}
           onChange={(e) => handleHeightChange(e.target.value)}
         />
@@ -134,10 +131,7 @@ const ProfileForm = ({
           type="text"
           id="weight"
           placeholder="체중 (10-199 kg)"
-          className={`border ${getInputBorderColor(
-            weight,
-            weightError
-          )} border-solid p-3 rounded-sm w-full text-gray900 placeholder:text-gray500 hover:border-gray600 focus:outline-none focus:border-secondary600`}
+          className={`border ${getInputBorderColor(weight, weightError)} border-solid p-3 rounded-sm w-full text-gray900 placeholder:text-gray500 hover:border-gray600 focus:outline-none focus:border-secondary600`}
           value={weight}
           onChange={(e) => handleWeightChange(e.target.value)}
         />
@@ -170,16 +164,16 @@ const ProfileForm = ({
         />
         <Button
           buttonName="저장"
-          bgColor={isValid ? 'bg-[#FF7A85]' : 'bg-gray-300'}
+          bgColor={isValid ? "bg-[#FF7A85]" : "bg-gray-300"}
           textColor="text-white"
           buttonWidth="w-48"
           boxShadow="shadow-none"
           onClick={isValid ? onSave : undefined}
-          hover={isValid ? 'hover:bg-[#F5637C] hover:text-white' : ''}
+          hover={isValid ? "hover:bg-[#F5637C] hover:text-white" : ""}
         />
       </div>
     </form>
-  );
-};
+  )
+}
 
-export default ProfileForm;
+export default ProfileForm
