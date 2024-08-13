@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { createClient } from '@/supabase/client';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import myPageDefaultImg from '@/assets/image/img_myDefaultImg.png';
 
 type PostData = {
   id: string;
@@ -14,7 +15,7 @@ type PostData = {
   image_url: string[];
   created_at: string;
   category: string;
-  updated_at: string;
+  updated_at: Date;
 };
 
 const PostsSection = () => {
@@ -61,7 +62,7 @@ const PostsSection = () => {
                 <div className="w-60 h-48 mb-4 relative">
                   <Image
                     className="object-cover rounded-lg"
-                    src={post.image_url[0] || '/path/to/default-image.jpg'}
+                    src={post.image_url[0] || myPageDefaultImg}
                     alt={`Post ${post.id}`}
                     layout="fill"
                   />

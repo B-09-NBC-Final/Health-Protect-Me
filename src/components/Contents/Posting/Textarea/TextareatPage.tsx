@@ -92,10 +92,6 @@ const TextareaPage = () => {
         return;
       }
 
-      if (fileInfos.length === 0) {
-        showAlertMessage('최소 1개의 이미지를 업로드해주세요.');
-        return;
-      }
 
       const timestamp = dayjs().format('YYYY-MM-DD HH:mm:ss');
       const imageUrls = fileInfos.map((info) => info.url);
