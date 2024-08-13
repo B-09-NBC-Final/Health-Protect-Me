@@ -15,8 +15,8 @@ import {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+  AlertDialogTitle
+} from '@/components/ui/alert-dialog';
 
 const PostingUpdateForm = ({ params }: { params: { id: string } }) => {
   const { id } = params;
@@ -110,11 +110,6 @@ const PostingUpdateForm = ({ params }: { params: { id: string } }) => {
 
     if (content.length === 0 || content.length > 500) {
       showAlertMessage('내용은 1자 이상 500자 이하여야 합니다.');
-      return;
-    }
-
-    if (fileUrl.length === 0) {
-      showAlertMessage('최소 1개의 이미지를 업로드해주세요.');
       return;
     }
 

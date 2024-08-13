@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import PostingMainBtn from './PostingBtn';
 import { useQuery } from '@tanstack/react-query';
 import Pagination from '@/components/Common/Pagination';
+import postingDefaultImg from '@/assets/image/img_postingDefaultImg.png';
 
 const ITEMS_PER_PAGE = 4;
 
@@ -104,11 +105,11 @@ const PostingList = () => {
                 >
                   <Link href={`/posting-detail/${item?.id}`} className="flex">
                     <Image
-                      src={item.image_url[0]}
+                      src={item.image_url[0] || postingDefaultImg}
                       alt=""
                       width={128}
                       height={128}
-                      className="!w-[128px] !h-[128px] rounded-lg"
+                      className="!w-[128px] !h-[128px] rounded-lg shrink-0 object-cover"
                     />
                     <div className="flex flex-col justify-between ml-5 w-full">
                       <div>
