@@ -16,7 +16,7 @@ const PostingList = () => {
   const categories = ['전체 글 보기', '잡담', '질문', '정보'];
   const supabase = createClient();
   const dayjs = require('dayjs');
-  const formatDate = (dateString: string) => dayjs(dateString).format('YY.MM.DD');
+  const formatDate = (dateString: Date) => dayjs(dateString).format('YY.MM.DD');
 
   const getPosts = async (selected: string) => {
     const { data, count } =
@@ -25,12 +25,22 @@ const PostingList = () => {
             .from('posts')
             .select('*, users(nickname)', { count: 'exact' })
             .range(ITEMS_PER_PAGE * (page - 1), ITEMS_PER_PAGE * (page - 1) + ITEMS_PER_PAGE - 1)
+            .order('updated_at', { ascending: false })
         : await supabase
             .from('posts')
             .select('*, users(nickname)', { count: 'exact' })
             .eq('category', selected)
-            .range(ITEMS_PER_PAGE * (page - 1), ITEMS_PER_PAGE * (page - 1) + ITEMS_PER_PAGE - 1);
-    return { data, count };
+            .range(ITEMS_PER_PAGE * (page - 1), ITEMS_PER_PAGE * (page - 1) + ITEMS_PER_PAGE - 1)
+            .order('updated_at', { ascending: false });
+
+    const kstOffset = 9 * 60 * 60 * 1000;
+    const postsWithKST = data?.map((post) => {
+      const updatedAtUTC = new Date(post.updated_at);
+      const updatedAtKST = new Date(updatedAtUTC.getTime() + kstOffset);
+      return { ...post, updated_at: updatedAtKST };
+    });
+
+    return { data: postsWithKST, count };
   };
 
   const {
@@ -108,7 +118,7 @@ const PostingList = () => {
                       </div>
                       <div className="flex justify-between w-full">
                         <p className="text-xs text-gray600">{item.users?.nickname}</p>
-                        <p className="text-xs text-gray600 pr-3">{formatDate(item.created_at)}</p>
+                        <p className="text-xs text-gray600 pr-3">{formatDate(item.updated_at)}</p>
                       </div>
                     </div>
                   </Link>
