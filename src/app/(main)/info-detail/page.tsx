@@ -10,6 +10,7 @@ import fat from '@/assets/icons/fat.png';
 import running from '@/assets/icons/running_man.png';
 import dumbbel from '@/assets/icons/dumbbel.png';
 import clock from '@/assets/icons/clock.png';
+import { Button } from '@/components/ui/button';
 
 type PostgrestError = {
   message: string;
@@ -223,10 +224,6 @@ const InforDetailPage = () => {
     updateDailyPlan();
   }, [currentDay, resultDiet, resultExercise]);
 
-  useEffect(() => {
-    setCurrentDay(1); // 예를 들어 3일 차 데이터 확인
-  }, []);
-
   // ai 결과 식단과 운동 나누기
   const parseAiResults = (result: string) => {
     if (!result) return null;
@@ -368,90 +365,91 @@ const InforDetailPage = () => {
       <div>
         <h1 className="text-2xl font-medium mb-2">오늘의 추천 식단</h1>
         <div>
-          {syncUserData === false && (
-            <div className='flex'>
-              <p className='text-red-500'>정보가 바뀌었네요! 식단을 다시 받아 보시겠어요?</p>
-              <button onClick={resetGptCall}>식단 다시 받기</button>
+          {syncUserData === false ? (
+            <div className='my-5 '>
+              <p className='text-black pb-2'>프로필 정보가 변경되었어요. 새로운 목표에 맞춘 식단을 다시 받아보세요!</p>
+              <Button onClick={resetGptCall} className='border border-[#F5637C] text-[#F5637C] bg-white hover:bg-[#F5637C] hover:text-white'>새로운 식단 추천받기</Button>
             </div>
+          ) : (
+            <p className="text-gray-600 mb-6">AI 분석을 바탕으로 매일 맞춤 식단을 추천해 드려요</p>
           )}
         </div>
-        <p className="text-gray600 mb-6">AI 분석을 바탕으로 매일 맞춤 식단을 추천해 드려요</p>
         <div className="inline-flex gap-9 flex-col items-start flex-[0_0_auto] pb-14">
           <div className="flex gap-10">
-            {/* card radius 20으로 바꾸기, 메뉴랑 칼로리 붙여서 마진값 4 카드 안 위아래 padding 16으로 바꿈 */}
-            <Card className="!flex-[0_0_auto] shadow-floating overflow-hidden w-[400px]">
+            {/* 메뉴랑 칼로리 붙여서 마진값 4 카드 안 위아래 padding 16으로 바꿈 */}
+            <Card className="!flex-[0_0_auto] shadow-floating overflow-hidden w-[400px] rounded-[20px] flex flex-col">
               <CardHeader className="!text-color-text-sub">
-                <CardDescription style={{ color: '#3E9B2E', fontWeight: '600' }}>아침</CardDescription>
-                <CardDescription className="text-black h-[60px] text-base">{meal[0].menu}</CardDescription>
-                <p style={{ color: '#76797F', marginTop: '8px' }}>{meal[0].calories.replace('&칼로리:', '')}</p>
+                <CardDescription className="text-[#3E9B2E] font-semibold">아침</CardDescription>
+                <CardDescription className="text-black text-base mt-2">{meal[0].menu}</CardDescription>
+                <p className="text-[#76797F]">{meal[0].calories.replace('&칼로리:', '')}</p>
               </CardHeader>
-              <CardContent className="overflow-auto max-h-[200px]">
+              <CardContent className="overflow-auto max-h-[200px] mt-auto">
                 <div className="flex justify-center space-x-4">
                   <div className="flex flex-col items-center justify-center w-[104px] h-[104px] rounded-full bg-gray75">
                     <Image src={carbohydrate} alt="carbohydrate" width={32} height={32} />
-                    <p style={{ color: '#76797F' }}>탄수화물</p>
+                    <p className='text-[#76797F]'>탄수화물</p>
                     <p>{breakfastRatios.carbohydrates}%</p>
                   </div>
                   <div className="flex flex-col items-center justify-center w-[104px] h-[104px] rounded-full bg-gray75">
                     <Image src={protein} alt="protein" width={32} height={32} />
-                    <p style={{ color: '#76797F' }}>단백질</p>
+                    <p className='text-[#76797F]'>단백질</p>
                     <p>{breakfastRatios.proteins}%</p>
                   </div>
                   <div className="flex flex-col items-center justify-center w-[104px] h-[104px] rounded-full bg-gray75">
                     <Image src={fat} alt="fat" width={32} height={32} />
-                    <p style={{ color: '#76797F' }}>지방</p>
+                    <p className='text-[#76797F]'>지방</p>
                     <p>{breakfastRatios.fats}%</p>
                   </div>
                 </div>
               </CardContent>
             </Card>
-            <Card className="!flex-[0_0_auto] shadow-floating w-[400px]">
+            <Card className="!flex-[0_0_auto] shadow-floating overflow-hidden w-[400px] rounded-[20px] flex flex-col">
               <CardHeader className="!text-color-text-sub">
-                <CardDescription style={{ color: '#3E9B2E', fontWeight: '600' }}>점심</CardDescription>
-                <CardDescription className="text-black h-[60px] text-base">{meal[1].menu}</CardDescription>
-                <p style={{ color: '#76797F', marginTop: '8px' }}>{meal[0].calories.replace('&칼로리:', '')}</p>
+                <CardDescription className="text-[#3E9B2E] font-semibold">점심</CardDescription>
+                <CardDescription className="text-black text-base mt-2">{meal[1].menu}</CardDescription>
+                <p className="text-[#76797F]">{meal[0].calories.replace('&칼로리:', '')}</p>
               </CardHeader>
-              <CardContent>
+              <CardContent className="overflow-auto max-h-[200px] mt-auto">
                 <div className="flex justify-center space-x-4">
                   <div className="flex flex-col items-center justify-center w-[104px] h-[104px] rounded-full bg-gray75">
                     <Image src={carbohydrate} alt="carbohydrate" width={32} height={32} />
-                    <p style={{ color: '#76797F' }}>탄수화물</p>
+                    <p className='text-[#76797F]'>탄수화물</p>
                     <p>{lunchRatios.carbohydrates}%</p>
                   </div>
                   <div className="flex flex-col items-center justify-center w-[104px] h-[104px] rounded-full bg-gray75">
                     <Image src={protein} alt="protein" width={32} height={32} />
-                    <p style={{ color: '#76797F' }}>단백질</p>
+                    <p className='text-[#76797F]'>단백질</p>
                     <p>{lunchRatios.proteins}%</p>
                   </div>
                   <div className="flex flex-col items-center justify-center w-[104px] h-[104px] rounded-full bg-gray75">
                     <Image src={fat} alt="fat" width={32} height={32} />
-                    <p style={{ color: '#76797F' }}>지방</p>
+                    <p className='text-[#76797F]'>지방</p>
                     <p>{lunchRatios.fats}%</p>
                   </div>
                 </div>
               </CardContent>
             </Card>
-            <Card className="!flex-[0_0_auto] shadow-floating w-[400px]">
+            <Card className="!flex-[0_0_auto] shadow-floating overflow-hidden w-[400px] rounded-[20px] flex flex-col">
               <CardHeader className="!text-color-text-sub">
-                <CardDescription style={{ color: '#3E9B2E', fontWeight: '600' }}>저녁</CardDescription>
-                <CardDescription className="text-black h-[60px] text-base">{meal[2].menu}</CardDescription>
-                <p style={{ color: '#76797F', marginTop: '8px' }}>{meal[0].calories.replace('&칼로리:', '')}</p>
+                <CardDescription className="text-[#3E9B2E] font-semibold">저녁</CardDescription>
+                <CardDescription className="text-black text-base mt-2">{meal[2].menu}</CardDescription>
+                <p className="text-[#76797F]">{meal[0].calories.replace('&칼로리:', '')}</p>
               </CardHeader>
-              <CardContent>
+              <CardContent className="overflow-auto max-h-[200px] mt-auto">
                 <div className="flex justify-center space-x-4">
                   <div className="flex flex-col items-center justify-center w-[104px] h-[104px] rounded-full bg-gray75">
                     <Image src={carbohydrate} alt="carbohydrate" width={32} height={32} />
-                    <p style={{ color: '#76797F' }}>탄수화물</p>
+                    <p className='text-[#76797F]'>탄수화물</p>
                     <p>{dinnerRatios.carbohydrates}%</p>
                   </div>
                   <div className="flex flex-col items-center justify-center w-[104px] h-[104px] rounded-full bg-gray75">
                     <Image src={protein} alt="protein" width={32} height={32} />
-                    <p style={{ color: '#76797F' }}>단백질</p>
+                    <p className='text-[#76797F]'>단백질</p>
                     <p>{dinnerRatios.proteins}%</p>
                   </div>
                   <div className="flex flex-col items-center justify-center w-[104px] h-[104px] rounded-full bg-gray75">
                     <Image src={fat} alt="fat" width={32} height={32} />
-                    <p style={{ color: '#76797F' }}>지방</p>
+                    <p className='text-[#76797F]'>지방</p>
                     <p>{dinnerRatios.fats}%</p>
                   </div>
                 </div>
@@ -462,7 +460,7 @@ const InforDetailPage = () => {
             <span className="font-[number:var(--desktop-subtitle2-font-weight)] font-desktop-subtitle2 [font-style:var(--desktop-subtitle2-font-style)] tracking-[var(--desktop-subtitle2-letter-spacing)] leading-[var(--desktop-subtitle2-line-height)] text-[length:var(--desktop-subtitle2-font-size)]">
               목표를 위한 일일 권장 칼로리 섭취량은{' '}
             </span>
-            <span className="font-desktop-subtitle2 [font-style:var(--desktop-subtitle2-font-style)] tracking-[var(--desktop-subtitle2-letter-spacing)] leading-[var(--desktop-subtitle2-line-height)] text-[length:var(--desktop-subtitle2-font-size)]">
+            <span className="text-[#3E9B2E] font-bold font-desktop-subtitle2 [font-style:var(--desktop-subtitle2-font-style)] tracking-[var(--desktop-subtitle2-letter-spacing)] leading-[var(--desktop-subtitle2-line-height)] text-[length:var(--desktop-subtitle2-font-size)]">
               {meal[3].calories.replace('총 칼로리:', '')}
             </span>
             <span className="font-[number:var(--desktop-subtitle2-font-weight)] font-desktop-subtitle2 [font-style:var(--desktop-subtitle2-font-style)] tracking-[var(--desktop-subtitle2-letter-spacing)] leading-[var(--desktop-subtitle2-line-height)] text-[length:var(--desktop-subtitle2-font-size)]">
@@ -492,7 +490,9 @@ const InforDetailPage = () => {
                 <div className="relative w-fit text-sm text-gray900 font-semibold ">운동 방법</div>
               </div>
               <p className="relative w-fit text-gray800 font-desktop-p-md font-[number:var(--desktop-p-md-font-weight)] text-color-text-main-2 text-[length:var(--desktop-p-md-font-size)] tracking-[var(--desktop-p-md-letter-spacing)] leading-[var(--desktop-p-md-line-height)] whitespace-nowrap [font-style:var(--desktop-p-md-font-style)]">
-                {work.method}
+                {work.method.split('\n').map((line, index) => (
+                  <div key={index}>{line}</div>
+                ))}
               </p>
             </div>
             <div className="inline-flex flex-col items-start gap-1 relative flex-[0_0_auto]">
