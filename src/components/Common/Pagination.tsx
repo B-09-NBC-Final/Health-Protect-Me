@@ -1,9 +1,9 @@
 'use client';
 
-import arrowLeftDisabled from '@/assets/icons/icon_arrow_left_gray.svg';
-import arrowRightDisabled from '@/assets/icons/icon_arrow_right_gray.svg';
-import arrowRightBlack from '@/assets/icons/icon_arrow_right_black.svg';
-import arrowLeftBlack from '@/assets/icons/icon_arrow_left_black.svg';
+import arrowLeftDisabled from '@/assets/icons/icon_arrow_left_gray.png';
+import arrowRightDisabled from '@/assets/icons/icon_arrow_right_gray.png';
+import arrowRightBlack from '@/assets/icons/icon_arrow_right_black.png';
+import arrowLeftBlack from '@/assets/icons/icon_arrow_left_black.png';
 
 import Image from 'next/image';
 
