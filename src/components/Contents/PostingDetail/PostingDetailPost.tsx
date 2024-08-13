@@ -14,7 +14,6 @@ const PostingDetailPost = ({ params }: { params: { id: string } }) => {
   const [post, setPost] = useState<Post | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [userPurpose, setUserPurpose] = useState<string | null>(null);
-  // const [imageLoaded, setImageLoaded] = useState(false);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const postDate = new Date(post?.created_at as string);
   const postYear = String(postDate.getFullYear()).slice(-2);
@@ -100,9 +99,9 @@ const PostingDetailPost = ({ params }: { params: { id: string } }) => {
           <Skeleton className="!w-[50px] !h-[24px] rounded-xl" />
         )}
 
-        <div className="flex justify-between">
+        <div className="flex justify-between items-center mt-2 relative">
           {post ? (
-            <p className="text-gray900 font-semibold mt-2">{post?.title}</p>
+            <p className="text-gray900 font-semibold">{post?.title}</p>
           ) : (
             <Skeleton className="!w-[100px] !h-[24px] rounded-xl mt-2" />
           )}
