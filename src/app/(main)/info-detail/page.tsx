@@ -11,6 +11,7 @@ import running from '@/assets/icons/running_man.png';
 import dumbbel from '@/assets/icons/dumbbel.png';
 import clock from '@/assets/icons/clock.png';
 import { Button } from '@/components/ui/button';
+import Loading from '@/components/LoadingPage/Loading';
 
 type PostgrestError = {
   message: string;
@@ -362,6 +363,7 @@ const InforDetailPage = () => {
 
   return (
     <div className="border-gray100 border border-solid rounded-xl py-[24px] px-10 bg-white">
+      {isLoading && <Loading />}
       <div>
         <h1 className="text-2xl font-medium mb-2">오늘의 추천 식단</h1>
         <div>
