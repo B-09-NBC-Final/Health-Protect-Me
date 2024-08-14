@@ -110,8 +110,7 @@ const config = {
         'mobile-main-height': 'calc(100vh - 188px)'
       },
       fontFamily: {
-        Pretendard: ['"Pretendard"', 'sans-serif'],
-        Montserrat: ['"Montserrat"', 'sans-serif)']
+        Pretendard: ['"Pretendard"', 'sans-serif']
       }
     }
   },
