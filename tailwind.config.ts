@@ -108,6 +108,10 @@ const config = {
       minHeight: {
         'main-height': 'calc(100vh - 194px)',
         'mobile-main-height': 'calc(100vh - 188px)'
+      },
+      fontFamily: {
+        Pretendard: ['"Pretendard"', 'sans-serif'],
+        Montserrat: ['"Montserrat"', 'sans-serif)']
       }
     }
   },
