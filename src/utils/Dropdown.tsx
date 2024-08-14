@@ -6,10 +6,6 @@ const ProfileDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
-  const toggleDropdown = () => {
-    setIsOpen(!isOpen);
-  };
-
   const clickOutside = (event: MouseEvent) => {
     if (dropdownRef.current && event.target instanceof Node && !dropdownRef.current.contains(event.target)) {
       setIsOpen(false);
@@ -17,15 +13,15 @@ const ProfileDropdown = () => {
   };
 
   useEffect(() => {
-    document.addEventListener('mousedown', clickOutside);
+    document.addEventListener('click', clickOutside);
     return () => {
-      document.removeEventListener('mousedown', clickOutside);
+      document.removeEventListener('click', clickOutside);
     };
   }, []);
 
   return (
     <div className="relative inline-block text-left" ref={dropdownRef}>
-      <ProfileTrigger onClick={toggleDropdown} />
+      <ProfileTrigger setIsOpen={setIsOpen} />
       {isOpen && <DropdownContent />}
     </div>
   );
