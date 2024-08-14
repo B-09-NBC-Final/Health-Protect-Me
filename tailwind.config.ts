@@ -109,6 +109,9 @@ const config = {
         'main-height': 'calc(100vh - 194px)',
         'mobile-main-height': 'calc(100vh - 188px)'
       },
+      fontFamily: {
+        Pretendard: ['"Pretendard"', 'sans-serif']
+      },
       screens: {
         m: { max: '1460px' },
         s: { max: '1044px' },

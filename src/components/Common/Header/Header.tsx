@@ -5,9 +5,11 @@ import { useUserStore } from '@/store/userStore';
 import Dropdown from '@/utils/Dropdown';
 import Image from 'next/image';
 import logo from '@/assets/icons/Vector.svg';
+import { useMediaQuery } from 'react-responsive';
 
 const Header = () => {
   const { user } = useUserStore((state) => state);
+  const isMobile = useMediaQuery({ maxWidth: 767 });
 
   return (
     <header className="fixed w-full bg-white z-10 h-[57px]">
@@ -32,14 +34,17 @@ const Header = () => {
                   </Link>
                 </li>
                 <div className="w-px h-5 bg-gray-300"></div>
-                <li className="flex items-center w-10 h-10">
-                  <Dropdown />
-                </li>
+                {!isMobile && (
+                  <li className="flex items-center w-10 h-10">
+                    <Dropdown />
+                  </li>
+                )}
               </ul>
-              {/* 모바일버전 */}
-              <div className="md:hidden block">
-                <Dropdown />
-              </div>
+              {isMobile && (
+                <div className="md:hidden block">
+                  <Dropdown />
+                </div>
+              )}
             </>
           ) : (
             <ul className="flex items-center px-2 gap-10">
