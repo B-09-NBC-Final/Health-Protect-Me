@@ -102,13 +102,15 @@ const InfoResearch = (): JSX.Element => {
   const parseAiResults = (result: string) => {
     if (!result) return null;
 
-    const days = result.split('@').slice(1);
+    const days = result.split('@').slice(1); // 첫 번째 항목은 빈 문자열이므로 제거
+
+    // 각 날짜에 대해 식단과 운동 정보를 각각 파싱
     const dietPlans = days.map((day) => parseDiet(day));
-    const exercise = parseExercise(days[0].split('~추천운동')[1]);
+    const exercises = days.map((day) => parseExercise(day.split('~추천운동')[1]));
 
     return {
       result_diet: JSON.stringify(dietPlans),
-      result_exercise: JSON.stringify(exercise)
+      result_exercise: JSON.stringify(exercises)
     };
   };
 
@@ -250,7 +252,7 @@ const InfoResearch = (): JSX.Element => {
           surveyData.height !== null &&
           /^1\d{2}$/.test(surveyData.height.toString()) &&
           surveyData.weight !== null &&
-          /^\d{2,3}$/.test(surveyData.weight.toString()) 
+          /^\d{2,3}$/.test(surveyData.weight.toString())
         );
       case '식단 목적':
         return !!surveyData.purpose;
@@ -275,11 +277,10 @@ const InfoResearch = (): JSX.Element => {
                 placeholder="예) 1990"
                 value={surveyData.year_of_birth ?? ''}
                 onChange={handleInputChange}
-                className={`w-full p-3 text-sm border rounded-lg focus:outline-none focus:ring-1 ${
-                  surveyData.year_of_birth !== null && !/^(19|20)\d{2}$/.test(surveyData.year_of_birth.toString())
-                    ? 'focus:ring-red-500 focus:border-red-500'
-                    : 'focus:ring-[#49BA43] focus:border-[#49BA43]'
-                }`}
+                className={`w-full p-3 text-sm border rounded-lg focus:outline-none focus:ring-1 ${surveyData.year_of_birth !== null && !/^(19|20)\d{2}$/.test(surveyData.year_of_birth.toString())
+                  ? 'focus:ring-red-500 focus:border-red-500'
+                  : 'focus:ring-[#49BA43] focus:border-[#49BA43]'
+                  }`}
               />
               {surveyData.year_of_birth !== null && !/^(19|20)\d{2}$/.test(surveyData.year_of_birth.toString()) && (
                 <p className="text-red-500 text-sm mt-1">1900년대 또는 2000년대 4자리로 입력해주세요</p>
@@ -296,68 +297,64 @@ const InfoResearch = (): JSX.Element => {
             <div className="flex  space-x-2 gap-4 ">
               <button
                 onClick={() => handleGenderSelect('남')}
-                className={` w-48 h-12 py-3 px-4 text-base border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-red-400 transition duration-200 ${
-                  surveyData.gender === '남' ? 'bg-[#FFF6F2] text-black' : 'bg-white text-gray-700'
-                }`}
+                className={` w-48 h-12 py-3 px-4 text-base border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-red-400 transition duration-200 ${surveyData.gender === '남' ? 'bg-[#FFF6F2] text-black' : 'bg-white text-gray-700'
+                  }`}
               >
                 남자
               </button>
               <button
                 onClick={() => handleGenderSelect('여')}
-                className={` w-48 h-12 py-3 px-4 text-base border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-400 transition duration-200 ${
-                  surveyData.gender === '여' ? 'bg-[#FFF6F2] text-black' : 'bg-white text-gray-700'
-                }`}
+                className={` w-48 h-12 py-3 px-4 text-base border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-400 transition duration-200 ${surveyData.gender === '여' ? 'bg-[#FFF6F2] text-black' : 'bg-white text-gray-700'
+                  }`}
               >
                 여자
               </button>
             </div>
           </div>
         );
-        case '신장 및 체중':
-          return (
-            <div ref={stepRefs.current[2]} className=" flex-col justify-center items-center text-center">
-              <h2 className="text-xl font-semibold mb-2 text-center text-gray-900">신장과 체중을 입력해주세요</h2>
-              <p className="text-sm text-gray-600 mb-10 text-center">
-                신장과 체중에 따라 일일 권장 칼로리 섭취량이 달라집니다
-              </p>
-              <div className="mb-6   ">
-                <label className="flex text-sm font-normal text-gray-700">신장</label>
-                <input
-                  type="text"
-                  name="height"
-                  placeholder="cm (예: 170)"
-                  value={surveyData.height ?? ''}
-                  onChange={handleInputChange}
-                  className={`w-full p-3 text-sm border rounded focus:outline-none focus:ring-1 ${
-                    surveyData.height !== null && !/^1\d{2}$/.test(surveyData.height.toString())
-                      ? 'border-red-500 focus:ring-red-500 focus:border-red-500'
-                      : 'focus:ring-[#49BA43] focus:border-[#49BA43]'
-                  }`}   
-                />
-                {surveyData.height !== null && !/^1\d{2}$/.test(surveyData.height.toString()) && (
-                  <p className="flex text-red-500 text-sm">100~199cm 사이로 입력해주세요</p>
-                )}
-              </div>
-              <div >
-                <label className="flex text-sm font-normal text-gray-700">체중</label>
-                <input
-                  type="text"
-                  name="weight"
-                  placeholder="kg (예: 65)"
-                  value={surveyData.weight ?? ''}
-                  onChange={handleInputChange}
-                  className={`w-full p-3 text-sm border rounded focus:outline-none focus:ring-1 ${
-                    surveyData.weight !== null && !/^\d{2,3}$/.test(surveyData.weight.toString())
-                      ? 'border-red-500 focus:ring-red-500 focus:border-red-500'
-                      : 'focus:ring-[#49BA43] focus:border-[#49BA43]'
+      case '신장 및 체중':
+        return (
+          <div ref={stepRefs.current[2]} className=" flex-col justify-center items-center text-center">
+            <h2 className="text-xl font-semibold mb-2 text-center text-gray-900">신장과 체중을 입력해주세요</h2>
+            <p className="text-sm text-gray-600 mb-10 text-center">
+              신장과 체중에 따라 일일 권장 칼로리 섭취량이 달라집니다
+            </p>
+            <div className="mb-6   ">
+              <label className="flex text-sm font-normal text-gray-700">신장</label>
+              <input
+                type="text"
+                name="height"
+                placeholder="cm (예: 170)"
+                value={surveyData.height ?? ''}
+                onChange={handleInputChange}
+                className={`w-full p-3 text-sm border rounded focus:outline-none focus:ring-1 ${surveyData.height !== null && !/^1\d{2}$/.test(surveyData.height.toString())
+                  ? 'border-red-500 focus:ring-red-500 focus:border-red-500'
+                  : 'focus:ring-[#49BA43] focus:border-[#49BA43]'
                   }`}
-                />
-                {surveyData.weight !== null && !/^\d{2,3}$/.test(surveyData.weight.toString()) && (
-                  <p className="flex text-red-500 text-sm">30kg~200kg 사이로 입력해주세요</p>
-                )}
-              </div>
+              />
+              {surveyData.height !== null && !/^1\d{2}$/.test(surveyData.height.toString()) && (
+                <p className="flex text-red-500 text-sm">100~199cm 사이로 입력해주세요</p>
+              )}
             </div>
-          );
+            <div >
+              <label className="flex text-sm font-normal text-gray-700">체중</label>
+              <input
+                type="text"
+                name="weight"
+                placeholder="kg (예: 65)"
+                value={surveyData.weight ?? ''}
+                onChange={handleInputChange}
+                className={`w-full p-3 text-sm border rounded focus:outline-none focus:ring-1 ${surveyData.weight !== null && !/^\d{2,3}$/.test(surveyData.weight.toString())
+                  ? 'border-red-500 focus:ring-red-500 focus:border-red-500'
+                  : 'focus:ring-[#49BA43] focus:border-[#49BA43]'
+                  }`}
+              />
+              {surveyData.weight !== null && !/^\d{2,3}$/.test(surveyData.weight.toString()) && (
+                <p className="flex text-red-500 text-sm">30kg~200kg 사이로 입력해주세요</p>
+              )}
+            </div>
+          </div>
+        );
       case '식단 목적':
         return (
           <div ref={stepRefs.current[4]} className="mb-4">
@@ -372,9 +369,8 @@ const InfoResearch = (): JSX.Element => {
                 <button
                   key={goal}
                   onClick={() => handleDietGoalSelect(goal)}
-                  className={`w-80 flex h-12 items-center text-center justify-center py-3 px-4 text-base border border-gray-300 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-red-400 transition duration-200 ${
-                    surveyData.purpose === goal ? 'bg-[#FFF6F2] text-black' : 'bg-white text-gray-700'
-                  }`}
+                  className={`w-80 flex h-12 items-center text-center justify-center py-3 px-4 text-base border border-gray-300 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-red-400 transition duration-200 ${surveyData.purpose === goal ? 'bg-[#FFF6F2] text-black' : 'bg-white text-gray-700'
+                    }`}
                 >
                   {goal}
                 </button>
