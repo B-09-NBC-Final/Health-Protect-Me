@@ -107,8 +107,6 @@ const InfoResearch = (): JSX.Element => {
     // 각 날짜에 대해 식단과 운동 정보를 각각 파싱
     const dietPlans = days.map((day) => parseDiet(day));
     const exercises = days.map((day) => parseExercise(day.split('~추천운동')[1]));
-    console.log("첫 식단", dietPlans);
-    console.log("첫 운동", exercises);
 
     return {
       result_diet: JSON.stringify(dietPlans),

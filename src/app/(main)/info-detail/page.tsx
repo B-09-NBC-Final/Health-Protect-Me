@@ -131,7 +131,6 @@ const InforDetailPage = () => {
             const parsedExerciseData = JSON.parse(exerciseData.result_exercise || '[]');
             if (parsedExerciseData.length > 0) {
               setWork(parsedExerciseData[currentDay]);
-              console.log("처음 렌더링 시 추천 운동 데이터:", parsedExerciseData[currentDay]);
             }
           }
         }
@@ -164,9 +163,7 @@ const InforDetailPage = () => {
       }
 
       const content = await response.json();
-      console.log("날 것 그대로", content);
       const parsedResults = parseAiResults(content.data);
-      console.log("식단, 운동 분리", parsedResults);
 
       if (!parsedResults) {
         throw new Error('AI 결과 파싱에 실패했습니다.');
