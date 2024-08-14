@@ -131,6 +131,7 @@ const InforDetailPage = () => {
             const parsedExerciseData = JSON.parse(exerciseData.result_exercise || '[]');
             if (parsedExerciseData.length > 0) {
               setWork(parsedExerciseData[currentDay]);
+              console.log("처음 렌더링 시 추천 운동 데이터:", parsedExerciseData[currentDay]);
             }
           }
         }
@@ -140,8 +141,8 @@ const InforDetailPage = () => {
     fetchData();
   }, [userId, shouldCallGptApi]);
 
-  // GPT API c
-  const callGPTAPI = async (userData: any) => {
+  // GPT API call
+  const callGPTAPI = async (userData: { year_of_birth: number | null; weight: number | null; gender: string; height: number | null; purpose: string; user_id: string | null; }) => {
     setIsLoading(true);
     try {
       const response = await fetch('/api/gpt', {
@@ -163,8 +164,9 @@ const InforDetailPage = () => {
       }
 
       const content = await response.json();
-      console.log(content);
+      console.log("날 것 그대로", content);
       const parsedResults = parseAiResults(content.data);
+      console.log("식단, 운동 분리", parsedResults);
 
       if (!parsedResults) {
         throw new Error('AI 결과 파싱에 실패했습니다.');
@@ -382,7 +384,7 @@ const InforDetailPage = () => {
             <Card className="!flex-[0_0_auto] shadow-floating overflow-hidden w-[400px] rounded-[20px] flex flex-col">
               <CardHeader className="!text-color-text-sub">
                 <CardDescription className="text-[#3E9B2E] font-semibold">아침</CardDescription>
-                <CardDescription className="text-black text-base mt-2">{meal[0].menu}</CardDescription>
+                <CardDescription className="text-black text-base mt-2">{meal[0].menu.trim().replace(/^-/, '')}</CardDescription>
                 <p className="text-[#76797F]">{meal[0].calories.replace('&칼로리:', '')}</p>
               </CardHeader>
               <CardContent className="overflow-auto max-h-[200px] mt-auto">
@@ -408,7 +410,7 @@ const InforDetailPage = () => {
             <Card className="!flex-[0_0_auto] shadow-floating overflow-hidden w-[400px] rounded-[20px] flex flex-col">
               <CardHeader className="!text-color-text-sub">
                 <CardDescription className="text-[#3E9B2E] font-semibold">점심</CardDescription>
-                <CardDescription className="text-black text-base mt-2">{meal[1].menu}</CardDescription>
+                <CardDescription className="text-black text-base mt-2">{meal[1].menu.trim().replace(/^-/, '')}</CardDescription>
                 <p className="text-[#76797F]">{meal[0].calories.replace('&칼로리:', '')}</p>
               </CardHeader>
               <CardContent className="overflow-auto max-h-[200px] mt-auto">
@@ -434,7 +436,7 @@ const InforDetailPage = () => {
             <Card className="!flex-[0_0_auto] shadow-floating overflow-hidden w-[400px] rounded-[20px] flex flex-col">
               <CardHeader className="!text-color-text-sub">
                 <CardDescription className="text-[#3E9B2E] font-semibold">저녁</CardDescription>
-                <CardDescription className="text-black text-base mt-2">{meal[2].menu}</CardDescription>
+                <CardDescription className="text-black text-base mt-2">{meal[2].menu.trim().replace(/^-/, '')}</CardDescription>
                 <p className="text-[#76797F]">{meal[0].calories.replace('&칼로리:', '')}</p>
               </CardHeader>
               <CardContent className="overflow-auto max-h-[200px] mt-auto">
