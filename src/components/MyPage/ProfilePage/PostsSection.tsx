@@ -67,7 +67,7 @@ const PostsSection = () => {
                   <div className="w-full h-48 mb-4 relative">
                     <Image
                       className="object-cover rounded-lg"
-                      src={post.image_url[0] || myPageDefaultImg}
+                      src={post.image_url[0] || myPageDefaultImg} 
                       alt={`Post ${post.id}`}
                       layout="fill"
                     />
