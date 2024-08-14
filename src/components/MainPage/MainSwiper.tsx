@@ -20,7 +20,7 @@ const MainSwiper = () => {
     <Swiper
       className="text-white max-h-screen"
       spaceBetween={40}
-      slidesPerView={3.5}
+      slidesPerView={'auto'}
       direction={'vertical'}
       loop={true}
       speed={2500}
