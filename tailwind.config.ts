@@ -108,6 +108,20 @@ const config = {
       minHeight: {
         'main-height': 'calc(100vh - 194px)',
         'mobile-main-height': 'calc(100vh - 188px)'
+      },
+      fontFamily: {
+        Pretendard: ['"Pretendard"', 'sans-serif']
+      },
+      screens: {
+        m: { max: '1460px' },
+        s: { max: '1023px' },
+        xs: { max: '767px' }
+      },
+      maxWidth: {
+        'container-l': '1440px',
+        'container-m': '1024px',
+        'container-s': '768px',
+        'container-xs': '360px'
       }
     }
   },

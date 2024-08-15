@@ -6,6 +6,7 @@ import { createClient } from '@/supabase/client';
 import { useUserStore } from '@/store/userStore';
 import Button from '@/components/Common/Button';
 import defaultimg from '@/assets/image/defaultimg.png';
+import BMIInfo from '../EditProfile/BmiInfo';
 
 const DEFAULT_PROFILE_IMAGE = defaultimg;
 
@@ -127,8 +128,7 @@ const Profile = () => {
           </div>
           <div className="h-12 w-px bg-gray-300 mx-4"></div>
           <div className="flex flex-col items-center">
-            <span className="font-bold">BMI</span>
-            <span className="text-sm text-gray800">{bmiStatus}</span>
+            <BMIInfo bmi={calculateBMI(user.height, user.weight)} />
           </div>
         </div>
       </div>

@@ -92,7 +92,6 @@ const TextareaPage = () => {
         return;
       }
 
-
       const timestamp = dayjs().format('YYYY-MM-DD HH:mm:ss');
       const imageUrls = fileInfos.map((info) => info.url);
       const { data: postData, error } = await supabase.from('posts').insert({
@@ -114,9 +113,9 @@ const TextareaPage = () => {
   };
 
   return (
-    <div className="w-[800px] mx-auto pb-[188px]">
+    <div className="w-full max-w-[800px] mx-auto pb-[188px] px-4 s:px-0 s:pb-6">
       <h2 className="text-lg font-semibold mb-4">포스트 작성</h2>
-      <div className="mb-6">
+      <div className='mb-6 s:mb-0'>
         <CategoryMain
           categories={categories}
           selectedCategories={selectedCategory}
@@ -126,20 +125,20 @@ const TextareaPage = () => {
         <input
           type="text"
           placeholder="제목을 입력 해주세요. (최소 2자)"
-          className="border border-gray300 border-solid p-3 rounded-sm w-full text-gray900 placeholder:text-gray500 hover:border-gray600 focus:outline-none focus:border-secondary600"
+          className="border border-gray300 border-solid p-3 rounded-sm w-full text-gray900 placeholder:text-gray500 hover:border-gray600 focus:outline-none focus:border-secondary600 s:my-1"
           value={title}
           onChange={(e) => validateTitle(e.target.value)}
         />
         {titleError && <div className="text-backgroundError mt-1 text-sm">{titleError}</div>}
         <textarea
           placeholder="식단을 공유하거나, 자유롭게 이야기를 나눠보세요. (최대 500자)"
-          className="border border-gray300 border-solid p-3 rounded-sm w-full text-gray900 placeholder:text-gray500 hover:border-gray600 focus:outline-none focus:border-secondary600 mt-2 h-[400px]"
+          className="border border-gray300 border-solid p-3 rounded-sm w-full text-gray900 placeholder:text-gray500 hover:border-gray600 focus:outline-none focus:border-secondary600 mt-2 h-64 s:h-48"
           value={content}
           onChange={(e) => validateContent(e.target.value)}
         />
-        <div className="flex">
-          {contentError && <p className="text-backgroundError text-sm">{contentError}</p>}
-          <p className="ml-auto text-gray600 text-sm">{content.length}/500</p>
+        <div className="flex mt-2">
+          {contentError && <p className="text-backgroundError text-sm s:w-1/2">{contentError}</p>}
+          <p className="ml-auto text-gray600 text-sm sm:w-1/2 s:text-right">{content.length}/500</p>
         </div>
       </div>
       <ImageUpload fileInfos={fileInfos} setFileInfos={setFileInfos} setImageError={setImageError} />
@@ -147,7 +146,7 @@ const TextareaPage = () => {
       {error && <div className="text-red-500 mt-4">{error}</div>}
 
       <div className="mt-10">
-        <div className="flex justify-center space-x-4">
+      <div className="flex justify-center gap-4 s:flex-row s:flex s:justify-center s:space-y-0 s:space-x-4">
           <Button
             buttonName="취소"
             onClick={() => router.push('/posting-main')}
@@ -156,9 +155,9 @@ const TextareaPage = () => {
             textColor="text-gray900"
             paddingY="py-2"
             border="border-gray400"
-            buttonWidth="w-[192px]"
+            buttonWidth="w-48 s:w-full s:w-1/4 s:px-3 s:py-2 s:item-center s:h-10"
             hover="hover:bg-gray100 hover:border-gray600"
-          ></Button>
+          />
           <Button
             buttonName="작성 완료"
             onClick={handlePostRegist}
@@ -167,8 +166,8 @@ const TextareaPage = () => {
             textColor="text-primary600"
             paddingY="py-2"
             border="border-primary500"
-            buttonWidth="w-[192px]"
-          ></Button>
+            buttonWidth="w-48 s:w-full s:px-3 s:py-2 s:item-center s:h-10"
+          />
         </div>
       </div>
 

@@ -6,7 +6,7 @@ import { createClient } from '@/supabase/client';
 import { toast } from 'react-toastify';
 import { useUserStore } from '@/store/userStore';
 import { useRouter } from 'next/navigation';
-import Loading from '@/components/LoadingPage/Loading';
+import LoadingAnimation from '@/components/LoadingPage/ResultLoading/Loading';
 
 const supabase = createClient();
 
@@ -383,7 +383,7 @@ const InfoResearch = (): JSX.Element => {
 
   return (
     <div className="flex flex-col items-center justify-center">
-      {isLoading && <Loading />}
+      {isLoading && <LoadingAnimation />}
       <div className={`w-[1360px] max-w-2xl flex flex-col items-center mx-auto ${isLoading ? 'opacity-50' : ''}`}>
         {/* 최상단에 있던 목차 제목의 요소를 시각적으로 숨기고 기능엔 문제없이 할 수 있도록 css 적용 */}
         <h1 className="text-3xl font-bold mb-8 text-center text-gray-800 sr-only">{steps[currentStepIndex]}</h1>

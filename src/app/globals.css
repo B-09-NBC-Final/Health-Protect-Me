@@ -51,30 +51,36 @@ html {
 
 @font-face {
   font-family: 'Pretendard-Regular';
-  src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+  src: url('/fonts/subset-Pretendard-Regular.woff2') format('woff2'),
+    url('/fonts/subset-Pretendard-Regular.woff') format('woff'),
+    url('/fonts/subset-Pretendard-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
 }
 @font-face {
   font-family: 'Pretendard-Regular';
-  src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Medium.woff') format('woff');
+  src: url('/fonts/subset-Pretendard-Medium.woff2') format('woff2'),
+    url('/fonts/subset-Pretendard-Medium.woff') format('woff'),
+    url('/fonts/subset-Pretendard-Medium.ttf') format('truetype');
   font-weight: 500;
   font-style: normal;
 }
 @font-face {
   font-family: 'Pretendard-Regular';
-  src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-SemiBold.woff') format('woff');
+  src: url('/fonts/subset-Pretendard-SemiBold.woff2') format('woff2'),
+    url('/fonts/subset-Pretendard-SemiBold.woff') format('woff'),
+    url('/fonts/subset-Pretendard-SemiBold.ttf') format('truetype');
   font-weight: 600;
   font-style: normal;
 }
 @font-face {
   font-family: 'Pretendard-Regular';
-  src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Bold.woff') format('woff');
+  src: url('/fonts/subset-Pretendard-Bold.woff2') format('woff2'),
+    url('/fonts/subset-Pretendard-Bold.woff') format('woff'),
+    url('/fonts/subset-Pretendard-Bold.ttf') format('truetype');
   font-weight: 700;
   font-style: normal;
 }
-
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
 .login_title {
   font-family: 'Montserrat', sans-serif;
@@ -95,14 +101,9 @@ html {
   color: #76797f;
 }
 
-.inner_wrap {
-  max-width: 1440px;
-  padding: 0 40px;
-  margin: 0 auto;
-}
-
 .swiper {
   margin: 0 !important;
+  overflow: visible !important;
 }
 
 .swiper-area {
