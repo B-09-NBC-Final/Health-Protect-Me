@@ -40,7 +40,7 @@ const MainBanner = () => {
   };
 
   return (
-    <div className="max-w-container-l !py-40 text-center m:max-w-container-m s:max-w-container-s xs:max-w-container-xs s:px-5">
+    <div className="max-w-container-l !py-40 text-center m:max-w-container-m s:max-w-container-s xs:max-w-container-xs xs:px-5">
       <h2 className="${montserrat.className} text-[32px] font-bold mb-2 text-gray900">Health Protect Me</h2>
       <p className="text-2xl font-medium mb-10 text-gray800">당신의 건강을 함께 지켜드릴게요</p>
       <Button

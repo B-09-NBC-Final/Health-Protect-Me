@@ -10,7 +10,7 @@ import fat from '@/assets/icons/fat.png';
 import running from '@/assets/icons/running_man.png';
 import dumbbel from '@/assets/icons/dumbbel.png';
 import clock from '@/assets/icons/clock.png';
-import { Button } from '@/components/ui/button';
+import Button from '@/components/Common/Button';
 import Loading from '@/components/LoadingPage/Loading';
 
 type PostgrestError = {
@@ -364,12 +364,22 @@ const InforDetailPage = () => {
     <div className="border-gray100 border border-solid rounded-xl py-[24px] px-10 bg-white">
       {isLoading && <Loading />}
       <div>
-        <h1 className="text-2xl font-medium mb-2">오늘의 추천 식단</h1>
+        <h1 className="text-2xl text-gray-900 font-medium mb-2">오늘의 추천 식단</h1>
         <div>
           {syncUserData === false ? (
             <div className='my-5 '>
-              <p className='text-black pb-2'>프로필 정보가 변경되었어요. 새로운 목표에 맞춘 식단을 다시 받아보세요!</p>
-              <Button onClick={resetGptCall} className='border border-[#F5637C] text-[#F5637C] bg-white hover:bg-[#F5637C] hover:text-white'>새로운 식단 추천받기</Button>
+              <p className='text-gray-800 pb-2'>프로필 정보가 변경되었어요. 새로운 목표에 맞춘 식단을 다시 받아보세요!</p>
+              <Button
+                buttonName="새로운 식단 추천받기"
+                onClick={resetGptCall}
+                bgColor="bg-white"
+                boxShadow="none"
+                textColor="text-primary600"
+                paddingY="py-2"
+                border="border-primary500"
+                buttonWidth="w-[192px]"
+              >
+              </Button>
             </div>
           ) : (
             <p className="text-gray-600 mb-6">AI 분석을 바탕으로 매일 맞춤 식단을 추천해 드려요</p>
@@ -377,7 +387,6 @@ const InforDetailPage = () => {
         </div>
         <div className="inline-flex gap-9 flex-col items-start flex-[0_0_auto] pb-14">
           <div className="flex gap-10">
-            {/* 메뉴랑 칼로리 붙여서 마진값 4 카드 안 위아래 padding 16으로 바꿈 */}
             <Card className="!flex-[0_0_auto] shadow-floating overflow-hidden w-[400px] rounded-[20px] flex flex-col">
               <CardHeader className="!text-color-text-sub">
                 <CardDescription className="text-[#3E9B2E] font-semibold">아침</CardDescription>
@@ -389,17 +398,17 @@ const InforDetailPage = () => {
                   <div className="flex flex-col items-center justify-center w-[104px] h-[104px] rounded-full bg-gray75">
                     <Image src={carbohydrate} alt="carbohydrate" width={32} height={32} />
                     <p className='text-[#76797F]'>탄수화물</p>
-                    <p>{breakfastRatios.carbohydrates}%</p>
+                    <p className='text-gray-900'>{breakfastRatios.carbohydrates}%</p>
                   </div>
                   <div className="flex flex-col items-center justify-center w-[104px] h-[104px] rounded-full bg-gray75">
                     <Image src={protein} alt="protein" width={32} height={32} />
                     <p className='text-[#76797F]'>단백질</p>
-                    <p>{breakfastRatios.proteins}%</p>
+                    <p className='text-gray-900'>{breakfastRatios.proteins}%</p>
                   </div>
                   <div className="flex flex-col items-center justify-center w-[104px] h-[104px] rounded-full bg-gray75">
                     <Image src={fat} alt="fat" width={32} height={32} />
                     <p className='text-[#76797F]'>지방</p>
-                    <p>{breakfastRatios.fats}%</p>
+                    <p className='text-gray-900'>{breakfastRatios.fats}%</p>
                   </div>
                 </div>
               </CardContent>
@@ -415,17 +424,17 @@ const InforDetailPage = () => {
                   <div className="flex flex-col items-center justify-center w-[104px] h-[104px] rounded-full bg-gray75">
                     <Image src={carbohydrate} alt="carbohydrate" width={32} height={32} />
                     <p className='text-[#76797F]'>탄수화물</p>
-                    <p>{lunchRatios.carbohydrates}%</p>
+                    <p className='text-gray-900'>{lunchRatios.carbohydrates}%</p>
                   </div>
                   <div className="flex flex-col items-center justify-center w-[104px] h-[104px] rounded-full bg-gray75">
                     <Image src={protein} alt="protein" width={32} height={32} />
                     <p className='text-[#76797F]'>단백질</p>
-                    <p>{lunchRatios.proteins}%</p>
+                    <p className='text-gray-900'>{lunchRatios.proteins}%</p>
                   </div>
                   <div className="flex flex-col items-center justify-center w-[104px] h-[104px] rounded-full bg-gray75">
                     <Image src={fat} alt="fat" width={32} height={32} />
                     <p className='text-[#76797F]'>지방</p>
-                    <p>{lunchRatios.fats}%</p>
+                    <p className='text-gray-900'>{lunchRatios.fats}%</p>
                   </div>
                 </div>
               </CardContent>
@@ -441,17 +450,17 @@ const InforDetailPage = () => {
                   <div className="flex flex-col items-center justify-center w-[104px] h-[104px] rounded-full bg-gray75">
                     <Image src={carbohydrate} alt="carbohydrate" width={32} height={32} />
                     <p className='text-[#76797F]'>탄수화물</p>
-                    <p>{dinnerRatios.carbohydrates}%</p>
+                    <p className='text-gray-900'>{dinnerRatios.carbohydrates}%</p>
                   </div>
                   <div className="flex flex-col items-center justify-center w-[104px] h-[104px] rounded-full bg-gray75">
                     <Image src={protein} alt="protein" width={32} height={32} />
                     <p className='text-[#76797F]'>단백질</p>
-                    <p>{dinnerRatios.proteins}%</p>
+                    <p className='text-gray-900'>{dinnerRatios.proteins}%</p>
                   </div>
                   <div className="flex flex-col items-center justify-center w-[104px] h-[104px] rounded-full bg-gray75">
                     <Image src={fat} alt="fat" width={32} height={32} />
                     <p className='text-[#76797F]'>지방</p>
-                    <p>{dinnerRatios.fats}%</p>
+                    <p className='text-gray-900'>{dinnerRatios.fats}%</p>
                   </div>
                 </div>
               </CardContent>
@@ -473,13 +482,13 @@ const InforDetailPage = () => {
       </div>
       <hr className="border-t border-gray-300 w-full" />
       <div className="w-full pt-14">
-        <h1 className="text-2xl font-medium mb-2">오늘의 운동 플랜</h1>
+        <h1 className="text-2xl text-gray-900 font-medium mb-2">오늘의 운동 플랜</h1>
         <p className="text-gray600 mb-6">목표를 더 빠르게 달성할 수 있도록 식단과 함께하면 좋은 최적의 운동이에요</p>
         <div className="flex gap-4 self-stretch w-full flex-col items-start relative flex-[0_0_auto]">
           <div className="inline-flex items-center gap-2 relative flex-[0_0_auto]">
             <div className="flex items-center mb-4">
               <Image src={running} alt="running" width={48} height={48} />
-              <div className="font-bold text-black text-lg ml-2">{work.type}</div>
+              <div className="font-bold text-gray-900 text-lg ml-2">{work.type}</div>
             </div>
           </div>
         </div>
@@ -492,7 +501,7 @@ const InforDetailPage = () => {
               </div>
               <p className="relative w-fit text-gray800 font-desktop-p-md font-[number:var(--desktop-p-md-font-weight)] text-color-text-main-2 text-[length:var(--desktop-p-md-font-size)] tracking-[var(--desktop-p-md-letter-spacing)] leading-[var(--desktop-p-md-line-height)] whitespace-nowrap [font-style:var(--desktop-p-md-font-style)]">
                 {work.method.split('\n').map((line, index) => (
-                  <div key={index}>{line}</div>
+                  <div className="pt-2" key={index}>{line}</div>
                 ))}
               </p>
             </div>
