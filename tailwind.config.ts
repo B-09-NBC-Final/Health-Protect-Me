@@ -113,7 +113,6 @@ const config = {
         Pretendard: ['"Pretendard"', 'sans-serif']
       },
       screens: {
-        m: { max: '1460px' },
         s: { max: '1023px' },
         xs: { max: '767px' }
       },
@@ -121,7 +120,7 @@ const config = {
         'container-l': '1440px',
         'container-m': '1024px',
         'container-s': '768px',
-        'container-xs': '360px'
+        'container-xs': '100%'
       }
     }
   },

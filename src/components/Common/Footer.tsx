@@ -7,7 +7,7 @@ import instagramIcon from '@/assets/icons/icon_instar.png';
 const Footer = () => {
   return (
     <footer className="w-full bg-white z-10">
-      <div className="flex flex-col justify-start px-10 py-6 mx-auto max-w-container-l m:max-w-container-m s:max-w-container-s xs:max-w-container-xs s:px-5">
+      <div className="flex flex-col justify-start px-10 py-6 mx-auto max-w-container-l m:max-w-container-m s:max-w-container-s xs:max-w-container-xs xs:px-5">
         <div className="flex items-start justify-between w-[280px]">
           <Link href={'/'}>
             <Image src={logo} alt="logo" width={100} height={28} />
