@@ -24,10 +24,10 @@ const MainPage = () => {
       <Header />
       <main className="w-full bg-default">
         <MainContent />
-        <section className="swiper-area s:h-full s:py-20">
-          <div className="max-w-container-l mx-auto flex justify-between px-10 m:max-w-container-m s:max-w-container-s xs:max-w-container-xs xs:px-5 s:block">
+        <section className="swiper-area ml:h-full ml:py-20">
+          <div className="ml:max-w-container-ml max-w-container-l mx-auto flex justify-between px-10 s:max-w-container-s xs:max-w-container-xs xs:px-5 ml:block">
             <MainSwiper />
-            <div className="flex flex-col justify-center items-center s:block s:py-20 s:text-center">
+            <div className="flex flex-col justify-center items-center ml:block ml:py-20 ml:text-center">
               <p className="text-white text-2xl font-medium">사용자들의 이야기</p>
               <p className="text-white opacity-60">추천 식단과 함께한 경험</p>
             </div>
@@ -36,9 +36,9 @@ const MainPage = () => {
         </section>
         <section className="max-w-container-l mx-auto px-10 m:max-w-container-m s:max-w-container-s xs:max-w-container-xs xs:px-5">
           <ul className="pb-40 s:pb-20">
-            <li className="flex justify-between pt-40 pl-40 s:flex-col s:pt-20 s:pl-0">
-              <div className="pt-[156px] s:pt-0">
-                <p className="text-main-title2 text-gray900 font-medium leading-tight tracking-tight s:text-2xl">
+            <li className="flex justify-between pt-40 pl-40 ml:pl-0 s:flex-col s:pt-20 s:pl-0">
+              <div className="flex flex-col justify-center mr-10 s:pt-0 s:mr-0">
+                <p className="text-main-title2 text-gray900 font-medium leading-tight tracking-tight ml:text-[36px] s:text-2xl">
                   나에게 맞는 <br />
                   맞춤 식단을 간편하게 확인
                 </p>
@@ -55,8 +55,8 @@ const MainPage = () => {
               <div data-aos="fade-right">
                 <Image src={main02} alt="간편하게, 나만을 위한 맞춤형 건강 솔루션" width={600} height={480} />
               </div>
-              <div className="w-[600px] pt-[156px] s:pt-0 s:w-full">
-                <p className="text-main-title2 text-gray900 font-medium leading-tight tracking-tight s:text-2xl">
+              <div className="flex flex-col justify-center w-[600px] ml-10 s:pt-0 s:w-full s:ml-0">
+                <p className="text-main-title2 text-gray900 font-medium leading-tight tracking-tight ml:text-[36px] s:text-2xl">
                   목표 달성을 <br />
                   도와줄 최적화된 운동 플랜
                 </p>
@@ -66,9 +66,9 @@ const MainPage = () => {
                 </p>
               </div>
             </li>
-            <li className="flex justify-between pt-40 pl-40 s:flex-col s:pt-20 s:pl-0">
-              <div className="pt-[156px] s:pt-0">
-                <p className="text-main-title2 text-gray900 font-medium leading-tight tracking-tight s:text-2xl">
+            <li className="flex justify-between pt-40 pl-40 ml:pl-0 s:flex-col s:pt-20 s:pl-0">
+              <div className="flex flex-col justify-center mr-10 s:pt-0 s:mr-0">
+                <p className="text-main-title2 text-gray900 font-medium leading-tight tracking-tight ml:text-[36px] s:text-2xl">
                   건강한 <br />
                   라이프스타일을 위한 커뮤니티
                 </p>

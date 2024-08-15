@@ -24,11 +24,11 @@ const MainSwiperReverse = () => {
       direction={'horizontal'}
       loop={true}
       speed={4000}
-      // autoplay={{
-      //   delay: 0,
-      //   disableOnInteraction: false,
-      //   reverseDirection: true
-      // }}
+      autoplay={{
+        delay: 0,
+        disableOnInteraction: false,
+        reverseDirection: true
+      }}
       breakpoints={{
         767: {
           direction: 'horizontal',
@@ -42,7 +42,7 @@ const MainSwiperReverse = () => {
         }
       }}
     >
-      <SwiperSlide className="relative cursor-pointer !h-[260px] s:!h-[230px] s:!w-[420px] xs:!h-[146px] xs:!w-[270px]">
+      <SwiperSlide className="relative cursor-pointer !h-[260px] ml:!h-[230px] ml:!w-[420px] s:!h-[230px] s:!w-[420px] xs:!h-[146px] xs:!w-[270px]">
         <Image src={Card11} alt="" width={480} height={260} />
         <div className="text-area xs:!p-4 xs:!pb-2 s:rounded-2xl">
           <div>
@@ -57,7 +57,7 @@ const MainSwiperReverse = () => {
           </div>
         </div>
       </SwiperSlide>
-      <SwiperSlide className="relative cursor-pointer !h-[260px] s:!h-[230px] s:!w-[420px] xs:!h-[146px] xs:!w-[270px]">
+      <SwiperSlide className="relative cursor-pointer !h-[260px] ml:!h-[230px] ml:!w-[420px] s:!h-[230px] s:!w-[420px] xs:!h-[146px] xs:!w-[270px]">
         <Image src={Card12} alt="" width={480} height={260} />
         <div className="text-area xs:!p-4 xs:!pb-2 s:rounded-2xl">
           <div>
@@ -74,7 +74,7 @@ const MainSwiperReverse = () => {
           </div>
         </div>
       </SwiperSlide>
-      <SwiperSlide className="relative cursor-pointer !h-[260px] s:!h-[230px] s:!w-[420px] xs:!h-[146px] xs:!w-[270px]">
+      <SwiperSlide className="relative cursor-pointer !h-[260px] ml:!h-[230px] ml:!w-[420px] s:!h-[230px] s:!w-[420px] xs:!h-[146px] xs:!w-[270px]">
         <Image src={Card13} alt="" width={480} height={260} />
         <div className="text-area xs:!p-4 xs:!pb-2 s:rounded-2xl">
           <div>
@@ -92,7 +92,7 @@ const MainSwiperReverse = () => {
           </div>
         </div>
       </SwiperSlide>
-      <SwiperSlide className="relative cursor-pointer !h-[260px] s:!h-[230px] s:!w-[420px] xs:!h-[146px] xs:!w-[270px]">
+      <SwiperSlide className="relative cursor-pointer !h-[260px] ml:!h-[230px] ml:!w-[420px] s:!h-[230px] s:!w-[420px] xs:!h-[146px] xs:!w-[270px]">
         <Image src={Card14} alt="" width={480} height={260} />
         <div className="text-area xs:!p-4 xs:!pb-2 s:rounded-2xl">
           <div>
@@ -107,7 +107,7 @@ const MainSwiperReverse = () => {
           </div>
         </div>
       </SwiperSlide>
-      <SwiperSlide className="relative cursor-pointer !h-[260px] s:!h-[230px] s:!w-[420px] xs:!h-[146px] xs:!w-[270px]">
+      <SwiperSlide className="relative cursor-pointer !h-[260px] ml:!h-[230px] ml:!w-[420px] s:!h-[230px] s:!w-[420px] xs:!h-[146px] xs:!w-[270px]">
         <Image src={Card15} alt="" width={480} height={260} />
         <div className="text-area xs:!p-4 xs:!pb-2 s:rounded-2xl">
           <div>
@@ -122,7 +122,7 @@ const MainSwiperReverse = () => {
           </div>
         </div>
       </SwiperSlide>
-      <SwiperSlide className="relative cursor-pointer !h-[260px] s:!h-[230px] s:!w-[420px] xs:!h-[146px] xs:!w-[270px]">
+      <SwiperSlide className="relative cursor-pointer !h-[260px] ml:!h-[230px] ml:!w-[420px] s:!h-[230px] s:!w-[420px] xs:!h-[146px] xs:!w-[270px]">
         <Image src={Card16} alt="" width={480} height={260} />
         <div className="text-area xs:!p-4 xs:!pb-2 s:rounded-2xl">
           <div>
@@ -139,7 +139,7 @@ const MainSwiperReverse = () => {
           </div>
         </div>
       </SwiperSlide>
-      <SwiperSlide className="relative cursor-pointer !h-[260px] s:!h-[230px] s:!w-[420px] xs:!h-[146px] xs:!w-[270px]">
+      <SwiperSlide className="relative cursor-pointer !h-[260px] ml:!h-[230px] ml:!w-[420px] s:!h-[230px] s:!w-[420px] xs:!h-[146px] xs:!w-[270px]">
         <Image src={Card17} alt="" width={480} height={260} />
         <div className="text-area xs:!p-4 xs:!pb-2 s:rounded-2xl">
           <div>

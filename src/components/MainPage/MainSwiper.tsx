@@ -24,10 +24,10 @@ const MainSwiper = () => {
       direction={'horizontal'}
       loop={true}
       speed={4000}
-      // autoplay={{
-      //   delay: 0,
-      //   disableOnInteraction: false
-      // }}
+      autoplay={{
+        delay: 0,
+        disableOnInteraction: false
+      }}
       breakpoints={{
         767: {
           direction: 'horizontal',
@@ -41,7 +41,7 @@ const MainSwiper = () => {
         }
       }}
     >
-      <SwiperSlide className="relative cursor-pointer !h-[260px] s:!h-[230px] s:!w-[420px] xs:!h-[146px] xs:!w-[270px]">
+      <SwiperSlide className="relative cursor-pointer !h-[260px] ml:!h-[230px] ml:!w-[420px] xs:!h-[146px] xs:!w-[270px]">
         <Image src={Card01} alt="" width={480} height={260} />
         <div className="text-area xs:!p-4 xs:!pb-2">
           <div>
@@ -59,7 +59,7 @@ const MainSwiper = () => {
           </div>
         </div>
       </SwiperSlide>
-      <SwiperSlide className="relative cursor-pointer !h-[260px] s:!h-[230px] s:!w-[420px] xs:!h-[146px] xs:!w-[270px]">
+      <SwiperSlide className="relative cursor-pointer !h-[260px] ml:!h-[230px] ml:!w-[420px] s:!h-[230px] s:!w-[420px] xs:!h-[146px] xs:!w-[270px]">
         <Image src={Card02} alt="" width={480} height={260} />
         <div className="text-area xs:!p-4 xs:!pb-2">
           <div>
@@ -74,7 +74,7 @@ const MainSwiper = () => {
           </div>
         </div>
       </SwiperSlide>
-      <SwiperSlide className="relative cursor-pointer !h-[260px] s:!h-[230px] s:!w-[420px] xs:!h-[146px] xs:!w-[270px]">
+      <SwiperSlide className="relative cursor-pointer !h-[260px] ml:!h-[230px] ml:!w-[420px] s:!h-[230px] s:!w-[420px] xs:!h-[146px] xs:!w-[270px]">
         <Image src={Card03} alt="" width={480} height={260} />
         <div className="text-area xs:!p-4 xs:!pb-2">
           <div>
@@ -92,7 +92,7 @@ const MainSwiper = () => {
           </div>
         </div>
       </SwiperSlide>
-      <SwiperSlide className="relative cursor-pointer !h-[260px] s:!h-[230px] s:!w-[420px] xs:!h-[146px] xs:!w-[270px]">
+      <SwiperSlide className="relative cursor-pointer !h-[260px] ml:!h-[230px] ml:!w-[420px] s:!h-[230px] s:!w-[420px] xs:!h-[146px] xs:!w-[270px]">
         <Image src={Card04} alt="" width={480} height={260} />
         <div className="text-area xs:!p-4 xs:!pb-2">
           <div>
@@ -107,7 +107,7 @@ const MainSwiper = () => {
           </div>
         </div>
       </SwiperSlide>
-      <SwiperSlide className="relative cursor-pointer !h-[260px] s:!h-[230px] s:!w-[420px] xs:!h-[146px] xs:!w-[270px]">
+      <SwiperSlide className="relative cursor-pointer !h-[260px] ml:!h-[230px] ml:!w-[420px] s:!h-[230px] s:!w-[420px] xs:!h-[146px] xs:!w-[270px]">
         <Image src={Card05} alt="" width={480} height={260} />
         <div className="text-area xs:!p-4 xs:!pb-2">
           <div>
@@ -125,7 +125,7 @@ const MainSwiper = () => {
           </div>
         </div>
       </SwiperSlide>
-      <SwiperSlide className="relative cursor-pointer !h-[260px] s:!h-[230px] s:!w-[420px] xs:!h-[146px] xs:!w-[270px]">
+      <SwiperSlide className="relative cursor-pointer !h-[260px] ml:!h-[230px] ml:!w-[420px] s:!h-[230px] s:!w-[420px] xs:!h-[146px] xs:!w-[270px]">
         <Image src={Card06} alt="" width={480} height={260} />
         <div className="text-area xs:!p-4 xs:!pb-2">
           <div>
@@ -144,7 +144,7 @@ const MainSwiper = () => {
           </div>
         </div>
       </SwiperSlide>
-      <SwiperSlide className="relative cursor-pointer !h-[260px] s:!h-[230px] s:!w-[420px] xs:!h-[146px] xs:!w-[270px]">
+      <SwiperSlide className="relative cursor-pointer !h-[260px] ml:!h-[230px] ml:!w-[420px] s:!h-[230px] s:!w-[420px] xs:!h-[146px] xs:!w-[270px]">
         <Image src={Card07} alt="" width={480} height={260} />
         <div className="text-area xs:!p-4 xs:!pb-2">
           <div>
