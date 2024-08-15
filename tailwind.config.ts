@@ -48,7 +48,8 @@ const config = {
           foreground: 'hsl(var(--card-foreground))'
         },
         primary600: '#F5637C',
-        gray500: '95989D',
+        gray300: '#D5D6D8',
+        gray500: '#95989D',
         gray600: '#76797F',
         gray800: '#404145',
         gray900: '#27282A',
@@ -110,7 +111,7 @@ const config = {
         'mobile-main-height': 'calc(100vh - 188px)'
       },
       fontFamily: {
-        Pretendard: ['"Pretendard"', 'sans-serif']
+        Pretendard: ['Pretendard', 'sans-serif']
       },
       screens: {
         s: { max: '1023px' },
