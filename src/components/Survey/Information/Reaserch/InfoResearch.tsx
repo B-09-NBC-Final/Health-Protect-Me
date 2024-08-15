@@ -293,12 +293,12 @@ const InfoResearch = (): JSX.Element => {
       case '성별':
         return (
           <div className="flex flex-col mb-2">
-            <h2 className="text-xl font-semibold mb-2 text-center text-gray-900">성별을 선택해 주세요</h2>
-            <p className="text-sm text-gray-600 mb-10 text-center">성별에 따라 일일 권장 칼로리 섭취량이 달라집니다</p>
-            <div className="flex space-x-2 gap-4 sm:flex-row flex-col s:space-y-0 space-y-2">
+            <h2 className="text-xl font-semibold mb-2 text-center text-gray-900 s:mt-20">성별을 선택해 주세요</h2>
+            <p className="text-sm text-gray-600 mb-4 s:mb-6 text-center">성별에 따라 일일 권장 칼로리 섭취량이 달라집니다</p>
+            <div className="flex space-x-2 gap-4 s:flex-row flex-col s:space-y-0 space-y-2">
               <button
                 onClick={() => handleGenderSelect('남')}
-                className={`w-full s:w-48 h-12 py-3 px-4 text-base border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-red-400 transition duration-200 ${
+                className={`w-full s:flex-1 s:w-36 h-12 py-3 s:py-3 s:text-center px-4 text-base border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-red-400 transition duration-200 ${
                   surveyData.gender === '남' ? 'bg-[#FFF6F2] text-black' : 'bg-white text-gray-700'
                 }`}
               >
@@ -306,7 +306,7 @@ const InfoResearch = (): JSX.Element => {
               </button>
               <button
                 onClick={() => handleGenderSelect('여')}
-                className={`w-full s:w-48 h-12 py-3 px-4 text-base border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-400 transition duration-200 ${
+                className={`w-full s:w-36 h-12 s:ml-0 py-3 px-4 text-base border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-red-400 transition duration-200 ${
                   surveyData.gender === '여' ? 'bg-[#FFF6F2] text-black' : 'bg-white text-gray-700'
                 }`}
               >
@@ -319,19 +319,19 @@ const InfoResearch = (): JSX.Element => {
       case '신장 및 체중':
         return (
           <div ref={stepRefs.current[2]} className="flex-col justify-center items-center text-center">
-            <h2 className="text-xl font-semibold mb-2 text-center text-gray-900">신장과 체중을 입력해주세요</h2>
-            <p className="text-sm text-gray-600 mb-10 text-center">
+            <h2 className="text-xl font-semibold mb-2 text-center text-gray-900 s:mt-20">신장과 체중을 입력해주세요</h2>
+            <p className="text-sm text-gray-600 mb-4 s:mb-6 text-center">
               신장과 체중에 따라 일일 권장 칼로리 섭취량이 달라집니다
             </p>
             <div className="mb-6">
-              <label className="flex text-sm font-normal text-gray-700">신장</label>
+              <label className="flex mb-1 text-sm font-normal text-gray-700">신장</label>
               <input
                 type="text"
                 name="height"
                 placeholder="cm (예: 170)"
                 value={surveyData.height ?? ''}
                 onChange={handleInputChange}
-                className={`w-full p-3 text-sm border rounded focus:outline-none focus:ring-1 ${
+                className={`w-full s:flex p-3 text-sm s:self-stretch border rounded focus:outline-none focus:ring-1 ${
                   surveyData.height !== null && !/^1\d{2}$/.test(surveyData.height.toString())
                     ? 'border-red-500 focus:ring-red-500 focus:border-red-500'
                     : 'focus:ring-[#49BA43] focus:border-[#49BA43]'
@@ -342,14 +342,14 @@ const InfoResearch = (): JSX.Element => {
               )}
             </div>
             <div>
-              <label className="flex text-sm font-normal text-gray-700">체중</label>
+              <label className="flex s:mt-6 mb-1 text-sm font-normal text-gray-700">체중</label>
               <input
                 type="text"
                 name="weight"
                 placeholder="kg (예: 65)"
                 value={surveyData.weight ?? ''}
                 onChange={handleInputChange}
-                className={`w-full p-3 text-sm border rounded focus:outline-none focus:ring-1 ${
+                className={`w-full p-3 s:flex s:self-stretch text-sm border rounded focus:outline-none focus:ring-1 ${
                   surveyData.weight !== null && !/^\d{2,3}$/.test(surveyData.weight.toString())
                     ? 'border-red-500 focus:ring-red-500 focus:border-red-500'
                     : 'focus:ring-[#49BA43] focus:border-[#49BA43]'
@@ -411,7 +411,7 @@ const InfoResearch = (): JSX.Element => {
           {currentStepIndex > 0 && (
             <Button
               onClick={preStep}
-              className="flex w-full s:w-56 s:mb-[332px] h-12 items-center justify-center py-3 text-base text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-1 focus:ring-gray-400 transition duration-200"
+              className="s:hidden flex w-full s:w-56 s:mb-[332px] h-12 items-center justify-center py-3 text-base text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-1 focus:ring-gray-400 transition duration-200"
             >
               이전
             </Button>
