@@ -101,12 +101,6 @@ html {
   color: #76797f;
 }
 
-.inner_wrap {
-  max-width: 1440px;
-  padding: 0 40px;
-  margin: 0 auto;
-}
-
 .swiper {
   margin: 0 !important;
   overflow: visible !important;

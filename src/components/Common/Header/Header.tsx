@@ -22,7 +22,7 @@ const Header = () => {
         <nav>
           {user ? (
             <>
-              <ul className="hidden md:flex items-center px-0 gap-10 ">
+              <ul className="xs:hidden flex items-center px-0 gap-10">
                 <li>
                   <Link href={'/info-detail'} className="hover-effect">
                     나만의 식단
@@ -41,7 +41,7 @@ const Header = () => {
                 )}
               </ul>
               {isMobile && (
-                <div className="md:hidden block">
+                <div className="hidden xs:flex">
                   <Dropdown />
                 </div>
               )}
