@@ -24,8 +24,8 @@ const MainPage = () => {
       <Header />
       <main className="w-full bg-default">
         <MainContent />
-        <section className="swiper-area">
-          <div className="max-w-container-l mx-auto flex justify-between px-10 m:max-w-container-m s:max-w-container-s xs:max-w-container-xs s:px-5">
+        <section className="swiper-area s:h-full s:py-20">
+          <div className="max-w-container-l mx-auto flex justify-between px-10 m:max-w-container-m s:max-w-container-s xs:max-w-container-xs xs:px-5 s:block">
             <MainSwiper />
             <div className="flex flex-col justify-center items-center">
               <p className="text-white text-2xl font-medium">사용자들의 이야기</p>
@@ -34,7 +34,7 @@ const MainPage = () => {
             <MainSwiperReverse />
           </div>
         </section>
-        <section className="max-w-container-l mx-auto px-10 m:max-w-container-m s:max-w-container-s xs:max-w-container-xs s:px-5">
+        <section className="max-w-container-l mx-auto px-10 m:max-w-container-m s:max-w-container-s xs:max-w-container-xs xs:px-5">
           <ul className="pb-40">
             <li className="flex justify-between pt-40 pl-40">
               <div className="pt-[156px]">
