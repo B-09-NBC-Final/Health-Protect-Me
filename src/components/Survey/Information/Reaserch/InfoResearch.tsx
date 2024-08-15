@@ -47,7 +47,7 @@ const InfoResearch = (): JSX.Element => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     if (name === 'weight' || name === 'height' || name === 'year_of_birth') {
-      // 숫자만 허용하고, 빈 문자열이면 null로 설정함.
+      // 숫자만 허용하고, 빈 문자열이면 null로 설정
       const allowNumValue = value.replace(/[^0-9]/g, '');
       setSurveyData((prevData) => ({
         ...prevData,
@@ -102,9 +102,8 @@ const InfoResearch = (): JSX.Element => {
   const parseAiResults = (result: string) => {
     if (!result) return null;
 
-    const days = result.split('@').slice(1); // 첫 번째 항목은 빈 문자열이므로 제거
+    const days = result.split('@').slice(1); 
 
-    // 각 날짜에 대해 식단과 운동 정보를 각각 파싱
     const dietPlans = days.map((day) => parseDiet(day));
     const exercises = days.map((day) => parseExercise(day.split('~추천운동')[1]));
 
@@ -267,7 +266,9 @@ const InfoResearch = (): JSX.Element => {
         return (
           <div>
             <h2 className="text-xl font-semibold mb-2 text-center text-gray-900 s:mt-20">출생연도를 입력해주세요</h2>
-            <p className="text-sm text-gray-600 mb-4 s:mb-6 text-center">연령에 따라 일일 권장 칼로리 섭취량이 달라집니다</p>
+            <p className="text-sm text-gray-600 mb-4 s:mb-6 text-center">
+              연령에 따라 일일 권장 칼로리 섭취량이 달라집니다
+            </p>
             <br />
             <div className="mb-4  ">
               <label className="block s:mb-1 text-sm mb-2 font-medium text-gray-700">출생연도</label>
@@ -294,8 +295,10 @@ const InfoResearch = (): JSX.Element => {
         return (
           <div className="flex flex-col mb-2">
             <h2 className="text-xl font-semibold mb-2 text-center text-gray-900 s:mt-20">성별을 선택해 주세요</h2>
-            <p className="text-sm text-gray-600 mb-4 s:mb-6 text-center">성별에 따라 일일 권장 칼로리 섭취량이 달라집니다</p>
-            <div className="flex space-x-2 gap-4 s:flex-row flex-col s:space-y-0 space-y-2">
+            <p className="text-sm text-gray-600 mb-4 s:mb-6 text-center">
+              성별에 따라 일일 권장 칼로리 섭취량이 달라집니다
+            </p>
+            <div className="flex space-x-2 gap-4 s:flex-row  s:space-y-0 ">
               <button
                 onClick={() => handleGenderSelect('남')}
                 className={`w-full s:flex-1 s:w-36 h-12 py-3 s:py-3 s:text-center px-4 text-base border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-red-400 transition duration-200 ${
@@ -331,7 +334,7 @@ const InfoResearch = (): JSX.Element => {
                 placeholder="cm (예: 170)"
                 value={surveyData.height ?? ''}
                 onChange={handleInputChange}
-                className={`w-full s:flex p-3 text-sm s:self-stretch border rounded focus:outline-none focus:ring-1 ${
+                className={`w-full s:flex p-3 text-sm border rounded focus:outline-none focus:ring-1 ${
                   surveyData.height !== null && !/^1\d{2}$/.test(surveyData.height.toString())
                     ? 'border-red-500 focus:ring-red-500 focus:border-red-500'
                     : 'focus:ring-[#49BA43] focus:border-[#49BA43]'
@@ -349,7 +352,7 @@ const InfoResearch = (): JSX.Element => {
                 placeholder="kg (예: 65)"
                 value={surveyData.weight ?? ''}
                 onChange={handleInputChange}
-                className={`w-full p-3 s:flex s:self-stretch text-sm border rounded focus:outline-none focus:ring-1 ${
+                className={`w-full p-3 s:flex text-sm border rounded focus:outline-none focus:ring-1 ${
                   surveyData.weight !== null && !/^\d{2,3}$/.test(surveyData.weight.toString())
                     ? 'border-red-500 focus:ring-red-500 focus:border-red-500'
                     : 'focus:ring-[#49BA43] focus:border-[#49BA43]'
@@ -365,10 +368,10 @@ const InfoResearch = (): JSX.Element => {
       case '식단 목적':
         return (
           <div ref={stepRefs.current[4]} className="mb-4">
-            <h2 className="text-xl font-semibold mb-2 text-center text-gray-900">
+            <h2 className="text-xl font-semibold mb-2 text-center text-gray-900 s:mt-20">
               식단을 통해 이루고자 하는 목표를 알려주세요
             </h2>
-            <p className="text-sm text-gray-600 mb-10 text-center">
+            <p className="text-sm text-gray-600 mb-4 s:mb-6 text-center">
               선택한 목표에 가장 최적화된 식단과 운동을 추천해 드려요
             </p>
             <div className="flex flex-col justify-center items-center gap-4">
@@ -400,7 +403,7 @@ const InfoResearch = (): JSX.Element => {
         <h1 className="text-3xl font-bold mb-8 text-center text-gray-800 sr-only">{steps[currentStepIndex]}</h1>
         <div className="w-full mb-10 s:mb-0 mt-20 s:mt-10 bg-gray-200 rounded-full h-2 s:w-80 s:h-[12px] s:flex s:item-center s:pr-[240px]">
           <div
-            className="bg-red-400 h-2 rounded-full transition-all duration-500 ease-in-out s:w-20 s:h-[12px] s:shrink-0 "
+            className="bg-red-400 h-2 rounded-full transition-all duration-500 ease-in-out s:w-20 "
             style={{ width: `${((currentStepIndex + 1) / steps.length) * 100}%` }}
           ></div>
         </div>
@@ -411,7 +414,7 @@ const InfoResearch = (): JSX.Element => {
           {currentStepIndex > 0 && (
             <Button
               onClick={preStep}
-              className="s:hidden flex w-full s:w-56 s:mb-[332px] h-12 items-center justify-center py-3 text-base text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-1 focus:ring-gray-400 transition duration-200"
+              className="s:hidden flex w-56 s:w-56 s:mb-[332px] h-12 items-center justify-center py-3 text-base text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-1 focus:ring-gray-400 transition duration-200"
             >
               이전
             </Button>
@@ -420,7 +423,7 @@ const InfoResearch = (): JSX.Element => {
             <Button
               onClick={nextStep}
               disabled={!isStepValid()}
-              className="flex w-full s:w-56 h-12 s:mb-[332px] items-center justify-center text-base bg-[#FF7A85] text-white py-3 rounded-lg hover:bg-[#FF7A85] transition duration-300"
+              className="flex w-56 s:w-56 h-12 s:mb-[332px] items-center justify-center text-base bg-[#FF7A85] text-white py-3 rounded-lg hover:bg-[#FF7A85] transition duration-300"
             >
               다음
             </Button>
@@ -428,7 +431,7 @@ const InfoResearch = (): JSX.Element => {
             <Button
               onClick={saveDataToSupabase}
               disabled={!isStepValid()}
-              className="flex w-full s:w-56 h-12 items-center justify-center text-base bg-[#FF7A85] text-white py-3 rounded-lg hover:bg-[#FF7A85] transition duration-300"
+              className="flex w-full s:w-56 h-12 s:mb-[332px] items-center justify-center text-base bg-[#FF7A85] text-white py-3 rounded-lg hover:bg-[#FF7A85] transition duration-300"
             >
               결과보기
             </Button>
