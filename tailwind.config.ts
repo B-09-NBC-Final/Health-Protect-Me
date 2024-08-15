@@ -114,8 +114,8 @@ const config = {
       },
       screens: {
         m: { max: '1460px' },
-        s: { max: '1044px' },
-        xs: { max: '788px' }
+        s: { max: '1023px' },
+        xs: { max: '767px' }
       },
       maxWidth: {
         'container-l': '1440px',

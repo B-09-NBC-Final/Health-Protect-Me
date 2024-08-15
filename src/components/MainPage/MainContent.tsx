@@ -33,10 +33,10 @@ const MainContent = () => {
     }
   };
   return (
-    <section className="inner_wrap">
+    <section className="max-w-container-l mx-auto px-10 m:max-w-container-m s:max-w-container-s xs:max-w-container-xs s:px-5">
       <div className="flex justify-between items-end py-40">
         <div className="pb-20">
-          <h2 className="text-5xl font-medium leading-tight mb-10 tracking-tight">
+          <h2 className="text-5xl font-medium leading-tight mb-10 tracking-tight m:text-xl">
             간편하게, 나만을 위한 <br />
             맞춤형 건강 솔루션
           </h2>
@@ -46,13 +46,15 @@ const MainContent = () => {
             hover="hover:shadow-main-btn-hover hover:bg-pramary600"
           ></Button>
         </div>
-        <Image
-          src={Thumbnail}
-          alt="간편하게, 나만을 위한 맞춤형 건강 솔루션"
-          width={790}
-          height={606}
-          loading="eager"
-        />
+        <div className="m:w-[590px] ml-10">
+          <Image
+            src={Thumbnail}
+            alt="간편하게, 나만을 위한 맞춤형 건강 솔루션"
+            width={790}
+            height={606}
+            loading="eager"
+          />
+        </div>
       </div>
     </section>
   );
