@@ -138,7 +138,7 @@ const TextareaPage = () => {
         />
         <div className="flex mt-2">
           {contentError && <p className="text-backgroundError text-sm s:w-1/2">{contentError}</p>}
-          <p className="ml-auto text-gray600 text-sm sm:w-1/2 s:text-right">{content.length}/500</p>
+          <p className="ml-auto text-gray600 text-sm s:w-1/2 s:text-right">{content.length}/500</p>
         </div>
       </div>
       <ImageUpload fileInfos={fileInfos} setFileInfos={setFileInfos} setImageError={setImageError} />
