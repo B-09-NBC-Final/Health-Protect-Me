@@ -39,7 +39,7 @@ const LoginButton = () => {
         alt="Google Login"
         width={320}
         height={52}
-        className="cursor-pointer"
+        className="cursor-pointer "
       />
     </div>
   );
