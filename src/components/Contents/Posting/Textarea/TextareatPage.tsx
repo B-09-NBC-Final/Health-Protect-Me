@@ -115,7 +115,7 @@ const TextareaPage = () => {
   return (
     <div className="w-full max-w-[800px] mx-auto pb-[188px] px-4 s:px-0 s:pb-6">
       <h2 className="text-lg font-semibold mb-4">포스트 작성</h2>
-      <div className='mb-6 s:mb-0'>
+      <div className="mb-6 s:mb-0">
         <CategoryMain
           categories={categories}
           selectedCategories={selectedCategory}
@@ -141,12 +141,13 @@ const TextareaPage = () => {
           <p className="ml-auto text-gray600 text-sm s:w-1/2 s:text-right">{content.length}/500</p>
         </div>
       </div>
+
       <ImageUpload fileInfos={fileInfos} setFileInfos={setFileInfos} setImageError={setImageError} />
       {imageError && <div className="text-backgroundError mt-1 text-sm">{imageError}</div>}
       {error && <div className="text-red-500 mt-4">{error}</div>}
 
-      <div className="mt-10">
-      <div className="flex justify-center gap-4 s:flex-row s:flex s:justify-center s:space-y-0 s:space-x-4">
+      <div className="mt-6">
+        <div className="flex justify-center gap-4 s:flex-row s:flex s:justify-center s:space-y-0 s:space-x-4">
           <Button
             buttonName="취소"
             onClick={() => router.push('/posting-main')}
