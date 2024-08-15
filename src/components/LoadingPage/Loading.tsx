@@ -1,9 +1,8 @@
-'use client'
-import styles from './Loading.module.css'
+'use client';
+import styles from './Loading.module.css';
 
 const LoadingPage = () => {
-  const loadingText = "Loading...";
-  const additionalText = "잠시만 기다려주세요. 곧 결과가 나옵니다";
+  const loadingText = 'Loading...';
 
   return (
     <div className={styles.loadingContainer}>
@@ -16,16 +15,6 @@ const LoadingPage = () => {
       <div className={styles.loadingText}>
         {loadingText.split('').map((char, index) => (
           <span key={index} style={{ animationDelay: `${0.1 * index}s` }}>
-            {char}
-          </span>
-        ))}
-      </div>
-      <div className={styles.additionalText}>
-        {additionalText.split('').map((char, index) => (
-          <span key={index} style={{ 
-            animationDelay: `${0.05 * index}s`,
-            animation: `${styles.fadeIn} 0.5s ease-in-out forwards`
-          }}>
             {char}
           </span>
         ))}

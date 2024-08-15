@@ -69,7 +69,7 @@ const ImageUpload = ({ fileInfos, setFileInfos, setImageError }: ImageUploadProp
   };
 
   return (
-    <div className="flex pb-10 border-b border-solid border-gray200">
+    <div className="flex pb-10 border-b border-solid border-gray200 s:pb-6 s:mt-4">
       {fileInfos.length < 3 && (
         <div className="flex">
           <label className="flex flex-col items-center cursor-pointer border border-solid border-gray300 rounded-lg p-2 w-[76px] h-[76px]">
