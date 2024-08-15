@@ -27,7 +27,7 @@ const MainPage = () => {
         <section className="swiper-area s:h-full s:py-20">
           <div className="max-w-container-l mx-auto flex justify-between px-10 m:max-w-container-m s:max-w-container-s xs:max-w-container-xs xs:px-5 s:block">
             <MainSwiper />
-            <div className="flex flex-col justify-center items-center">
+            <div className="flex flex-col justify-center items-center s:block s:py-20 s:text-center">
               <p className="text-white text-2xl font-medium">사용자들의 이야기</p>
               <p className="text-white opacity-60">추천 식단과 함께한 경험</p>
             </div>
