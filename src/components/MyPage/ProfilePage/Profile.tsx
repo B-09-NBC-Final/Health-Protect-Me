@@ -100,8 +100,8 @@ const Profile = () => {
   const bmiStatus = getBMIStatus(bmi);
 
   return (
-    <div className="w-full max-w-[360px] p-4 rounded-2xl border border-gray-300 flex flex-col items-center bg-white">
-      <div className="w-20 h-20 rounded-full overflow-hidden flex items-center justify-center mb-4">
+    <div className="w-[400px] h-[472px] p-6 px-10 rounded-2xl border border-gray-300 flex flex-col items-center bg-white">
+      <div className="w-[120px] h-[120px] overflow-hidden rounded-full object-cover flex items-center justify-center mb-4">
         <Image
           className="rounded-full object-cover"
           src={user.profile_url || DEFAULT_PROFILE_IMAGE}
