@@ -126,7 +126,7 @@ const ProfileForm = ({
 
   return (
     <>
-      <form className="w-[400px] mb-20" onSubmit={(e) => e.preventDefault()}>
+      <form className="w-full max-w-[400px] px-4 s:px-0 mb-20" onSubmit={(e) => e.preventDefault()}>
         <div className="mb-6">
           <label className="block text-left mb-1" htmlFor="nickname">
             닉네임
@@ -180,7 +180,7 @@ const ProfileForm = ({
         </div>
         <div className="mb-4">
           <label className="block text-left mb-1">나의 식단 목표</label>
-          <div className="flex justify-center space-x-2">
+          <div className="flex flex-col s:flex-row justify-center space-y-2 s:space-y-0 s:space-x-2">
             <button type="button" className={getButtonClasses('체중 감량')} onClick={() => setGoal('체중 감량')}>
               체중 감량
             </button>
@@ -192,12 +192,12 @@ const ProfileForm = ({
             </button>
           </div>
         </div>
-        <div className="flex justify-between mt-8">
+        <div className="flex flex-col s:flex-row justify-between mt-8 space-y-4 s:space-y-0 s:space-x-4">
           <Button
             buttonName="취소"
             bgColor="bg-white"
             textColor="text-[#27282A]"
-            buttonWidth="w-48"
+            buttonWidth="w-full s:w-48"
             boxShadow="shadow-none"
             border="border-solid-[#B7B9BD]"
             hover="hover:bg-[#FAFAFA] hover:text-[#27282A] border border-solid-[#B7B9BD]"
@@ -207,7 +207,7 @@ const ProfileForm = ({
             buttonName="저장"
             bgColor={isValid ? 'bg-[#FF7A85]' : 'bg-gray-300'}
             textColor="text-white"
-            buttonWidth="w-48"
+            buttonWidth="w-full s:w-48"
             boxShadow="shadow-none"
             onClick={isValid ? handleSave : undefined}
             hover={isValid ? 'hover:bg-[#F5637C] hover:text-white' : ''}

@@ -199,9 +199,11 @@ const UpdateProfile = (): JSX.Element => {
     );
 
   return (
-    <section className="w-[1360px] ml-auto mx-auto">
-      <h1 className="flex w-[400px] h-8 mb-4 ml-[480px] text-2xl font-medium">프로필 수정</h1>
-      <div className="flex flex-col items-center text-center mb-8 w-full px-4">
+    <section className="w-full max-w-[1360px] mx-auto px-2 sm:px-4 py-4 sm:py-8">
+      <h1 className="text-2xl font-medium text-center sm:text-left mb-4 sm:mb-8 mx-auto sm:mx-0 max-w-[400px]">
+        프로필 수정
+      </h1>
+      <div className="flex flex-col items-center text-center mb-8 w-full px-4 s:mb-6 ">
         <ProfileImage profile_url={user.profile_url || ''} onImageUpload={handleImageUpload} />
         <ProfileForm
           nickname={user.nickname || ''}
@@ -215,12 +217,12 @@ const UpdateProfile = (): JSX.Element => {
           onSave={handleSave}
           onCancel={handleCancel}
         />
-        <div>
+        <div className="w-full flex justify-center sm:justify-start mt-2 sm:mt-4">
           <Button
             buttonName="탈퇴하기"
             bgColor="bg-transparent"
             textColor="text-[#76797F]"
-            buttonWidth="w-[65px]"
+            buttonWidth="w-auto sm:w-[65px]"
             onClick={openDeleteModal}
             boxShadow="shadow-none"
             hover="hover:none"
