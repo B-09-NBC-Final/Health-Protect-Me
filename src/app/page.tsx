@@ -47,7 +47,7 @@ const MainPage = () => {
                   균형잡힌 영양소 정보를 바탕으로 다양한 식단을 안내해 드려요.
                 </p>
               </div>
-              <div data-aos="fade-left">
+              <div data-aos="fade-left" className="s:flex s:justify-end">
                 <Image src={main01} alt="간편하게, 나만을 위한 맞춤형 건강 솔루션" width={600} height={480} />
               </div>
             </li>
@@ -77,7 +77,7 @@ const MainPage = () => {
                   비슷한 목표를 가진 사람들과 소통하고, 성공적인 경험을 나누어 보세요.
                 </p>
               </div>
-              <div data-aos="fade-left">
+              <div data-aos="fade-left" className="s:flex s:justify-end">
                 <Image src={main03} alt="간편하게, 나만을 위한 맞춤형 건강 솔루션" width={600} height={480} />
               </div>
             </li>

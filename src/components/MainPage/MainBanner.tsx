@@ -40,7 +40,7 @@ const MainBanner = () => {
   };
 
   return (
-    <div className="max-w-container-l !py-40 text-center m:max-w-container-m s:max-w-container-s xs:max-w-container-xs xs:px-5 s:!py-20">
+    <div className="max-w-container-l !py-40 text-center mx-auto m:max-w-container-m s:max-w-container-s xs:max-w-container-xs xs:px-5 s:!py-20">
       <h2 className={`${montserrat.className} text-[32px] font-bold mb-2 text-gray900 s:text-2xl`}>
         Health Protect Me
       </h2>
