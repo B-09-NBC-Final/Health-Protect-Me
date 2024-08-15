@@ -377,7 +377,7 @@ const InforDetailPage = () => {
                 textColor="text-primary600"
                 paddingY="py-2"
                 border="border-primary500"
-                buttonWidth="w-[192px]"
+                buttonWidth="w-[160px]"
               >
               </Button>
             </div>
