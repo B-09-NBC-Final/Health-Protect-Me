@@ -22,7 +22,11 @@ const BMIInfo: React.FC<BMIInfoTooltipProps> = ({ bmi }) => {
 
   return (
     <div className="relative inline-block">
-      <div className="flex items-center space-x-1 cursor-pointer" onMouseEnter={() => setShowTooltip(true)} onMouseLeave={() => setShowTooltip(false)}>
+      <div
+        className="flex items-center space-x-1 cursor-pointer"
+        onMouseEnter={() => setShowTooltip(true)}
+        onMouseLeave={() => setShowTooltip(false)}
+      >
         <span className="font-bold text-sm">BMI</span>
         <Info size={16} className="w-3 h-3 sm:w-4 sm:h-4" />
       </div>
@@ -37,21 +41,29 @@ const BMIInfo: React.FC<BMIInfoTooltipProps> = ({ bmi }) => {
           </p>
           <div className="grid grid-cols-4 gap-1 text-[10px] sm:text-xs text-white">
             <div className="bg-blue-500 p-0.5 sm:p-1 rounded text-center">
-              저체중<br/>18.5 미만
+              저체중
+              <br />
+              18.5 미만
             </div>
             <div className="bg-green-500 p-0.5 sm:p-1 rounded text-center">
-              정상<br/>18.5 - 22.9
+              정상
+              <br />
+              18.5 - 22.9
             </div>
             <div className="bg-orange-500 p-0.5 sm:p-1 rounded text-center">
-              과체중<br/>23 - 24.9
+              과체중
+              <br />
+              23 - 24.9
             </div>
             <div className="bg-red-500 p-0.5 sm:p-1 rounded text-center">
-              비만<br/>25 이상
+              비만
+              <br />
+              25 이상
             </div>
           </div>
         </div>
       )}
-      <div className="text-xs text-gray-800">{category}</div>
+      <div className="text-sm text-gray-800">{category}</div>
     </div>
   );
 };
