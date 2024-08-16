@@ -56,18 +56,18 @@ const PostsSection = () => {
   }, []);
 
   return (
-    <div className="w-[880px] s:w-full s:mt-6 px-10 s:px-2 py-6 border border-[#D5D6D8] rounded-2xl bg-white ">
-      <h2 className="text-2xl font-medium mb-4 text-gray900">내가 작성한 글</h2>
-      <div className="h-[600px] s:h-full overflow-y-auto pr-4 custom-scrollbar">
-        <div className="grid grid-cols-1 gap-6 s:gap-0">
+    <div className="max-w-[880px] s:w-full s:mt-6 px-10 s:px-4 py-6 border border-[#D5D6D8] rounded-2xl bg-white">
+      <h2 className="text-2xl font-medium mb-4 text-gray900 s:font-[600]">내가 작성한 글</h2>
+      <div className="h-[600px] s:h-full overflow-y-auto custom-scrollbar">
+        <div className="flex flex-wrap gap-8">
           {posts.length > 0 ? (
             posts.map((post) => (
-              <article key={post.id} className="mb-6">
+              <article key={post.id} className="mb-6 w-[240px] s:w-full">
                 <Link href={`/posting-detail/${post?.id}`}>
                   <div className="w-full h-48 mb-4 relative">
                     <Image
                       className="object-cover s:border rounded-lg s:mb-4"
-                      src={post.image_url[0] || myPageDefaultImg} 
+                      src={post.image_url[0] || myPageDefaultImg}
                       alt={`Post ${post.id}`}
                       layout="fill"
                     />

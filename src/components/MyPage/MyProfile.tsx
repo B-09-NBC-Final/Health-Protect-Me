@@ -4,7 +4,7 @@ import PostsSection from '@/components/MyPage/ProfilePage/PostsSection';
 const MyProfile = () => {
   return (
     <div className="h-full justify-between s:h-full">
-      <div className="max-w-full  flex-col ">
+      <div className="max-w-full flex justify-between s:flex-col">
         <div className="flex items-start mr-10 s:mr-0">
           <Profile />
         </div>
