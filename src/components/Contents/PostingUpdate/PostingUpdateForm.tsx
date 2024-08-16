@@ -161,30 +161,30 @@ const PostingUpdateForm = ({ params }: { params: { id: string } }) => {
   }, []);
 
   return (
-    <div className="w-[800px] mx-auto">
+    <div className="w-full max-w-[800px] mx-auto pb-[188px] px-4 s:px-0">
       <h2 className="text-lg font-semibold mb-4">포스트 수정</h2>
       <div>
         <input
           type="text"
           placeholder="제목을 입력해 주세요."
-          className="border border-gray300 border-solid p-3 rounded-sm w-full text-gray900 placeholder:text-gray500 hover:border-gray600 focus:outline-none focus:border-secondary600"
+          className="border border-gray300 border-solid p-3 rounded-sm w-full text-gray900 placeholder:text-gray500 hover:border-gray600 focus:outline-none focus:border-secondary600 s:my-1"
           value={title}
           onChange={(e) => validateTitle(e.target.value)}
         />
         {titleError && <p className="text-backgroundError mt-1 text-sm">{titleError}</p>}
         <textarea
           placeholder="식단을 공유하거나, 자유롭게 이야기를 나눠보세요."
-          className="border border-gray300 border-solid p-3 rounded-sm w-full text-gray900 placeholder:text-gray500 hover:border-gray600 focus:outline-none focus:border-secondary600 mt-2 h-[400px]"
+          className="border border-gray300 border-solid p-3 rounded-sm w-full text-gray900 placeholder:text-gray500 hover:border-gray600 focus:outline-none focus:border-secondary600 mt-2 h-[400px] s:h-48"
           value={content}
           onChange={(e) => validateContent(e.target.value)}
         />
-        <div className="flex">
-          {contentError && <p className="text-backgroundError text-sm">{contentError}</p>}
-          <p className="ml-auto text-gray600 text-sm">{content.length}/500</p>
+        <div className="flex mt-2">
+          {contentError && <p className="text-backgroundError text-sm s:w-1/2">{contentError}</p>}
+          <p className="ml-auto text-gray600 text-sm sm:w-1/2 s:text-right">{content.length}/500</p>
         </div>
       </div>
 
-      <div className="pb-10 border-b border-solid border-gray200">
+      <div className="pb-6 border-b border-solid border-gray200">
         <div className="flex mt-4">
           <label className="flex flex-col items-center cursor-pointer border border-solid border-gray300 rounded-lg p-2 w-[76px] h-[76px]">
             <Image src={iconImage} alt="이미지 추가" width={36} height={36} />
@@ -218,8 +218,8 @@ const PostingUpdateForm = ({ params }: { params: { id: string } }) => {
         {imageError && <p className="text-backgroundError text-sm mt-1">{imageError}</p>}
       </div>
 
-      <div className="mt-10">
-        <div className="flex justify-center space-x-4">
+      <div className="mt-6">
+        <div className="flex justify-center space-x-4 s:flex-row s:flex s:justify-center s:space-y-0 s:space-x-4">
           <Button
             buttonName="취소"
             onClick={handleCancel}
@@ -228,8 +228,8 @@ const PostingUpdateForm = ({ params }: { params: { id: string } }) => {
             textColor="text-gray900"
             paddingY="py-2"
             border="border-gray400"
-            buttonWidth="w-[192px]"
-            hover="hover:bg-gray100 hover:border-gray600"
+            buttonWidth="w-[192px] s:w-full s:w-1/4 s:px-3 s:py-2 s:item-center s:h-10"
+            hover="hover:bg-gray100 hover:border-gray600 "
           ></Button>
           <Button
             buttonName="수정 완료"
@@ -239,7 +239,7 @@ const PostingUpdateForm = ({ params }: { params: { id: string } }) => {
             textColor="text-primary600"
             paddingY="py-2"
             border="border-primary500"
-            buttonWidth="w-[192px]"
+            buttonWidth="w-[192px] s:w-full s:px-3 s:py-2 s:item-center s:h-10"
           ></Button>
         </div>
       </div>

@@ -220,3 +220,15 @@ html {
   scrollbar-width: thin;
   scrollbar-color: #888 #f1f1f1;
 }
+
+@media screen and (max-width: 1023px) {
+  html {
+    overflow-x: hidden;
+  }
+  body {
+    overflow-x: hidden;
+  }
+  .swiper-slide::after {
+    border-radius: 10px;
+  }
+}

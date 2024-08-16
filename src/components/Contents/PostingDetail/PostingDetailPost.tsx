@@ -154,7 +154,7 @@ const PostingDetailPost = ({ params }: { params: { id: string } }) => {
             alt=""
             width={40}
             height={40}
-            className="rounded-xl"
+            className="rounded-xl w-10 h-10 object-cover"
           />
           <div className="flex flex-col ml-3 text-gray900">
             {post ? (
