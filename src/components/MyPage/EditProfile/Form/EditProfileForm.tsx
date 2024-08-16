@@ -199,11 +199,12 @@ const ProfileForm = ({
             </button>
           </div>
         </div>
-        <div className="flex justify-between mt-8">
+        <div className="flex justify-between mt-10 s:mt-8 gap-4">
           <Button
             buttonName="취소"
             bgColor="bg-white"
             textColor="text-[#27282A]"
+            paddingY='py-2 s:py-2 px-3 s:px-3'
             buttonWidth="w-full s:w-[152px] "
             boxShadow="shadow-none"
             border="border-solid-[#B7B9BD]"
@@ -214,7 +215,7 @@ const ProfileForm = ({
             buttonName="저장"
             bgColor={isValid ? 'bg-[#FF7A85]' : 'bg-gray-300'}
             textColor="text-white"
-            paddingY='s:py-2 s:px-3'
+            paddingY='py-2 s:py-2 px-3 s:px-3'
             buttonWidth="w-full s:w-[152px]"
             boxShadow="shadow-none"
             onClick={isValid ? handleSave : undefined}
