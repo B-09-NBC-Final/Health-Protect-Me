@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 import { useUserStore } from '@/store/userStore';
 import { useRouter } from 'next/navigation';
 import LoadingAnimation from '@/components/LoadingPage/ResultLoading/Loading';
+import LoadingPage from '@/components/LoadingPage/Loading';
 
 const supabase = createClient();
 
@@ -394,7 +395,7 @@ const InfoResearch = (): JSX.Element => {
 
   return (
     <div className="flex flex-col items-center justify-center">
-      {isLoading && <LoadingAnimation />}
+      {isLoading && <LoadingPage />}
       <div
         className={`w-full s:w-[1360px] max-w-2xl flex flex-col items-center mx-auto px-4 s:px-0 ${
           isLoading ? 'opacity-50' : ''
