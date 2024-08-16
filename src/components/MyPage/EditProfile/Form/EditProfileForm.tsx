@@ -8,8 +8,8 @@ import {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+  AlertDialogTitle
+} from '@/components/ui/alert-dialog';
 import { useRouter } from 'next/navigation';
 
 type ProfileFormProps = {
@@ -95,10 +95,7 @@ const ProfileForm = ({
   };
 
   const handleSave = () => {
-    if (
-      weight !== initialValues.weight ||
-      goal !== initialValues.goal
-    ) {
+    if (weight !== initialValues.weight || goal !== initialValues.goal) {
       setShowAlert(true);
     } else {
       onSave();
@@ -126,9 +123,9 @@ const ProfileForm = ({
 
   return (
     <>
-      <form className="w-full max-w-[400px] px-4 s:px-0 mb-20" onSubmit={(e) => e.preventDefault()}>
-        <div className="mb-6">
-          <label className="block text-left mb-1" htmlFor="nickname">
+      <form className="w-full max-w-[400px] px-4 s:px-0 mb-20 s:mb-0" onSubmit={(e) => e.preventDefault()}>
+        <div className="mb-6 s:mb-4">
+          <label className="block text-left mb-1 s:text-sm s:font-normal" htmlFor="nickname">
             닉네임
           </label>
           <input
@@ -144,8 +141,8 @@ const ProfileForm = ({
           />
           {nicknameError && <p className="flex text-red-500 text-sm mt-1">{nicknameError}</p>}
         </div>
-        <div className="mb-6">
-          <label className="block text-left mb-1" htmlFor="height">
+        <div className="mb-6 s:mb-4">
+          <label className="block text-left mb-1 s:text-sm s:font-normal " htmlFor="height">
             신장
           </label>
           <input
@@ -161,8 +158,8 @@ const ProfileForm = ({
           />
           {heightError && <p className="flex text-red-500 text-sm mt-1">{heightError}</p>}
         </div>
-        <div className="mb-6">
-          <label className="block text-left mb-1" htmlFor="weight">
+        <div className="mb-6 s:mb-6">
+          <label className="block text-left mb-1 s:text-sm s:font-normal" htmlFor="weight">
             체중
           </label>
           <input
@@ -178,26 +175,36 @@ const ProfileForm = ({
           />
           {weightError && <p className="flex text-red-500 text-sm mt-1">{weightError}</p>}
         </div>
-        <div className="mb-4">
-          <label className="block text-left mb-1">나의 식단 목표</label>
-          <div className="flex flex-col s:flex-row justify-center space-y-2 s:space-y-0 s:space-x-2">
-            <button type="button" className={getButtonClasses('체중 감량')} onClick={() => setGoal('체중 감량')}>
+        <div className="mb-4 ">
+          <label className="block text-left mb-1 s:text-sm s:font-normal">나의 식단 목표</label>
+          <div className="flex justify-center space-x-2 s:mb-10">
+            <button 
+            type="button" 
+            className={`${getButtonClasses('체중 감량')} s:py-3 s:px-4 s:h-16 `} 
+            onClick={() => setGoal('체중 감량')}
+            >
               체중 감량
             </button>
-            <button type="button" className={getButtonClasses('체중 유지')} onClick={() => setGoal('체중 유지')}>
+            <button 
+            type="button" 
+            className={`${getButtonClasses('체중 유지')} s:py-3 s:px-4 s:h-16`}
+            onClick={() => setGoal('체중 유지')}>
               체중 유지
             </button>
-            <button type="button" className={getButtonClasses('체중 증가')} onClick={() => setGoal('체중 증가')}>
+            <button 
+            type="button" 
+            className={`${getButtonClasses('체중 증가')} s:py-3 s:px-4 s:h-16`}
+            onClick={() => setGoal('체중 증가')}>
               체중 증가
             </button>
           </div>
         </div>
-        <div className="flex flex-col s:flex-row justify-between mt-8 space-y-4 s:space-y-0 s:space-x-4">
+        <div className="flex justify-between mt-8">
           <Button
             buttonName="취소"
             bgColor="bg-white"
             textColor="text-[#27282A]"
-            buttonWidth="w-full s:w-48"
+            buttonWidth="w-full s:w-[152px] "
             boxShadow="shadow-none"
             border="border-solid-[#B7B9BD]"
             hover="hover:bg-[#FAFAFA] hover:text-[#27282A] border border-solid-[#B7B9BD]"
@@ -207,7 +214,8 @@ const ProfileForm = ({
             buttonName="저장"
             bgColor={isValid ? 'bg-[#FF7A85]' : 'bg-gray-300'}
             textColor="text-white"
-            buttonWidth="w-full s:w-48"
+            paddingY='s:py-2 s:px-3'
+            buttonWidth="w-full s:w-[152px]"
             boxShadow="shadow-none"
             onClick={isValid ? handleSave : undefined}
             hover={isValid ? 'hover:bg-[#F5637C] hover:text-white' : ''}
@@ -219,9 +227,7 @@ const ProfileForm = ({
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>정보 변경 확인</AlertDialogTitle>
-            <AlertDialogDescription>
-              정보가 변경되었습니다. 새로운 정보를 받아보시겠습니까?
-            </AlertDialogDescription>
+            <AlertDialogDescription>정보가 변경되었습니다. 새로운 정보를 받아보시겠습니까?</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel onClick={handleAlertCancel}>아니오</AlertDialogCancel>

@@ -10,9 +10,9 @@ interface ProfileImageProps {
 const ProfileImage = ({ profile_url, onImageUpload }: ProfileImageProps): JSX.Element => {
   return (
     <div className="flex items-center mb-10">
-      <div className="h-24 w-24 rounded-full object-cover overflow-hidden bg-gray-300 flex items-center justify-center relative mr-6">
+      <div className="h-24 s:h-[72px] w-24 s:w-19 s:mr-0 rounded-full object-cover overflow-hidden bg-gray-300 flex items-center justify-center relative mr-6">
         <Image
-          className="rounded-full cursor-pointer"
+          className="rounded-full cursor-pointer s:mr-0"
           src={profile_url || defaultimg}
           alt="Profile"
           width={96}
@@ -22,8 +22,8 @@ const ProfileImage = ({ profile_url, onImageUpload }: ProfileImageProps): JSX.El
         <input type="file" accept="image/*" id="fileInput" className="hidden" onChange={onImageUpload} />
       </div>
       <div className="flex flex-col items-start">
-        <div className="mb-1">프로필 사진</div>
-        <div className="text-sm text-[#76797F]">5MB 이하의 PNG, JPG 파일을 올려주세요.</div>
+        <div className="mb-1 s:mb-0 s:p-[15px] s:pl-6 s:pb-0">프로필 사진</div>
+        <div className="text-sm text-left font-normal s:p-[15px] s:pl-6 s:pt-0 s:pb-0 text-[#76797F]">5MB 이하의 PNG,JPG,SVG 파일을 올려주세요.</div>
       </div>
     </div>
   );
