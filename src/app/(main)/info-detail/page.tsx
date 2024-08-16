@@ -1,5 +1,6 @@
 'use client'
 import React, { useState, useEffect } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { createClient } from '@/supabase/client';
 import { useUserStore } from '@/store/userStore';
 import { Card, CardHeader, CardDescription, CardContent } from '@/components/ui/card';
@@ -13,14 +14,27 @@ import clock from '@/assets/icons/clock.png';
 import Button from '@/components/Common/Button';
 import Loading from '@/components/LoadingPage/Loading';
 
-type PostgrestError = {
-  message: string;
+// Custom hook for data fetching
+const useUserData = (userId: string) => {
+  const supabase = createClient();
+
+  return useQuery({
+    queryKey: ['userData', userId],
+    queryFn: async () => {
+      const { data: infoData, error: infoError } = await supabase
+        .from('information')
+        .select('created_at, sync_user_data, year_of_birth, weight, gender, height, purpose, user_id, result_diet, result_exercise')
+        .eq('user_id', userId)
+        .single();
+
+      if (infoError) throw infoError;
+      return infoData;
+    },
+    enabled: !!userId,
+  });
 };
 
 const InforDetailPage = () => {
-  const [resultDiet, setResultDiet] = useState('');
-  const [resultExercise, setResultExercise] = useState('');
-  const [error, setError] = useState<PostgrestError | null>(null);
   const [userId, setUserId] = useState('');
   const { user } = useUserStore();
   const [meal, setMeal] = useState<{ calories: string; menu: string; ratio: string }[]>([]);
@@ -39,11 +53,11 @@ const InforDetailPage = () => {
     effect: '',
     caution: ''
   });
-  const [syncUserData, setSyncUserData] = useState<boolean | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [shouldCallGptApi, setShouldCallGptApi] = useState(false);
   const [currentDay, setCurrentDay] = useState(0);
   const [createdAt, setCreatedAt] = useState<Date | null>(null);
+  const [syncUserData, setSyncUserData] = useState<boolean | null>(null);
+
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     if (user) {
@@ -51,25 +65,31 @@ const InforDetailPage = () => {
     }
   }, [user]);
 
+  const { data: userData, isLoading, error } = useUserData(userId);
+
+  const gptMutation = useMutation({
+    mutationFn: async (userData: any) => {
+      const response = await fetch('/api/gpt', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(userData)
+      });
+      if (!response.ok) throw new Error('API 요청에 실패하였습니다.');
+      return response.json();
+    },
+    onSuccess: async (data) => {
+      const parsedResults = parseAiResults(data.data);
+      if (!parsedResults) throw new Error('AI 결과 파싱에 실패했습니다.');
+
+      await saveResultsToSupabase(parsedResults);
+      queryClient.invalidateQueries({ queryKey: ['userData', userId] });
+    },
+  });
+
   useEffect(() => {
-    const fetchData = async () => {
-      if (!userId) return;
-
-      const supabase = createClient();
-
-      const { data: infoData, error: infoError } = await supabase
-        .from('information')
-        .select('created_at')
-        .eq('user_id', userId)
-        .single();
-
-      if (infoError) {
-        console.error('Error fetching created_at date:', infoError);
-        return;
-      }
-
-      if (infoData && infoData.created_at) {
-        const createdAtDate = new Date(infoData.created_at);
+    if (userData) {
+      if (userData.created_at) {
+        const createdAtDate = new Date(userData.created_at);
         setCreatedAt(createdAtDate);
 
         const today = new Date();
@@ -78,151 +98,24 @@ const InforDetailPage = () => {
         setCurrentDay(diffDays % 7);
       }
 
-      const { data: syncData, error: syncError } = await supabase
-        .from('information')
-        .select('sync_user_data')
-        .eq('user_id', userId)
-        .single();
-
-      if (syncError) {
-        console.error('Error fetching sync user data status:', syncError);
-        setSyncUserData(false);
-      } else {
-        setSyncUserData(syncData.sync_user_data);
-      }
-
-      const { data: userData, error: userError } = await supabase
-        .from('information')
-        .select('year_of_birth, weight, gender, height, purpose, user_id')
-        .eq('user_id', userId)
-        .single();
-
-      if (userError) setError(userError);
-
-      if (userData) {
-        setUserId(userData.user_id || '');
-
-        if (shouldCallGptApi) {
-          await callGPTAPI(userData);
-        } else {
-          const { data: dietData, error: dietError } = await supabase
-            .from('information')
-            .select('result_diet')
-            .eq('user_id', userId)
-            .single();
-
-          const { data: exerciseData, error: exerciseError } = await supabase
-            .from('information')
-            .select('result_exercise')
-            .eq('user_id', userId)
-            .single();
-
-          if (dietData) {
-            setResultDiet(dietData.result_diet || '');
-            const parsedDietData = JSON.parse(dietData.result_diet || '[]');
-            if (parsedDietData.length > 0) {
-              const dayData = parsedDietData[currentDay];
-              setMeal([dayData.breakfast, dayData.lunch, dayData.dinner, { menu: '', ratio: '', calories: dayData.totalCalories }]);
-            }
-          }
-
-          if (exerciseData) {
-            setResultExercise(exerciseData.result_exercise || '');
-            const parsedExerciseData = JSON.parse(exerciseData.result_exercise || '[]');
-            if (parsedExerciseData.length > 0) {
-              setWork(parsedExerciseData[currentDay]);
-            }
-          }
-        }
-      }
-    };
-
-    fetchData();
-  }, [userId, shouldCallGptApi]);
-
-  // GPT API call
-  const callGPTAPI = async (userData: { year_of_birth: number | null; weight: number | null; gender: string; height: number | null; purpose: string; user_id: string | null; }) => {
-    setIsLoading(true);
-    try {
-      const response = await fetch('/api/gpt', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          year_of_birth: userData.year_of_birth,
-          weight: userData.weight,
-          gender: userData.gender,
-          height: userData.height,
-          purpose: userData.purpose
-        })
-      });
-
-      if (!response.ok) {
-        throw new Error('API 요청에 실패하였습니다.');
-      }
-
-      const content = await response.json();
-      const parsedResults = parseAiResults(content.data);
-
-      if (!parsedResults) {
-        throw new Error('AI 결과 파싱에 실패했습니다.');
-      }
-
-      const parsedDietData = JSON.parse(parsedResults.result_diet || '[]');
-      if (parsedDietData.length > 0) {
-        const dayData = parsedDietData[currentDay];
-        setMeal([dayData.breakfast, dayData.lunch, dayData.dinner, { menu: '', ratio: '', calories: dayData.totalCalories }]);
-      }
-
-      const parsedExerciseData = JSON.parse(parsedResults.result_exercise || '[]');
-      if (parsedExerciseData.length > 0) {
-        setWork(parsedExerciseData[currentDay]);
-      }
-
-      await saveResultsToSupabase(parsedResults);
-
-    } catch (error) {
-      console.error('API 요청 중 오류:', error);
-    } finally {
-      setIsLoading(false);
-      setShouldCallGptApi(false);
-    }
-  };
-
-  // 자정에 currentDay를 업데이트
-  useEffect(() => {
-    const timer = setInterval(() => {
-      const now = new Date();
-      if (now.getHours() === 0 && now.getMinutes() === 0) {
-        setCurrentDay((prevDay) => (prevDay + 1) % 7);
-      }
-    }, 60000);
-
-    return () => clearInterval(timer);
-  }, []);
-
-  // currentDay가 변경될 때 식단과 운동을 업데이트
-  useEffect(() => {
-    const updateDailyPlan = () => {
-      if (resultDiet) {
-        const parsedDietData = JSON.parse(resultDiet);
+      if (userData.result_diet) {
+        const parsedDietData = JSON.parse(userData.result_diet);
         if (parsedDietData.length > 0) {
           const dayData = parsedDietData[currentDay];
           setMeal([dayData.breakfast, dayData.lunch, dayData.dinner, { menu: '', ratio: '', calories: dayData.totalCalories }]);
         }
       }
 
-      if (resultExercise) {
-        const parsedExerciseData = JSON.parse(resultExercise);
+      if (userData.result_exercise) {
+        const parsedExerciseData = JSON.parse(userData.result_exercise);
         if (parsedExerciseData.length > 0) {
           setWork(parsedExerciseData[currentDay]);
         }
       }
-    };
 
-    updateDailyPlan();
-  }, [currentDay, resultDiet, resultExercise]);
+      setSyncUserData(userData.sync_user_data);
+    }
+  }, [userData, currentDay]);
 
   // ai 결과 식단과 운동 나누기
   const parseAiResults = (result: string) => {
@@ -341,11 +234,18 @@ const InforDetailPage = () => {
 
   // gpt 재호출
   const resetGptCall = async () => {
-    setShouldCallGptApi(true);
+    if (userData) {
+      gptMutation.mutate({
+        year_of_birth: userData.year_of_birth,
+        weight: userData.weight,
+        gender: userData.gender,
+        height: userData.height,
+        purpose: userData.purpose
+      });
+    }
   }
 
-  if (meal.length === 0 || !work) return null;
-
+  // 탄단지 비율 쪼개기
   const extractRatios = (ratioString: string) => {
     const ratios = ratioString.match(/\d+/g);
     return {
@@ -355,14 +255,19 @@ const InforDetailPage = () => {
     };
   };
 
+  if (meal.length === 0 || !work) return null;
+
   // 각 식사의 탄단지 쪼개기
   const breakfastRatios = extractRatios(meal[0].ratio);
   const lunchRatios = extractRatios(meal[1].ratio);
   const dinnerRatios = extractRatios(meal[2].ratio);
 
+  if (isLoading) return <Loading />;
+  if (error) return <div>에러가 발생했습니다: {error.message}</div>;
+
   return (
     <div className="border-gray100 border border-solid rounded-xl py-[24px] px-10 bg-white s:w-full s:py-2 s:px-0 s:border-none s:bg-transparent">
-      {isLoading && <Loading />}
+      {gptMutation.status === 'pending' && <Loading />}
       <div>
         <h1 className="text-2xl text-gray-900 font-medium mb-2">오늘의 추천 식단</h1>
         <div>
