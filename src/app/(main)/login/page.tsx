@@ -10,10 +10,12 @@ const montserrat = Montserrat({
 
 const LoginPage = () => {
   return (
-    <div className="w-full flex flex-col justify-center ${montserrat.className}">
+    <div className={`w-full flex flex-col justify-center ${montserrat.className}`}>
       <div className="flex flex-col">
         <div className="flex flex-col items-center pt-[120px] s:pt:0 leading-8 s:pt-[144px] s:pb-[188px] ">
-          <h2 className="${montserrat.className} text-[32px] tracking-tighter font-bold mb-4 s:text-2xl s:tracking-tight">
+          <h2
+            className={`${montserrat.className} text-[32px] tracking-tighter font-bold mb-4 s:text-2xl s:tracking-tight`}
+          >
             Health Protect me
           </h2>
           <p className="login_subtitle s:text-base font-normal tracking-tight">
