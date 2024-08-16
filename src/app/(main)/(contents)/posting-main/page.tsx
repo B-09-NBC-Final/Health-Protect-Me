@@ -2,7 +2,7 @@ import PostingList from '@/components/Contents/PostingMain/PostingList';
 
 const PostingMainPage = () => {
   return (
-    <div className="flex justify-between">
+    <div className="flex justify-between s:block">
       <PostingList />
     </div>
   );

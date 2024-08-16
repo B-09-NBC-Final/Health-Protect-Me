@@ -90,9 +90,9 @@ const PostingDetailPost = ({ params }: { params: { id: string } }) => {
 
   return (
     <>
-      <div className="w-[800px] mx-auto">
+      <div className="w-[800px] mx-auto s:w-full xs:pb-6">
         {post ? (
-          <span className="text-primary600 border-primary500 border border-solid py-1 px-2 mb-3 rounded bg-white">
+          <span className="text-primary600 border-primary500 border border-solid py-1 px-2 mb-3 rounded bg-white xs:text-text-sm">
             {post?.category}
           </span>
         ) : (
@@ -146,7 +146,11 @@ const PostingDetailPost = ({ params }: { params: { id: string } }) => {
           />
         ) : null}
 
-        {post ? <p className="mt-6">{post?.content}</p> : <Skeleton className="!w-[350px] !h-[24px] rounded-xl mt-6" />}
+        {post ? (
+          <p className="text-gray800 mt-6">{post?.content}</p>
+        ) : (
+          <Skeleton className="!w-[350px] !h-[24px] rounded-xl mt-6" />
+        )}
 
         <div className="inline-flex border border-gray100 border-solid rounded-2xl pl-3 py-6 pr-6 mt-10 bg-gray-50">
           <Image
