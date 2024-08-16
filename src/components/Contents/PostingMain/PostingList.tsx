@@ -8,6 +8,7 @@ import PostingMainBtn from './PostingBtn';
 import { useQuery } from '@tanstack/react-query';
 import Pagination from '@/components/Common/Pagination';
 import postingDefaultImg from '@/assets/image/img_postingDefaultImg.png';
+import FloatingButton from '@/components/Common/FloatingButton';
 
 const ITEMS_PER_PAGE = 4;
 
@@ -69,13 +70,13 @@ const PostingList = () => {
 
   return (
     <>
-      <div className="w-[248px]">
-        <nav className="flex flex-col border border-solid rounded-xl border-gray300 p-2 bg-white ">
+      <div className="w-[248px] s:w-full">
+        <nav className="flex flex-col border border-solid rounded-xl border-gray300 p-2 bg-white s:flex-row s:rounded-[28px] s:justify-around xs:justify-between">
           {categories.map((category, idx) => (
             <button
               key={category}
               onClick={() => setSelectedCategory(category)}
-              className={`h-[40px] rounded-xl text-sm text-left py-3 px-4 flex items-center ${
+              className={`h-[40px] rounded-xl text-sm text-left py-3 px-4 flex items-center s:mb-0 ${
                 category === selectedCategory
                   ? 'bg-pramary500 text-white font-semibold'
                   : 'bg-white text-black border-gray-300'
@@ -86,8 +87,9 @@ const PostingList = () => {
           ))}
         </nav>
         <PostingMainBtn />
+        <FloatingButton />
       </div>
-      <div className="border border-solid rounded-xl border-gray300 w-[1032px] ml-20 px-10 py-6 bg-white">
+      <div className="border border-solid rounded-xl border-gray300 w-[1032px] ml-20 px-10 py-6 bg-white s:w-auto s:ml-0 s:mt-6 s:border-none s:bg-inherit s:p-0 s:text-lg s:font-semibold">
         <h2 className="mb-4 text-2xl text-gray900 font-medium">건강한 식단 이야기</h2>
         {posts.data?.length === 0 ? (
           <p className="text-gray600 mt-2">
@@ -101,7 +103,7 @@ const PostingList = () => {
                   key={index}
                   className={`${
                     index < (posts.data?.length || 0) - 1 ? 'border-b' : ''
-                  }   border-gray200 pb-4 mb-4 cursor-pointer`}
+                  }   border-gray200 pb-4 mb-4 cursor-pointer s:pb-5 s:mb-5`}
                 >
                   <Link href={`/posting-detail/${item?.id}`} className="flex">
                     <Image
@@ -109,12 +111,12 @@ const PostingList = () => {
                       alt=""
                       width={128}
                       height={128}
-                      className="!w-[128px] !h-[128px] rounded-lg shrink-0 object-cover"
+                      className="!w-[128px] !h-[128px] rounded-lg shrink-0 object-cover s:!w-[88px] s:!h-[88px]"
                     />
                     <div className="flex flex-col justify-between ml-5 w-full">
                       <div>
                         <span className="text-sm font-semibold text-primary600 mb-2">{item.category}</span>
-                        <p className="text-gray900 font-semibold">{item.title}</p>
+                        <p className="text-gray900 font-bold s:text-sm">{item.title}</p>
                         <p className="line-clamp-2 text-gray800 text-sm">{item.content}</p>
                       </div>
                       <div className="flex justify-between w-full">

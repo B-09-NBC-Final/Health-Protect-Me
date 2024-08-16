@@ -20,6 +20,7 @@ const PostingMainBtn = () => {
       marginX="mt-10"
       paddingY="py-2"
       border="border-primary500"
+      display="s:hidden"
     ></Button>
   );
 };
