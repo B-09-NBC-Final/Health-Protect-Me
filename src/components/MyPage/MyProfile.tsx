@@ -3,12 +3,12 @@ import PostsSection from '@/components/MyPage/ProfilePage/PostsSection';
 
 const MyProfile = () => {
   return (
-    <div className="h-[858px] justify-between">
-      <div className="max-w-full flex flex-col md:flex-row">
-        <div className="flex items-start mr-10">
+    <div className="h-[858px] s:h-full">
+      <div className="  flex-col ">
+        <div className="flex items-start mr-10 s:mr-0">
           <Profile />
         </div>
-        <div className="items-end ml-10">
+        <div className="items-end ml-10 s:ml-0 s:items-center">
           <PostsSection />
         </div>
       </div>

@@ -100,8 +100,8 @@ const Profile = () => {
   const bmiStatus = getBMIStatus(bmi);
 
   return (
-    <div className="w-[400px] h-[472px] p-6 px-10 rounded-2xl border border-gray-300 flex flex-col items-center bg-white">
-      <div className="w-[120px] h-[120px] overflow-hidden rounded-full object-cover flex items-center justify-center mb-4">
+    <div className="w-[400px] h-[472px] p-6 px-10 s:px-6 rounded-2xl border border-gray-300 flex flex-col items-center bg-white">
+      <div className="w-[120px] h-[120px] overflow-auto rounded-full object-cover flex items-center justify-center mb-4">
         <Image
           className="rounded-full object-cover"
           src={user.profile_url || DEFAULT_PROFILE_IMAGE}
@@ -111,12 +111,12 @@ const Profile = () => {
         />
       </div>
       <h1 className="text-sm font-bold mb-4 text-center">{user.nickname || '사용자'}</h1>
-      <div className="py-3 px-4 text-center w-full shadow-my-box rounded-2xl flex flex-col items-center justify-center">
+      <div className="py-3 s:py-4 px-4 s:px-4 text-center w-full shadow-my-box rounded-2xl flex flex-col items-center justify-center">
         <div className="flex items-center justify-center w-full h-8 bg-[#EAF3EC] text-[#257D1D] rounded-xl mb-2 font-semibold">
           <h2 className="text-base font-medium py-1">{user.goal}</h2>
         </div>
         <p className="text-gray-500 text-xs mt-1">헬프미와 함께 나의 목표를 달성해요</p>
-        <div className="flex justify-between items-center mt-4 w-full">
+        <div className="flex justify-between items-center mt-4 s:mt-6 w-full">
           <div className="flex flex-col items-center">
             <span className="font-bold text-sm">키</span>
             <span className="text-xs text-gray-800">{user.height ? `${user.height}cm` : 'N/A'}</span>
@@ -132,13 +132,14 @@ const Profile = () => {
           </div>
         </div>
       </div>
-      <div className="flex justify-center mt-6 w-full">
+      <div className="flex justify-center mt-6 s:mt-0 w-full">
         <Button
           buttonName="프로필 수정하기"
           onClick={handleNavigateToEdit}
           bgColor="bg-white"
           boxShadow="none"
           textColor="text-gray-900"
+          marginX='mt-6'
           paddingY="py-2"
           border="border-gray-400"
           buttonWidth="w-full"

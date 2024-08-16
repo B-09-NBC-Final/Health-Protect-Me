@@ -102,7 +102,7 @@ const InfoResearch = (): JSX.Element => {
   const parseAiResults = (result: string) => {
     if (!result) return null;
 
-    const days = result.split('@').slice(1); 
+    const days = result.split('@').slice(1);
 
     const dietPlans = days.map((day) => parseDiet(day));
     const exercises = days.map((day) => parseExercise(day.split('~추천운동')[1]));
@@ -401,10 +401,13 @@ const InfoResearch = (): JSX.Element => {
         }`}
       >
         <h1 className="text-3xl font-bold mb-8 text-center text-gray-800 sr-only">{steps[currentStepIndex]}</h1>
-        <div className="w-full mb-10 s:mb-0 mt-20 s:mt-10 bg-gray-200 rounded-full h-2 s:w-80 s:h-[12px] s:flex s:item-center s:pr-[240px]">
+        <div
+          className="w-full mb-10 mt-20 bg-gray-200 rounded-full h-2 
+                    s:mb-0 s:mt-10 s:w-80 s:h-3 s:flex s:items-center s:pr-[240px]"
+        >
           <div
-            className="bg-red-400 h-2 rounded-full transition-all duration-500 ease-in-out s:w-20 "
-            style={{ width: `${((currentStepIndex + 1) / steps.length) * 100}%` }}
+            className="bg-red-400 h-2 s:h-3 rounded-full transition-all duration-500 ease-in-out s:w-40 "
+            style={{ width: `${((currentStepIndex + 1) / steps.length) * 100}%`, maxWidth: '100%' }}
           ></div>
         </div>
 

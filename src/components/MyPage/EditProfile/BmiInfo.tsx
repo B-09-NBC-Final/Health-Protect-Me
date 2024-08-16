@@ -23,7 +23,7 @@ const BMIInfo: React.FC<BMIInfoTooltipProps> = ({ bmi }) => {
   return (
     <div className="relative inline-block">
       <div className="flex items-center space-x-1 cursor-pointer" onMouseEnter={() => setShowTooltip(true)} onMouseLeave={() => setShowTooltip(false)}>
-        <span className="font-bold text-xs sm:text-base">BMI</span>
+        <span className="font-bold text-sm">BMI</span>
         <Info size={16} className="w-3 h-3 sm:w-4 sm:h-4" />
       </div>
       {showTooltip && (
@@ -51,7 +51,7 @@ const BMIInfo: React.FC<BMIInfoTooltipProps> = ({ bmi }) => {
           </div>
         </div>
       )}
-      <div className="text-gray-800 text-xs sm:text-sm">{category}</div>
+      <div className="text-xs text-gray-800">{category}</div>
     </div>
   );
 };

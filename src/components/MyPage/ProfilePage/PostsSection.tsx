@@ -56,9 +56,9 @@ const PostsSection = () => {
   }, []);
 
   return (
-    <section className="w-full sm:w-[880px] px-4 s:px-10 py-6 border border-[#D5D6D8] rounded-2xl bg-white s:border-none s:bg-none">
+    <div className="w-full s:mt-6 px-4 s:px-2 py-6 border border-[#D5D6D8] rounded-2xl bg-white ">
       <h2 className="text-2xl font-medium mb-4 text-gray900">내가 작성한 글</h2>
-      <div className="h-[600px] overflow-y-auto pr-4 custom-scrollbar">
+      <div className="h-[600px] overflow-y- pr-4 custom-scrollbar">
         <div className="grid grid-cols-1  gap-6">
           {posts.length > 0 ? (
             posts.map((post) => (
@@ -80,14 +80,14 @@ const PostsSection = () => {
               </article>
             ))
           ) : (
-            <div className="col-span-1 sm:col-span-3">
+            <div className="col-span-1 s:col-span-3">
               <p className="text-[#404145]">아직 작성된 글이 존재하지 않아요.</p>
               <p className="text-[#404145]">첫번째 글을 작성하고 커뮤니티를 시작해보세요!</p>
             </div>
           )}
         </div>
       </div>
-    </section>
+    </div>
   );
 };
 
