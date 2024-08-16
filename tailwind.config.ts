@@ -48,7 +48,8 @@ const config = {
           foreground: 'hsl(var(--card-foreground))'
         },
         primary600: '#F5637C',
-        gray500: '95989D',
+        gray300: '#D5D6D8',
+        gray500: '#95989D',
         gray600: '#76797F',
         gray800: '#404145',
         gray900: '#27282A',
@@ -100,7 +101,8 @@ const config = {
       boxShadow: {
         'main-btn': '0px 8px 16px 0px rgba(255, 122, 133, 0.40)',
         'main-btn-hover': 'inset 0px -4px 4px 0px rgba(39, 40, 42, 0.25), 0px 8px 16px 0px rgba(255, 122, 133, 0.40)',
-        'my-box': '0px 2px 4px 0px rgba(39, 40, 42, 0.10)'
+        'my-box': '0px 2px 4px 0px rgba(39, 40, 42, 0.10)',
+        'floating-btn': '2px 2px 8px 0px rgba(39, 40, 42, 0.15);'
       },
       height: {
         'main-height': 'calc(100vh - 57px)'
@@ -108,6 +110,21 @@ const config = {
       minHeight: {
         'main-height': 'calc(100vh - 194px)',
         'mobile-main-height': 'calc(100vh - 188px)'
+      },
+      fontFamily: {
+        Pretendard: ['Pretendard', 'sans-serif']
+      },
+      screens: {
+        ml: { max: '1299px' },
+        s: { max: '1023px' },
+        xs: { max: '767px' }
+      },
+      maxWidth: {
+        'container-l': '1440px',
+        'container-ml': '1300px',
+        'container-m': '1024px',
+        'container-s': '768px',
+        'container-xs': '100%'
       }
     }
   },

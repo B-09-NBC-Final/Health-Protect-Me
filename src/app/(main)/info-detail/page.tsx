@@ -1,5 +1,6 @@
 'use client'
 import React, { useState, useEffect } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { createClient } from '@/supabase/client';
 import { useUserStore } from '@/store/userStore';
 import { Card, CardHeader, CardDescription, CardContent } from '@/components/ui/card';
@@ -10,17 +11,37 @@ import fat from '@/assets/icons/fat.png';
 import running from '@/assets/icons/running_man.png';
 import dumbbel from '@/assets/icons/dumbbel.png';
 import clock from '@/assets/icons/clock.png';
-import { Button } from '@/components/ui/button';
+import Button from '@/components/Common/Button';
 import Loading from '@/components/LoadingPage/Loading';
 
-type PostgrestError = {
-  message: string;
+type UserData = {
+  year_of_birth: number | null;
+  weight: number | null;
+  gender: string;
+  height: number | null;
+  purpose: string;
+};
+
+const useUserData = (userId: string) => {
+  const supabase = createClient();
+
+  return useQuery({
+    queryKey: ['userData', userId],
+    queryFn: async () => {
+      const { data: infoData, error: infoError } = await supabase
+        .from('information')
+        .select('created_at, sync_user_data, year_of_birth, weight, gender, height, purpose, user_id, result_diet, result_exercise')
+        .eq('user_id', userId)
+        .single();
+
+      if (infoError) throw infoError;
+      return infoData;
+    },
+    enabled: !!userId,
+  });
 };
 
 const InforDetailPage = () => {
-  const [resultDiet, setResultDiet] = useState('');
-  const [resultExercise, setResultExercise] = useState('');
-  const [error, setError] = useState<PostgrestError | null>(null);
   const [userId, setUserId] = useState('');
   const { user } = useUserStore();
   const [meal, setMeal] = useState<{ calories: string; menu: string; ratio: string }[]>([]);
@@ -39,11 +60,11 @@ const InforDetailPage = () => {
     effect: '',
     caution: ''
   });
-  const [syncUserData, setSyncUserData] = useState<boolean | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [shouldCallGptApi, setShouldCallGptApi] = useState(false);
   const [currentDay, setCurrentDay] = useState(0);
   const [createdAt, setCreatedAt] = useState<Date | null>(null);
+  const [syncUserData, setSyncUserData] = useState<boolean | null>(null);
+
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     if (user) {
@@ -51,25 +72,31 @@ const InforDetailPage = () => {
     }
   }, [user]);
 
+  const { data: userData, isLoading, error } = useUserData(userId);
+
+  const gptMutation = useMutation({
+    mutationFn: async (userData: UserData) => {
+      const response = await fetch('/api/gpt', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(userData)
+      });
+      if (!response.ok) throw new Error('API 요청에 실패하였습니다.');
+      return response.json();
+    },
+    onSuccess: async (data) => {
+      const parsedResults = parseAiResults(data.data);
+      if (!parsedResults) throw new Error('AI 결과 파싱에 실패했습니다.');
+
+      await saveResultsToSupabase(parsedResults);
+      queryClient.invalidateQueries({ queryKey: ['userData', userId] });
+    },
+  });
+
   useEffect(() => {
-    const fetchData = async () => {
-      if (!userId) return;
-
-      const supabase = createClient();
-
-      const { data: infoData, error: infoError } = await supabase
-        .from('information')
-        .select('created_at')
-        .eq('user_id', userId)
-        .single();
-
-      if (infoError) {
-        console.error('Error fetching created_at date:', infoError);
-        return;
-      }
-
-      if (infoData && infoData.created_at) {
-        const createdAtDate = new Date(infoData.created_at);
+    if (userData) {
+      if (userData.created_at) {
+        const createdAtDate = new Date(userData.created_at);
         setCreatedAt(createdAtDate);
 
         const today = new Date();
@@ -78,151 +105,24 @@ const InforDetailPage = () => {
         setCurrentDay(diffDays % 7);
       }
 
-      const { data: syncData, error: syncError } = await supabase
-        .from('information')
-        .select('sync_user_data')
-        .eq('user_id', userId)
-        .single();
-
-      if (syncError) {
-        console.error('Error fetching sync user data status:', syncError);
-        setSyncUserData(false);
-      } else {
-        setSyncUserData(syncData.sync_user_data);
-      }
-
-      const { data: userData, error: userError } = await supabase
-        .from('information')
-        .select('year_of_birth, weight, gender, height, purpose, user_id')
-        .eq('user_id', userId)
-        .single();
-
-      if (userError) setError(userError);
-
-      if (userData) {
-        setUserId(userData.user_id || '');
-
-        if (shouldCallGptApi) {
-          await callGPTAPI(userData);
-        } else {
-          const { data: dietData, error: dietError } = await supabase
-            .from('information')
-            .select('result_diet')
-            .eq('user_id', userId)
-            .single();
-
-          const { data: exerciseData, error: exerciseError } = await supabase
-            .from('information')
-            .select('result_exercise')
-            .eq('user_id', userId)
-            .single();
-
-          if (dietData) {
-            setResultDiet(dietData.result_diet || '');
-            const parsedDietData = JSON.parse(dietData.result_diet || '[]');
-            if (parsedDietData.length > 0) {
-              const dayData = parsedDietData[currentDay];
-              setMeal([dayData.breakfast, dayData.lunch, dayData.dinner, { menu: '', ratio: '', calories: dayData.totalCalories }]);
-            }
-          }
-
-          if (exerciseData) {
-            setResultExercise(exerciseData.result_exercise || '');
-            const parsedExerciseData = JSON.parse(exerciseData.result_exercise || '[]');
-            if (parsedExerciseData.length > 0) {
-              setWork(parsedExerciseData[currentDay]);
-            }
-          }
-        }
-      }
-    };
-
-    fetchData();
-  }, [userId, shouldCallGptApi]);
-
-  // GPT API call
-  const callGPTAPI = async (userData: { year_of_birth: number | null; weight: number | null; gender: string; height: number | null; purpose: string; user_id: string | null; }) => {
-    setIsLoading(true);
-    try {
-      const response = await fetch('/api/gpt', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          year_of_birth: userData.year_of_birth,
-          weight: userData.weight,
-          gender: userData.gender,
-          height: userData.height,
-          purpose: userData.purpose
-        })
-      });
-
-      if (!response.ok) {
-        throw new Error('API 요청에 실패하였습니다.');
-      }
-
-      const content = await response.json();
-      const parsedResults = parseAiResults(content.data);
-
-      if (!parsedResults) {
-        throw new Error('AI 결과 파싱에 실패했습니다.');
-      }
-
-      const parsedDietData = JSON.parse(parsedResults.result_diet || '[]');
-      if (parsedDietData.length > 0) {
-        const dayData = parsedDietData[currentDay];
-        setMeal([dayData.breakfast, dayData.lunch, dayData.dinner, { menu: '', ratio: '', calories: dayData.totalCalories }]);
-      }
-
-      const parsedExerciseData = JSON.parse(parsedResults.result_exercise || '[]');
-      if (parsedExerciseData.length > 0) {
-        setWork(parsedExerciseData[currentDay]);
-      }
-
-      await saveResultsToSupabase(parsedResults);
-
-    } catch (error) {
-      console.error('API 요청 중 오류:', error);
-    } finally {
-      setIsLoading(false);
-      setShouldCallGptApi(false);
-    }
-  };
-
-  // 자정에 currentDay를 업데이트
-  useEffect(() => {
-    const timer = setInterval(() => {
-      const now = new Date();
-      if (now.getHours() === 0 && now.getMinutes() === 0) {
-        setCurrentDay((prevDay) => (prevDay + 1) % 7);
-      }
-    }, 60000);
-
-    return () => clearInterval(timer);
-  }, []);
-
-  // currentDay가 변경될 때 식단과 운동을 업데이트
-  useEffect(() => {
-    const updateDailyPlan = () => {
-      if (resultDiet) {
-        const parsedDietData = JSON.parse(resultDiet);
+      if (userData.result_diet) {
+        const parsedDietData = JSON.parse(userData.result_diet);
         if (parsedDietData.length > 0) {
           const dayData = parsedDietData[currentDay];
           setMeal([dayData.breakfast, dayData.lunch, dayData.dinner, { menu: '', ratio: '', calories: dayData.totalCalories }]);
         }
       }
 
-      if (resultExercise) {
-        const parsedExerciseData = JSON.parse(resultExercise);
+      if (userData.result_exercise) {
+        const parsedExerciseData = JSON.parse(userData.result_exercise);
         if (parsedExerciseData.length > 0) {
           setWork(parsedExerciseData[currentDay]);
         }
       }
-    };
 
-    updateDailyPlan();
-  }, [currentDay, resultDiet, resultExercise]);
+      setSyncUserData(userData.sync_user_data);
+    }
+  }, [userData, currentDay]);
 
   // ai 결과 식단과 운동 나누기
   const parseAiResults = (result: string) => {
@@ -341,11 +241,18 @@ const InforDetailPage = () => {
 
   // gpt 재호출
   const resetGptCall = async () => {
-    setShouldCallGptApi(true);
+    if (userData) {
+      gptMutation.mutate({
+        year_of_birth: userData.year_of_birth,
+        weight: userData.weight,
+        gender: userData.gender,
+        height: userData.height,
+        purpose: userData.purpose
+      });
+    }
   }
 
-  if (meal.length === 0 || !work) return null;
-
+  // 탄단지 비율 쪼개기
   const extractRatios = (ratioString: string) => {
     const ratios = ratioString.match(/\d+/g);
     return {
@@ -355,103 +262,169 @@ const InforDetailPage = () => {
     };
   };
 
+  if (meal.length === 0 || !work) return null;
+
   // 각 식사의 탄단지 쪼개기
   const breakfastRatios = extractRatios(meal[0].ratio);
   const lunchRatios = extractRatios(meal[1].ratio);
   const dinnerRatios = extractRatios(meal[2].ratio);
 
+  if (isLoading) return <Loading />;
+  if (error) return <div>에러가 발생했습니다: {error.message}</div>;
+
   return (
-    <div className="border-gray100 border border-solid rounded-xl py-[24px] px-10 bg-white">
-      {isLoading && <Loading />}
+    <div className="border-gray100 border border-solid rounded-xl py-[24px] px-10 bg-white s:w-full s:py-2 s:px-0 s:border-none s:bg-transparent">
+      {gptMutation.status === 'pending' && <Loading />}
       <div>
-        <h1 className="text-2xl font-medium mb-2">오늘의 추천 식단</h1>
+        <h1 className="text-2xl text-gray-900 font-medium mb-2 s:text-xl">오늘의 추천 식단</h1>
         <div>
           {syncUserData === false ? (
-            <div className='my-5 '>
-              <p className='text-black pb-2'>프로필 정보가 변경되었어요. 새로운 목표에 맞춘 식단을 다시 받아보세요!</p>
-              <Button onClick={resetGptCall} className='border border-[#F5637C] text-[#F5637C] bg-white hover:bg-[#F5637C] hover:text-white'>새로운 식단 추천받기</Button>
+            <div className='my-5'>
+              <p className='text-gray-800 pb-2'>프로필 정보가 변경되었어요. 새로운 목표에 맞춘 식단을 다시 받아보세요!</p>
+              <Button
+                buttonName="새로운 식단 추천받기"
+                onClick={resetGptCall}
+                bgColor="bg-white"
+                boxShadow="none"
+                textColor="text-primary600"
+                paddingY="py-2"
+                border="border-primary500"
+                buttonWidth="w-[160px] s:w-[160px]"
+              >
+              </Button>
             </div>
           ) : (
-            <p className="text-gray-600 mb-6">AI 분석을 바탕으로 매일 맞춤 식단을 추천해 드려요</p>
+            <p className="text-gray-600 mb-6 s:text-sm">AI 분석을 바탕으로 매일 맞춤 식단을 추천해 드려요</p>
           )}
         </div>
-        <div className="inline-flex gap-9 flex-col items-start flex-[0_0_auto] pb-14">
-          <div className="flex gap-10">
-            {/* 메뉴랑 칼로리 붙여서 마진값 4 카드 안 위아래 padding 16으로 바꿈 */}
-            <Card className="!flex-[0_0_auto] shadow-floating overflow-hidden w-[400px] rounded-[20px] flex flex-col">
+        <div className="inline-flex gap-10 flex-col items-start flex-[0_0_auto] pb-14 s:pb-6">
+          <div className="flex gap-10 s:flex-col s:gap-6">
+            <Card className="!flex-[0_0_auto] shadow-floating overflow-hidden w-[400px] rounded-[20px] flex flex-col s:w-[320px]">
               <CardHeader className="!text-color-text-sub">
-                <CardDescription className="text-[#3E9B2E] font-semibold">아침</CardDescription>
+                <CardDescription className="text-[#3E9B2E] font-semibold s:text-sm">아침</CardDescription>
                 <CardDescription className="text-black text-base mt-2">{meal[0].menu.trim().replace(/^-/, '')}</CardDescription>
-                <p className="text-[#76797F]">{meal[0].calories.replace('&칼로리:', '')}</p>
+                <p className="text-[#76797F] mt-1">{meal[0].calories.replace('&칼로리:', '')}</p>
               </CardHeader>
               <CardContent className="overflow-auto max-h-[200px] mt-auto">
-                <div className="flex justify-center space-x-4">
-                  <div className="flex flex-col items-center justify-center w-[104px] h-[104px] rounded-full bg-gray75">
-                    <Image src={carbohydrate} alt="carbohydrate" width={32} height={32} />
-                    <p className='text-[#76797F]'>탄수화물</p>
-                    <p>{breakfastRatios.carbohydrates}%</p>
+                <div className="flex justify-center space-x-5 s:space-x-3">
+                  <div className="flex flex-col items-center justify-center w-[104px] h-[104px] rounded-full bg-gray75 s:w-[88px] s:h-[88px]">
+                    <Image
+                      src={carbohydrate}
+                      alt="carbohydrate"
+                      width={32} height={32}
+                      className="s:w-[24px] s:h-[24px]"
+                    />
+                    <p className='text-[#76797F] s:text-sm s:mt-2'>탄수화물</p>
+                    <p className='text-gray-900 s:text-sm'>{breakfastRatios.carbohydrates}%</p>
                   </div>
-                  <div className="flex flex-col items-center justify-center w-[104px] h-[104px] rounded-full bg-gray75">
-                    <Image src={protein} alt="protein" width={32} height={32} />
-                    <p className='text-[#76797F]'>단백질</p>
-                    <p>{breakfastRatios.proteins}%</p>
+                  <div className="flex flex-col items-center justify-center w-[104px] h-[104px] rounded-full bg-gray75 s:w-[88px] s:h-[88px]">
+                    <Image
+                      src={protein}
+                      alt="protein"
+                      width={32}
+                      height={32}
+                      className="s:w-[24px] s:h-[24px]"
+                    />
+                    <p className='text-[#76797F] s:text-sm s:mt-2'>단백질</p>
+                    <p className='text-gray-900 s:text-sm'>{breakfastRatios.proteins}%</p>
                   </div>
-                  <div className="flex flex-col items-center justify-center w-[104px] h-[104px] rounded-full bg-gray75">
-                    <Image src={fat} alt="fat" width={32} height={32} />
-                    <p className='text-[#76797F]'>지방</p>
-                    <p>{breakfastRatios.fats}%</p>
+                  <div className="flex flex-col items-center justify-center w-[104px] h-[104px] rounded-full bg-gray75 s:w-[88px] s:h-[88px]">
+                    <Image
+                      src={fat}
+                      alt="fat"
+                      width={32}
+                      height={32}
+                      className="s:w-[24px] s:h-[24px]"
+                    />
+                    <p className='text-[#76797F] s:text-sm s:mt-2'>지방</p>
+                    <p className='text-gray-900 s:text-sm'>{breakfastRatios.fats}%</p>
                   </div>
                 </div>
               </CardContent>
             </Card>
-            <Card className="!flex-[0_0_auto] shadow-floating overflow-hidden w-[400px] rounded-[20px] flex flex-col">
+            <Card className="!flex-[0_0_auto] shadow-floating overflow-hidden w-[400px] s:w-[320px] rounded-[20px] flex flex-col">
               <CardHeader className="!text-color-text-sub">
-                <CardDescription className="text-[#3E9B2E] font-semibold">점심</CardDescription>
+                <CardDescription className="text-[#3E9B2E] font-semibold s:text-sm">점심</CardDescription>
                 <CardDescription className="text-black text-base mt-2">{meal[1].menu.trim().replace(/^-/, '')}</CardDescription>
-                <p className="text-[#76797F]">{meal[0].calories.replace('&칼로리:', '')}</p>
+                <p className="text-[#76797F] mt-1">{meal[0].calories.replace('&칼로리:', '')}</p>
               </CardHeader>
               <CardContent className="overflow-auto max-h-[200px] mt-auto">
-                <div className="flex justify-center space-x-4">
-                  <div className="flex flex-col items-center justify-center w-[104px] h-[104px] rounded-full bg-gray75">
-                    <Image src={carbohydrate} alt="carbohydrate" width={32} height={32} />
-                    <p className='text-[#76797F]'>탄수화물</p>
-                    <p>{lunchRatios.carbohydrates}%</p>
+                <div className="flex justify-center space-x-5 s:space-x-3">
+                  <div className="flex flex-col items-center justify-center w-[104px] h-[104px] rounded-full bg-gray75 s:w-[88px] s:h-[88px]">
+                    <Image
+                      src={carbohydrate}
+                      alt="carbohydrate"
+                      width={32} height={32}
+                      className="s:w-[24px] s:h-[24px]"
+                    />
+                    <p className="text-[#76797F] s:text-sm s:mt-2">탄수화물</p>
+                    <p className="text-gray-900 s:text-sm">{lunchRatios.carbohydrates}%</p>
                   </div>
-                  <div className="flex flex-col items-center justify-center w-[104px] h-[104px] rounded-full bg-gray75">
-                    <Image src={protein} alt="protein" width={32} height={32} />
-                    <p className='text-[#76797F]'>단백질</p>
-                    <p>{lunchRatios.proteins}%</p>
+                  <div className="flex flex-col items-center justify-center w-[104px] h-[104px] rounded-full bg-gray75 s:w-[88px] s:h-[88px]">
+                    <Image
+                      src={protein}
+                      alt="protein"
+                      width={32}
+                      height={32}
+                      className="s:w-[24px] s:h-[24px]"
+                    />
+                    <p className="text-[#76797F] s:text-sm s:mt-2">단백질</p>
+                    <p className="text-gray-900 s:text-sm">{lunchRatios.proteins}%</p>
                   </div>
-                  <div className="flex flex-col items-center justify-center w-[104px] h-[104px] rounded-full bg-gray75">
-                    <Image src={fat} alt="fat" width={32} height={32} />
-                    <p className='text-[#76797F]'>지방</p>
-                    <p>{lunchRatios.fats}%</p>
+                  <div className="flex flex-col items-center justify-center w-[104px] h-[104px] rounded-full bg-gray75 s:w-[88px] s:h-[88px]">
+                    <Image
+                      src={fat}
+                      alt="fat"
+                      width={32}
+                      height={32}
+                      className="s:w-[24px] s:h-[24px]"
+                    />
+                    <p className="text-[#76797F] s:text-sm s:mt-2">지방</p>
+                    <p className="text-gray-900 s:text-sm">{lunchRatios.fats}%</p>
                   </div>
                 </div>
               </CardContent>
             </Card>
-            <Card className="!flex-[0_0_auto] shadow-floating overflow-hidden w-[400px] rounded-[20px] flex flex-col">
+            <Card className="!flex-[0_0_auto] shadow-floating overflow-hidden w-[400px] s:w-[320px] rounded-[20px] flex flex-col">
               <CardHeader className="!text-color-text-sub">
-                <CardDescription className="text-[#3E9B2E] font-semibold">저녁</CardDescription>
+                <CardDescription className="text-[#3E9B2E] font-semibold s:text-sm">저녁</CardDescription>
                 <CardDescription className="text-black text-base mt-2">{meal[2].menu.trim().replace(/^-/, '')}</CardDescription>
-                <p className="text-[#76797F]">{meal[0].calories.replace('&칼로리:', '')}</p>
+                <p className="text-[#76797F] mt-1">{meal[0].calories.replace('&칼로리:', '')}</p>
               </CardHeader>
               <CardContent className="overflow-auto max-h-[200px] mt-auto">
-                <div className="flex justify-center space-x-4">
-                  <div className="flex flex-col items-center justify-center w-[104px] h-[104px] rounded-full bg-gray75">
-                    <Image src={carbohydrate} alt="carbohydrate" width={32} height={32} />
-                    <p className='text-[#76797F]'>탄수화물</p>
-                    <p>{dinnerRatios.carbohydrates}%</p>
+                <div className="flex justify-center space-x-5 s:space-x-3">
+                  <div className="flex flex-col items-center justify-center w-[104px] h-[104px] rounded-full bg-gray75 s:w-[88px] s:h-[88px]">
+                    <Image
+                      src={carbohydrate}
+                      alt="carbohydrate"
+                      width={32}
+                      height={32}
+                      className="s:w-[24px] s:h-[24px]"
+                    />
+                    <p className='text-[#76797F] s:text-sm s:mt-2'>탄수화물</p>
+                    <p className='text-gray-900 s:text-sm'>{dinnerRatios.carbohydrates}%</p>
                   </div>
-                  <div className="flex flex-col items-center justify-center w-[104px] h-[104px] rounded-full bg-gray75">
-                    <Image src={protein} alt="protein" width={32} height={32} />
-                    <p className='text-[#76797F]'>단백질</p>
-                    <p>{dinnerRatios.proteins}%</p>
+                  <div className="flex flex-col items-center justify-center w-[104px] h-[104px] rounded-full bg-gray75 s:w-[88px] s:h-[88px]">
+                    <Image
+                      src={protein}
+                      alt="protein"
+                      width={32}
+                      height={32}
+                      className="s:w-[24px] s:h-[24px]"
+                    />
+                    <p className='text-[#76797F] s:text-sm s:mt-2'>단백질</p>
+                    <p className='text-gray-900 s:text-sm'>{dinnerRatios.proteins}%</p>
                   </div>
-                  <div className="flex flex-col items-center justify-center w-[104px] h-[104px] rounded-full bg-gray75">
-                    <Image src={fat} alt="fat" width={32} height={32} />
-                    <p className='text-[#76797F]'>지방</p>
-                    <p>{dinnerRatios.fats}%</p>
+                  <div className="flex flex-col items-center justify-center w-[104px] h-[104px] rounded-full bg-gray75 s:w-[88px] s:h-[88px]">
+                    <Image
+                      src={fat}
+                      alt="fat"
+                      width={32}
+                      height={32}
+                      className="s:w-[24px] s:h-[24px]"
+                    />
+                    <p className='text-[#76797F] s:text-sm s:mt-2'>지방</p>
+                    <p className='text-gray-900 s:text-sm'>{dinnerRatios.fats}%</p>
                   </div>
                 </div>
               </CardContent>
@@ -472,27 +445,27 @@ const InforDetailPage = () => {
         </div>
       </div>
       <hr className="border-t border-gray-300 w-full" />
-      <div className="w-full pt-14">
-        <h1 className="text-2xl font-medium mb-2">오늘의 운동 플랜</h1>
-        <p className="text-gray600 mb-6">목표를 더 빠르게 달성할 수 있도록 식단과 함께하면 좋은 최적의 운동이에요</p>
+      <div className="w-full pt-14 s:pt-6">
+        <h1 className="text-2xl text-gray-900 font-medium mb-2 s:text-xl">오늘의 운동 플랜</h1>
+        <p className="text-gray600 mb-6 s:text-sm">목표를 더 빠르게 달성할 수 있도록 식단과 함께하면 좋은 최적의 운동이에요</p>
         <div className="flex gap-4 self-stretch w-full flex-col items-start relative flex-[0_0_auto]">
           <div className="inline-flex items-center gap-2 relative flex-[0_0_auto]">
             <div className="flex items-center mb-4">
               <Image src={running} alt="running" width={48} height={48} />
-              <div className="font-bold text-black text-lg ml-2">{work.type}</div>
+              <div className="font-bold text-gray-900 text-lg ml-2">{work.type}</div>
             </div>
           </div>
         </div>
         <div className="flex flex-col items-start gap-6 relative w-full flex-[0_0_auto]">
-          <Card className="flex px-10 py-6 self-stretch w-full flex-col items-start gap-6 relative flex-[0_0_auto] bg-color-background-content rounded-[20px] shadow-floating">
+          <Card className="flex px-10 py-6 self-stretch w-full flex-col items-start gap-6 relative flex-[0_0_auto] bg-white rounded-[20px] shadow-floating s:w-[320px] s:p-4">
             <div className="inline-flex flex-col items-start gap-1 relative flex-[0_0_auto]">
               <div className="inline-flex items-center gap-1 relative flex-[0_0_auto]">
                 <Image src={dumbbel} alt="dumbbel" width={24} height={24} />
                 <div className="relative w-fit text-sm text-gray900 font-semibold ">운동 방법</div>
               </div>
-              <p className="relative w-fit text-gray800 font-desktop-p-md font-[number:var(--desktop-p-md-font-weight)] text-color-text-main-2 text-[length:var(--desktop-p-md-font-size)] tracking-[var(--desktop-p-md-letter-spacing)] leading-[var(--desktop-p-md-line-height)] whitespace-nowrap [font-style:var(--desktop-p-md-font-style)]">
+              <p className="relative w-fit text-gray800 font-desktop-p-md font-[number:var(--desktop-p-md-font-weight)] text-color-text-main-2 text-[length:var(--desktop-p-md-font-size)] tracking-[var(--desktop-p-md-letter-spacing)] leading-[var(--desktop-p-md-line-height)] [font-style:var(--desktop-p-md-font-style)]">
                 {work.method.split('\n').map((line, index) => (
-                  <div key={index}>{line}</div>
+                  <div className="pt-2" key={index}>{line}</div>
                 ))}
               </p>
             </div>
@@ -501,17 +474,17 @@ const InforDetailPage = () => {
                 <Image src={clock} alt="clock" width={24} height={24} className="text-green-500" />
                 <div className="relative w-fit text-sm text-gray900 font-semibold">운동 시간</div>
               </div>
-              <div className="relative w-fit text-gray800 font-desktop-p-md font-[number:var(--desktop-p-md-font-weight)] text-color-text-main-2 text-[length:var(--desktop-p-md-font-size)] tracking-[var(--desktop-p-md-letter-spacing)] leading-[var(--desktop-p-md-line-height)] whitespace-nowrap [font-style:var(--desktop-p-md-font-style)]">
+              <div className="relative w-fit text-gray800 font-desktop-p-md font-[number:var(--desktop-p-md-font-weight)] text-color-text-main-2 text-[length:var(--desktop-p-md-font-size)] tracking-[var(--desktop-p-md-letter-spacing)] leading-[var(--desktop-p-md-line-height)] [font-style:var(--desktop-p-md-font-style)]">
                 {work.duration}
               </div>
             </div>
           </Card>
-          <Card className="flex px-10 py-6 self-stretch w-full flex-col items-start gap-6 relative flex-[0_0_auto] bg-color-background-content rounded-[20px] shadow-floating">
+          <Card className="flex px-10 py-6 self-stretch w-full flex-col items-start gap-6 relative flex-[0_0_auto] bg-white rounded-[20px] shadow-floating s:w-[320px] s:p-4">
             <div className="inline-flex flex-col items-start gap-1 relative flex-[0_0_auto]">
               <div className="inline-flex items-center gap-1 relative flex-[0_0_auto]">
                 <div className="text-sm text-gray900 font-semibold w-fit">추가 팁</div>
               </div>
-              <p className="text-gray800 relative w-fit font-desktop-p-md font-[number:var(--desktop-p-md-font-weight)] text-color-text-main-2 text-[length:var(--desktop-p-md-font-size)] tracking-[var(--desktop-p-md-letter-spacing)] leading-[var(--desktop-p-md-line-height)] whitespace-nowrap [font-style:var(--desktop-p-md-font-style)]">
+              <p className="text-gray800 relative w-fit font-desktop-p-md font-[number:var(--desktop-p-md-font-weight)] text-color-text-main-2 text-[length:var(--desktop-p-md-font-size)] tracking-[var(--desktop-p-md-letter-spacing)] leading-[var(--desktop-p-md-line-height)] [font-style:var(--desktop-p-md-font-style)]">
                 {work.tip}
               </p>
             </div>
@@ -519,7 +492,7 @@ const InforDetailPage = () => {
               <div className="inline-flex items-center gap-1 relative flex-[0_0_auto]">
                 <div className="text-sm text-gray900 font-semibold w-fit ">주요 효과</div>
               </div>
-              <p className="text-gray800 relative w-fit font-desktop-p-md font-[number:var(--desktop-p-md-font-weight)] text-color-text-main-2 text-[length:var(--desktop-p-md-font-size)] tracking-[var(--desktop-p-md-letter-spacing)] leading-[var(--desktop-p-md-line-height)] whitespace-nowrap [font-style:var(--desktop-p-md-font-style)]">
+              <p className="text-gray800 relative w-fit font-desktop-p-md font-[number:var(--desktop-p-md-font-weight)] text-color-text-main-2 text-[length:var(--desktop-p-md-font-size)] tracking-[var(--desktop-p-md-letter-spacing)] leading-[var(--desktop-p-md-line-height)] [font-style:var(--desktop-p-md-font-style)]">
                 {work.effect}
               </p>
             </div>
@@ -527,7 +500,7 @@ const InforDetailPage = () => {
               <div className="inline-flex items-center gap-1 relative flex-[0_0_auto]">
                 <div className="text-sm text-gray900 font-semibold w-fit ">주의 사항</div>
               </div>
-              <p className="text-gray800 relative w-fit font-desktop-p-md font-[number:var(--desktop-p-md-font-weight)] text-color-text-main-2 text-[length:var(--desktop-p-md-font-size)] tracking-[var(--desktop-p-md-letter-spacing)] leading-[var(--desktop-p-md-line-height)] whitespace-nowrap [font-style:var(--desktop-p-md-font-style)]">
+              <p className="text-gray800 relative w-fit font-desktop-p-md font-[number:var(--desktop-p-md-font-weight)] text-color-text-main-2 text-[length:var(--desktop-p-md-font-size)] tracking-[var(--desktop-p-md-letter-spacing)] leading-[var(--desktop-p-md-line-height)] [font-style:var(--desktop-p-md-font-style)]">
                 {work.caution}
               </p>
             </div>

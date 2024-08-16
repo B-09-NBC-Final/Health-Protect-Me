@@ -3,6 +3,13 @@
 import { useRouter } from 'next/navigation';
 import Button from '../Common/Button';
 import { createClient } from '@/supabase/client';
+import { Montserrat } from 'next/font/google';
+
+const montserrat = Montserrat({
+  subsets: ['latin'],
+  weight: ['800'],
+  display: 'swap'
+});
 
 const MainBanner = () => {
   const router = useRouter();
@@ -33,9 +40,11 @@ const MainBanner = () => {
   };
 
   return (
-    <div className="inner_wrap !py-40 text-center">
-      <h2 className="text-[32px] font-bold mb-2 text-gray900 login_title">Health Protect Me</h2>
-      <p className="text-2xl font-medium mb-10 text-gray800">당신의 건강을 함께 지켜드릴게요</p>
+    <div className="max-w-container-l !py-40 text-center mx-auto flex flex-col items-center m:max-w-container-m s:max-w-container-s xs:max-w-container-xs xs:px-5 s:!py-20">
+      <h2 className={`${montserrat.className} text-[32px] font-bold mb-2 text-gray900 s:text-2xl`}>
+        Health Protect Me
+      </h2>
+      <p className="text-2xl font-medium mb-10 text-gray800 s:text-lg s:mb-6">당신의 건강을 함께 지켜드릴게요</p>
       <Button
         buttonName="맞춤 식단 제공받기"
         onClick={checkDiet}

@@ -14,7 +14,14 @@ interface PaginationProps {
 }
 
 const Pagination = ({ page, setPage, totalPages }: PaginationProps) => {
-  console.log(page);
+  const maxVisiblePages = 5;
+  let startPage = Math.max(1, page - Math.floor(maxVisiblePages / 2));
+  let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+  if (endPage === totalPages) {
+    startPage = Math.max(1, totalPages - maxVisiblePages + 1);
+  }
+
   return (
     <div className="flex justify-center items-center">
       <button
@@ -30,18 +37,21 @@ const Pagination = ({ page, setPage, totalPages }: PaginationProps) => {
           )}
         </i>
       </button>
-      <div className="border border-solid border-gray300 rounded-xl p-2 mx-3">
-        {[...Array(totalPages)].map((_, index) => (
-          <button
-            key={index + 1}
-            onClick={() => setPage(index + 1)}
-            className={`w-6 h-6 pt-[1px] pb-[2px] px-[7.5px] ${
-              page === index + 1 ? 'bg-pramary500 text-white rounded-full' : 'text-gray600'
-            } ${index !== totalPages - 1 ? 'mr-4' : ''}`}
-          >
-            {index + 1}
-          </button>
-        ))}
+      <div className="border border-solid border-gray300 rounded-xl p-2 mx-3 s:flex">
+        {[...Array(endPage - startPage + 1)].map((_, index) => {
+          const pageIndex = startPage + index;
+          return (
+            <button
+              key={pageIndex}
+              onClick={() => setPage(pageIndex)}
+              className={`w-6 h-6 pt-[1px] pb-[2px] px-[7.5px] s:text-sm ${
+                page === pageIndex ? 'bg-pramary500 text-white rounded-full' : 'text-gray600'
+              } ${pageIndex !== endPage ? 'mr-4' : ''}`}
+            >
+              {pageIndex}
+            </button>
+          );
+        })}
       </div>
       <button
         onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}

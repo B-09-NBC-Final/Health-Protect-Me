@@ -11,13 +11,13 @@ const UserProfile = ({ width, height }: UserProfileProps): JSX.Element => {
   const { user } = useUserStore((state) => state);
   console.log('user.profile_url', user?.profile_url);
   return (
-    <div className={`border rounded-full overflow-auto`}>
+    <div className={`border rounded-full object-cover overflow-hidden`}>
       <Image
         src={user?.profile_url && user.profile_url.length > 0 ? user.profile_url : Defaultimg}
         width={width}
         height={height}
         alt="유저프로필"
-        className="w-full h-full object-cover"
+        className="w-10 h-10 object-cover flex s:items-center"
       />
     </div>
   );

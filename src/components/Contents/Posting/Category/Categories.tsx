@@ -15,7 +15,7 @@ const CategoryMain = ({ categories, selectedCategories, onSelectCategory }: Cate
   }, [selectedCategories]);
 
   return (
-    <div className="mb-6">
+    <div className="mb-6 s:mb-4">
       {categories.map((category) => (
         <button
           key={category.id}
