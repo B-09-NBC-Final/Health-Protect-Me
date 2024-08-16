@@ -276,7 +276,7 @@ const InforDetailPage = () => {
     <div className="border-gray100 border border-solid rounded-xl py-[24px] px-10 bg-white s:w-full s:py-2 s:px-0 s:border-none s:bg-transparent">
       {gptMutation.status === 'pending' && <Loading />}
       <div>
-        <h1 className="text-2xl text-gray-900 font-medium mb-2">오늘의 추천 식단</h1>
+        <h1 className="text-2xl text-gray-900 font-medium mb-2 s:text-xl">오늘의 추천 식단</h1>
         <div>
           {syncUserData === false ? (
             <div className='my-5'>
@@ -294,14 +294,14 @@ const InforDetailPage = () => {
               </Button>
             </div>
           ) : (
-            <p className="text-gray-600 mb-6">AI 분석을 바탕으로 매일 맞춤 식단을 추천해 드려요</p>
+            <p className="text-gray-600 mb-6 s:text-sm">AI 분석을 바탕으로 매일 맞춤 식단을 추천해 드려요</p>
           )}
         </div>
         <div className="inline-flex gap-10 flex-col items-start flex-[0_0_auto] pb-14 s:pb-6">
           <div className="flex gap-10 s:flex-col s:gap-6">
             <Card className="!flex-[0_0_auto] shadow-floating overflow-hidden w-[400px] rounded-[20px] flex flex-col s:w-[320px]">
               <CardHeader className="!text-color-text-sub">
-                <CardDescription className="text-[#3E9B2E] font-semibold">아침</CardDescription>
+                <CardDescription className="text-[#3E9B2E] font-semibold s:text-sm">아침</CardDescription>
                 <CardDescription className="text-black text-base mt-2">{meal[0].menu.trim().replace(/^-/, '')}</CardDescription>
                 <p className="text-[#76797F] mt-1">{meal[0].calories.replace('&칼로리:', '')}</p>
               </CardHeader>
@@ -314,7 +314,7 @@ const InforDetailPage = () => {
                       width={32} height={32}
                       className="s:w-[24px] s:h-[24px]"
                     />
-                    <p className='text-[#76797F] s:text-sm'>탄수화물</p>
+                    <p className='text-[#76797F] s:text-sm s:mt-2'>탄수화물</p>
                     <p className='text-gray-900 s:text-sm'>{breakfastRatios.carbohydrates}%</p>
                   </div>
                   <div className="flex flex-col items-center justify-center w-[104px] h-[104px] rounded-full bg-gray75 s:w-[88px] s:h-[88px]">
@@ -325,7 +325,7 @@ const InforDetailPage = () => {
                       height={32}
                       className="s:w-[24px] s:h-[24px]"
                     />
-                    <p className='text-[#76797F] s:text-sm'>단백질</p>
+                    <p className='text-[#76797F] s:text-sm s:mt-2'>단백질</p>
                     <p className='text-gray-900 s:text-sm'>{breakfastRatios.proteins}%</p>
                   </div>
                   <div className="flex flex-col items-center justify-center w-[104px] h-[104px] rounded-full bg-gray75 s:w-[88px] s:h-[88px]">
@@ -336,7 +336,7 @@ const InforDetailPage = () => {
                       height={32}
                       className="s:w-[24px] s:h-[24px]"
                     />
-                    <p className='text-[#76797F] s:text-sm'>지방</p>
+                    <p className='text-[#76797F] s:text-sm s:mt-2'>지방</p>
                     <p className='text-gray-900 s:text-sm'>{breakfastRatios.fats}%</p>
                   </div>
                 </div>
@@ -344,7 +344,7 @@ const InforDetailPage = () => {
             </Card>
             <Card className="!flex-[0_0_auto] shadow-floating overflow-hidden w-[400px] s:w-[320px] rounded-[20px] flex flex-col">
               <CardHeader className="!text-color-text-sub">
-                <CardDescription className="text-[#3E9B2E] font-semibold">점심</CardDescription>
+                <CardDescription className="text-[#3E9B2E] font-semibold s:text-sm">점심</CardDescription>
                 <CardDescription className="text-black text-base mt-2">{meal[1].menu.trim().replace(/^-/, '')}</CardDescription>
                 <p className="text-[#76797F] mt-1">{meal[0].calories.replace('&칼로리:', '')}</p>
               </CardHeader>
@@ -357,7 +357,7 @@ const InforDetailPage = () => {
                       width={32} height={32}
                       className="s:w-[24px] s:h-[24px]"
                     />
-                    <p className="text-[#76797F] s:text-sm">탄수화물</p>
+                    <p className="text-[#76797F] s:text-sm s:mt-2">탄수화물</p>
                     <p className="text-gray-900 s:text-sm">{lunchRatios.carbohydrates}%</p>
                   </div>
                   <div className="flex flex-col items-center justify-center w-[104px] h-[104px] rounded-full bg-gray75 s:w-[88px] s:h-[88px]">
@@ -368,7 +368,7 @@ const InforDetailPage = () => {
                       height={32}
                       className="s:w-[24px] s:h-[24px]"
                     />
-                    <p className="text-[#76797F] s:text-sm">단백질</p>
+                    <p className="text-[#76797F] s:text-sm s:mt-2">단백질</p>
                     <p className="text-gray-900 s:text-sm">{lunchRatios.proteins}%</p>
                   </div>
                   <div className="flex flex-col items-center justify-center w-[104px] h-[104px] rounded-full bg-gray75 s:w-[88px] s:h-[88px]">
@@ -379,7 +379,7 @@ const InforDetailPage = () => {
                       height={32}
                       className="s:w-[24px] s:h-[24px]"
                     />
-                    <p className="text-[#76797F] s:text-sm">지방</p>
+                    <p className="text-[#76797F] s:text-sm s:mt-2">지방</p>
                     <p className="text-gray-900 s:text-sm">{lunchRatios.fats}%</p>
                   </div>
                 </div>
@@ -387,7 +387,7 @@ const InforDetailPage = () => {
             </Card>
             <Card className="!flex-[0_0_auto] shadow-floating overflow-hidden w-[400px] s:w-[320px] rounded-[20px] flex flex-col">
               <CardHeader className="!text-color-text-sub">
-                <CardDescription className="text-[#3E9B2E] font-semibold">저녁</CardDescription>
+                <CardDescription className="text-[#3E9B2E] font-semibold s:text-sm">저녁</CardDescription>
                 <CardDescription className="text-black text-base mt-2">{meal[2].menu.trim().replace(/^-/, '')}</CardDescription>
                 <p className="text-[#76797F] mt-1">{meal[0].calories.replace('&칼로리:', '')}</p>
               </CardHeader>
@@ -401,7 +401,7 @@ const InforDetailPage = () => {
                       height={32}
                       className="s:w-[24px] s:h-[24px]"
                     />
-                    <p className='text-[#76797F] s:text-sm'>탄수화물</p>
+                    <p className='text-[#76797F] s:text-sm s:mt-2'>탄수화물</p>
                     <p className='text-gray-900 s:text-sm'>{dinnerRatios.carbohydrates}%</p>
                   </div>
                   <div className="flex flex-col items-center justify-center w-[104px] h-[104px] rounded-full bg-gray75 s:w-[88px] s:h-[88px]">
@@ -412,7 +412,7 @@ const InforDetailPage = () => {
                       height={32}
                       className="s:w-[24px] s:h-[24px]"
                     />
-                    <p className='text-[#76797F] s:text-sm'>단백질</p>
+                    <p className='text-[#76797F] s:text-sm s:mt-2'>단백질</p>
                     <p className='text-gray-900 s:text-sm'>{dinnerRatios.proteins}%</p>
                   </div>
                   <div className="flex flex-col items-center justify-center w-[104px] h-[104px] rounded-full bg-gray75 s:w-[88px] s:h-[88px]">
@@ -423,7 +423,7 @@ const InforDetailPage = () => {
                       height={32}
                       className="s:w-[24px] s:h-[24px]"
                     />
-                    <p className='text-[#76797F] s:text-sm'>지방</p>
+                    <p className='text-[#76797F] s:text-sm s:mt-2'>지방</p>
                     <p className='text-gray-900 s:text-sm'>{dinnerRatios.fats}%</p>
                   </div>
                 </div>
@@ -446,8 +446,8 @@ const InforDetailPage = () => {
       </div>
       <hr className="border-t border-gray-300 w-full" />
       <div className="w-full pt-14 s:pt-6">
-        <h1 className="text-2xl text-gray-900 font-medium mb-2">오늘의 운동 플랜</h1>
-        <p className="text-gray600 mb-6">목표를 더 빠르게 달성할 수 있도록 식단과 함께하면 좋은 최적의 운동이에요</p>
+        <h1 className="text-2xl text-gray-900 font-medium mb-2 s:text-xl">오늘의 운동 플랜</h1>
+        <p className="text-gray600 mb-6 s:text-sm">목표를 더 빠르게 달성할 수 있도록 식단과 함께하면 좋은 최적의 운동이에요</p>
         <div className="flex gap-4 self-stretch w-full flex-col items-start relative flex-[0_0_auto]">
           <div className="inline-flex items-center gap-2 relative flex-[0_0_auto]">
             <div className="flex items-center mb-4">
