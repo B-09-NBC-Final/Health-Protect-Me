@@ -14,7 +14,14 @@ import clock from '@/assets/icons/clock.png';
 import Button from '@/components/Common/Button';
 import Loading from '@/components/LoadingPage/Loading';
 
-// Custom hook for data fetching
+type UserData = {
+  year_of_birth: number | null;
+  weight: number | null;
+  gender: string;
+  height: number | null;
+  purpose: string;
+};
+
 const useUserData = (userId: string) => {
   const supabase = createClient();
 
@@ -68,7 +75,7 @@ const InforDetailPage = () => {
   const { data: userData, isLoading, error } = useUserData(userId);
 
   const gptMutation = useMutation({
-    mutationFn: async (userData: any) => {
+    mutationFn: async (userData: UserData) => {
       const response = await fetch('/api/gpt', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
