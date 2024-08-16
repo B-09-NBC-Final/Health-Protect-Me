@@ -8,7 +8,7 @@ const MyProfile = () => {
         <div className="flex items-start mr-10 s:mr-0">
           <Profile />
         </div>
-        <div className="items-end ml-10 s:ml-0 s:items-center">
+        <div className="ml-10 s:ml-0">
           <PostsSection />
         </div>
       </div>

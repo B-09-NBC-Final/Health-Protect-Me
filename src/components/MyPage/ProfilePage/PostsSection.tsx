@@ -56,9 +56,9 @@ const PostsSection = () => {
   }, []);
 
   return (
-    <div className="w-full s:mt-6 px-4 s:px-2 py-6 border border-[#D5D6D8] rounded-2xl bg-white ">
+    <div className="w-[880px] s:w-full s:mt-6 px-4 s:px-2 py-6 border border-[#D5D6D8] rounded-2xl bg-white ">
       <h2 className="text-2xl font-medium mb-4 text-gray900">내가 작성한 글</h2>
-      <div className="h-[600px] overflow-y- pr-4 custom-scrollbar">
+      <div className="h-[600px] s:h-full overflow-y- pr-4 custom-scrollbar">
         <div className="grid grid-cols-1  gap-6">
           {posts.length > 0 ? (
             posts.map((post) => (
