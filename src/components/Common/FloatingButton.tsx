@@ -12,7 +12,7 @@ const FloatingButton = () => {
   return (
     <button
       type="button"
-      className="hidden w-12 h-12 bg-pramary500 rounded-full s:flex s:justify-center s:items-center s:fixed s:bottom-[15%] s:right-5 s:shadow-floating-btn"
+      className="hidden w-12 h-12 bg-pramary500 rounded-full s:flex s:justify-center s:items-center s:fixed s:bottom-[23%] s:right-5 s:shadow-floating-btn"
       onClick={writePost}
     >
       <Image src={iconPlus} alt="글 작성하기" width={32} height={32} />

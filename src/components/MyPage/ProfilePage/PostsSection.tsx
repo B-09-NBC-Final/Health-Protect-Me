@@ -57,7 +57,7 @@ const PostsSection = () => {
 
   return (
     <section className="w-[880px] px-10 py-6 border border-[#D5D6D8] rounded-2xl bg-white">
-      <h2 className="text-2xl font-medium mb-4 text-gray900">내가 작성한 글</h2>
+      <h2 className="text-2xl font-medium mb-4 text-gray900"></h2>
       <div className="h-[600px] overflow-y-auto pr-4 custom-scrollbar">
         <div className="grid grid-cols-3 gap-6">
           {posts.length > 0 ? (
@@ -67,7 +67,7 @@ const PostsSection = () => {
                   <div className="w-full h-48 mb-4 relative">
                     <Image
                       className="object-cover rounded-lg"
-                      src={post.image_url[0] || myPageDefaultImg} 
+                      src={post.image_url[0] || myPageDefaultImg}
                       alt={`Post ${post.id}`}
                       layout="fill"
                     />
