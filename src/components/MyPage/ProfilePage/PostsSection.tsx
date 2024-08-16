@@ -56,18 +56,18 @@ const PostsSection = () => {
   }, []);
 
   return (
-    <section className="w-[880px] px-10 py-6 border border-[#D5D6D8] rounded-2xl bg-white">
+    <div className="w-[880px] s:w-full s:mt-6 px-10 s:px-2 py-6 border border-[#D5D6D8] rounded-2xl bg-white ">
       <h2 className="text-2xl font-medium mb-4 text-gray900">내가 작성한 글</h2>
-      <div className="h-[600px] overflow-y-auto pr-4 custom-scrollbar">
-        <div className="grid grid-cols-3 gap-6">
+      <div className="h-[600px] s:h-full overflow-y-auto pr-4 custom-scrollbar">
+        <div className="grid grid-cols-1 gap-6 s:gap-0">
           {posts.length > 0 ? (
             posts.map((post) => (
               <article key={post.id} className="mb-6">
                 <Link href={`/posting-detail/${post?.id}`}>
                   <div className="w-full h-48 mb-4 relative">
                     <Image
-                      className="object-cover rounded-lg"
-                      src={post.image_url[0] || myPageDefaultImg}
+                      className="object-cover s:border rounded-lg s:mb-4"
+                      src={post.image_url[0] || myPageDefaultImg} 
                       alt={`Post ${post.id}`}
                       layout="fill"
                     />
@@ -80,14 +80,14 @@ const PostsSection = () => {
               </article>
             ))
           ) : (
-            <div className="col-span-3">
+            <div className="col-span-3 s:col-span-3">
               <p className="text-[#404145]">아직 작성된 글이 존재하지 않아요.</p>
               <p className="text-[#404145]">첫번째 글을 작성하고 커뮤니티를 시작해보세요!</p>
             </div>
           )}
         </div>
       </div>
-    </section>
+    </div>
   );
 };
 
