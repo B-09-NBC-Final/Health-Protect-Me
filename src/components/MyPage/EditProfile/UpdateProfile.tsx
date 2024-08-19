@@ -101,7 +101,6 @@ const UpdateProfile = (): JSX.Element => {
         const { data: publicUrlData } = supabase.storage.from('avatars').getPublicUrl(avatarData.path);
 
         avatarUrl = publicUrlData.publicUrl;
-        console.log('avatarUrl', avatarUrl);
         await revalidate();
         setUser({ ...user, profile_url: avatarUrl });
       }

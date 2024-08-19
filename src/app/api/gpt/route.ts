@@ -9,7 +9,6 @@ export async function POST(request: NextRequest) {
     const openai = new OpenAI({
         apiKey: process.env.NEXT_PUBLIC_OPENAI_SECRET_KEY,
     });
-    console.log('gpt 요청 직전')
     try {
         const response = await openai.chat.completions.create({
             model: "gpt-4o-mini",
