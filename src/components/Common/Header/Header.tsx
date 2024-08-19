@@ -42,7 +42,7 @@ const Header = () => {
   return (
     <header className="fixed w-full bg-white z-10 h-[57px]">
       <div className="flex justify-between items-center px-10 py-4 h-full mx-auto max-w-container-l m:max-w-container-m s:max-w-container-s xs:max-w-container-xs xs:px-5">
-        <div className="flex items-center">
+        <div className="flex items-center pt-2">
           <Link href={'/'}>
             <button>
               <Image src={logo} alt="logo" width={100} height={28} />
