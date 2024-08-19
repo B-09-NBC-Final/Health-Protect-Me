@@ -13,6 +13,7 @@ import dumbbel from '@/assets/icons/dumbbel.png';
 import clock from '@/assets/icons/clock.png';
 import Button from '@/components/Common/Button';
 import Loading from '@/components/LoadingPage/Loading';
+import dynamic from 'next/dynamic';
 
 type UserData = {
   year_of_birth: number | null;
@@ -21,6 +22,11 @@ type UserData = {
   height: number | null;
   purpose: string;
 };
+
+const DynamicLoading = dynamic(() => import('@/components/LoadingPage/Loading'), {
+  loading: () => <p>Loading...</p>,
+  ssr: false
+});
 
 const useUserData = (userId: string) => {
   const supabase = createClient();
@@ -269,7 +275,7 @@ const InforDetailPage = () => {
   const lunchRatios = extractRatios(meal[1].ratio);
   const dinnerRatios = extractRatios(meal[2].ratio);
 
-  if (isLoading) return <Loading />;
+  if (isLoading) return <DynamicLoading />;
   if (error) return <div>에러가 발생했습니다: {error.message}</div>;
 
   return (
@@ -297,12 +303,12 @@ const InforDetailPage = () => {
             <p className="text-gray-600 mb-6 s:text-sm">AI 분석을 바탕으로 매일 맞춤 식단을 추천해 드려요</p>
           )}
         </div>
-        <div className="inline-flex gap-10 flex-col items-start flex-[0_0_auto] pb-14 s:pb-6">
+        <div className="inline-flex gap-10 flex-col items-start flex-[0_0_auto] pb-14 s:pb-6 s:w-full s:items-center">
           <div className="flex gap-10 s:flex-col s:gap-6">
             <Card className="!flex-[0_0_auto] shadow-floating overflow-hidden w-[400px] rounded-[20px] flex flex-col s:w-[320px]">
               <CardHeader className="!text-color-text-sub">
                 <CardDescription className="text-[#3E9B2E] font-semibold s:text-sm">아침</CardDescription>
-                <CardDescription className="text-[#27282A]v text-base mt-2">{meal[0].menu.trim().replace(/^-/, '')}</CardDescription>
+                <CardDescription className="text-[#27282A] text-base mt-2">{meal[0].menu.trim().replace(/^-/, '')}</CardDescription>
                 <p className="text-[#76797F] mt-1">{meal[0].calories.replace('&칼로리:', '')}</p>
               </CardHeader>
               <CardContent className="overflow-auto max-h-[200px] mt-auto">
@@ -385,7 +391,7 @@ const InforDetailPage = () => {
                 </div>
               </CardContent>
             </Card>
-            <Card className="!flex-[0_0_auto] shadow-floating overflow-hidden w-[400px] s:w-[320px] rounded-[20px] flex flex-col">
+            <Card className="!flex-[0_0_auto] shadow-floating overflow-hidden w-full max-w-[400px] s:max-w-[320px] rounded-[20px] flex flex-col">
               <CardHeader className="!text-color-text-sub">
                 <CardDescription className="text-[#3E9B2E] font-semibold s:text-sm">저녁</CardDescription>
                 <CardDescription className="text-[#27282A] text-base mt-2">{meal[2].menu.trim().replace(/^-/, '')}</CardDescription>
@@ -448,16 +454,19 @@ const InforDetailPage = () => {
       <div className="w-full pt-14 s:pt-6">
         <h1 className="text-2xl text-[#27282A] font-medium mb-2 s:text-xl">오늘의 운동 플랜</h1>
         <p className="text-gray600 mb-6 s:text-sm">목표를 더 빠르게 달성할 수 있도록 식단과 함께하면 좋은 최적의 운동이에요</p>
-        <div className="flex gap-4 self-stretch w-full flex-col items-start relative flex-[0_0_auto]">
-          <div className="inline-flex items-center gap-2 relative flex-[0_0_auto]">
-            <div className="flex items-center mb-4">
+        <div className="flex self-stretch w-full flex-col items-start relative flex-[0_0_auto]">
+          {/* <div className="flex w-full justify-center"> */}
+          <div className="inline-flex items-center gap-2 relative flex-[0_0_auto] s:w-ful s:items-center s:justify-center">
+            <div className="flex items-center mb-4 ">
               <Image src={running} alt="running" width={48} height={48} />
               <div className="font-bold text-[#27282A] text-lg ml-2">{work.type}</div>
             </div>
           </div>
+          {/* <div>dsahfkjdshkjfahdskjfhkaj</div> */}
         </div>
-        <div className="flex flex-col items-start gap-6 relative w-full flex-[0_0_auto]">
-          <Card className="flex px-10 py-6 self-stretch w-full flex-col items-start gap-6 relative flex-[0_0_auto] bg-white rounded-[20px] shadow-floating s:w-[320px] s:p-4">
+        <div className="flex flex-col items-start gap-6 relative w-full flex-[0_0_auto] s:w-full s:items-center">
+          {/* <div className="flex flex-col items-center justify-center gap-6 w-full s:w-full s:justify-center"> */}
+          <Card className="flex px-10 py-6 self-stretch w-full flex-col items-start gap-6 relative flex-[0_0_auto] bg-white rounded-[20px] shadow-floating s:w-[320px] s:p-4 s:mx-auto">
             <div className="inline-flex flex-col items-start gap-1 relative flex-[0_0_auto]">
               <div className="inline-flex items-center gap-1 relative flex-[0_0_auto]">
                 <Image src={dumbbel} alt="dumbbel" width={24} height={24} />
@@ -479,7 +488,7 @@ const InforDetailPage = () => {
               </div>
             </div>
           </Card>
-          <Card className="flex px-10 py-6 self-stretch w-full flex-col items-start gap-6 relative flex-[0_0_auto] bg-white rounded-[20px] shadow-floating s:w-[320px] s:p-4">
+          <Card className="flex px-10 py-6 self-stretch w-full flex-col items-start gap-6 relative flex-[0_0_auto] bg-white rounded-[20px] shadow-floating s:w-[320px] s:p-4 s:mx-auto">
             <div className="inline-flex flex-col items-start gap-1 relative flex-[0_0_auto]">
               <div className="inline-flex items-center gap-1 relative flex-[0_0_auto]">
                 <div className="text-sm text-gray900 font-semibold w-fit">추가 팁</div>
