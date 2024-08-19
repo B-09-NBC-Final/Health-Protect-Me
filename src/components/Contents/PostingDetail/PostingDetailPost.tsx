@@ -92,14 +92,14 @@ const PostingDetailPost = ({ params }: { params: { id: string } }) => {
     <>
       <div className="w-[800px] mx-auto s:w-full xs:pb-6">
         {post ? (
-          <span className="text-primary600 border-primary500 border border-solid py-1 px-2 mb-3 rounded bg-white xs:text-text-sm">
+          <span className="text-primary600 border-primary500 border border-solid py-[3px] px-[7.5px] mb-3 rounded bg-white text-sm">
             {post?.category}
           </span>
         ) : (
           <Skeleton className="!w-[50px] !h-[24px] rounded-xl" />
         )}
 
-        <div className="flex justify-between items-center mt-2 relative">
+        <div className="flex justify-between items-center mt-1 relative">
           {post ? (
             <p className="text-gray900 font-semibold">{post?.title}</p>
           ) : (
@@ -147,7 +147,7 @@ const PostingDetailPost = ({ params }: { params: { id: string } }) => {
         ) : null}
 
         {post ? (
-          <p className="text-gray800 mt-6">{post?.content}</p>
+          <p className="text-gray800 mt-6 break-all">{post?.content}</p>
         ) : (
           <Skeleton className="!w-[350px] !h-[24px] rounded-xl mt-6" />
         )}
