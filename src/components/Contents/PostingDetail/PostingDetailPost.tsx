@@ -174,7 +174,7 @@ const PostingDetailPost = ({ params }: { params: { id: string } }) => {
             )}
           </div>
         </div>
-        <PostingComments />
+        <PostingComments post={post as Post} user={user as User} />
       </div>
     </>
   );
