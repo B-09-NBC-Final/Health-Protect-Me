@@ -19,10 +19,14 @@ const ProfileDropdown = () => {
     };
   }, []);
 
+  const closeDropdown = () => {
+    setIsOpen(false);
+  };
+
   return (
     <div className="relative inline-block text-left" ref={dropdownRef}>
       <ProfileTrigger setIsOpen={setIsOpen} />
-      {isOpen && <DropdownContent />}
+      {isOpen && <DropdownContent closeDropdown={closeDropdown} />}
     </div>
   );
 };
