@@ -10,7 +10,7 @@ const ProfileTrigger = ({ setIsOpen }: { setIsOpen: React.Dispatch<React.SetStat
     setIsOpen((prev) => !prev);
   };
   return (
-    <div onClick={handleClick} className="object-cover border rounded-full overflow-hidden cursor-pointer ">
+    <div onClick={handleClick} className="object-cover border rounded-full overflow-hidden cursor-pointer w-10 h-10">
       <ProfileImg
         src={user?.profile_url && user.profile_url.length > 0 ? user.profile_url : Defaultimg}
         width={40}

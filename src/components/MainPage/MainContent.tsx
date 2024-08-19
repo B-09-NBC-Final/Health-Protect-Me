@@ -32,6 +32,7 @@ const MainContent = () => {
       router.push('/info');
     }
   };
+  
   return (
     <section className="max-w-container-l ml:max-w-container-ml mx-auto px-10 m:max-w-container-m s:max-w-container-s xs:max-w-container-xs xs:px-5">
       <div className="flex justify-between items-end py-40 s:flex-col-reverse s:items-center s:pt-24 s:pb-20">
