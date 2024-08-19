@@ -9,7 +9,6 @@ type UserProfileProps = {
 
 const UserProfile = ({ width, height }: UserProfileProps): JSX.Element => {
   const { user } = useUserStore((state) => state);
-  console.log('user.profile_url', user?.profile_url);
   return (
     <div className={`border rounded-full object-cover overflow-hidden`}>
       <Image
