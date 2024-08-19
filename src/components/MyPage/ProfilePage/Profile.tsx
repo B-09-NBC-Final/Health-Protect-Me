@@ -112,19 +112,19 @@ const Profile = () => {
       </div>
       <h1 className="text-sm font-bold mb-[28px] text-center">{user.nickname || '사용자'}</h1>
       <div className="py-3 s:py-4 px-4 s:px-4 text-center w-full shadow-my-box rounded-2xl flex flex-col items-center justify-center">
-        <div className="flex items-center justify-center w-full h-8 bg-[#EAF3EC] text-[#257D1D] rounded-xl mb-2 font-semibold">
+        <div className="flex items-center justify-center w-full h-8 s:h-9 bg-[#EAF3EC] text-[#279B6A] rounded-xl mb-2 font-semibold">
           <h2 className="text-base font-medium py-1">{user.goal}</h2>
         </div>
         <p className="text-gray-500 text-xs mt-1">헬프미와 함께 나의 목표를 달성해요</p>
         <div className="flex justify-around items-center mt-4 s:mt-6 w-full">
           <div className="flex flex-col items-center">
-            <span className="font-bold text-sm">키</span>
-            <span className="text-sm text-gray-800">{user.height ? `${user.height}cm` : 'N/A'}</span>
+            <span className="font-bold text-sm text-[#27282A] ">키</span>
+            <span className="text-sm text-[#404145]">{user.height ? `${user.height}cm` : 'N/A'}</span>
           </div>
           <div className="h-8 w-px bg-gray-300 mx-2"></div>
           <div className="flex flex-col items-center">
-            <span className="font-bold text-sm">체중</span>
-            <span className="text-sm text-gray-800">{user.weight ? `${user.weight}kg` : 'N/A'}</span>
+            <span className="font-bold text-sm text-[#27282A]">체중</span>
+            <span className="text-sm text-[#404145]">{user.weight ? `${user.weight}kg` : 'N/A'}</span>
           </div>
           <div className="h-8 w-px bg-gray-300 mx-2"></div>
           <div className="flex flex-col items-center">
@@ -138,7 +138,7 @@ const Profile = () => {
           onClick={handleNavigateToEdit}
           bgColor="bg-white"
           boxShadow="none"
-          textColor="text-gray-900"
+          textColor="text-[#27282A]"
           marginX="mt-6"
           paddingY="py-2"
           border="border-gray-400"

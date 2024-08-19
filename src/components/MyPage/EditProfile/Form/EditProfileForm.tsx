@@ -232,7 +232,7 @@ const ProfileForm = ({
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel onClick={handleAlertCancel}>아니오</AlertDialogCancel>
-            <AlertDialogAction onClick={handleAlertConfirm}>예</AlertDialogAction>
+            <AlertDialogAction className='bg-[#F5637C]' onClick={handleAlertConfirm}>예</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

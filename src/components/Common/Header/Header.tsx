@@ -6,17 +6,47 @@ import Dropdown from '@/utils/Dropdown';
 import Image from 'next/image';
 import logo from '@/assets/icons/Vector.svg';
 import { useMediaQuery } from 'react-responsive';
+import { useRouter } from 'next/navigation';
+import { createClient } from '@/supabase/client';
 
 const Header = () => {
+  const router = useRouter();
+  const supabase = createClient();
   const { user } = useUserStore((state) => state);
   const isMobile = useMediaQuery({ maxWidth: 767 });
+
+  const filterdInfo = async () => {
+    const authToken = await supabase.auth.getSession();
+
+    if (authToken.data.session === null) {
+      router.push('/login');
+      return;
+    }
+
+    const userId = authToken.data.session.user.id;
+
+    const { data, error } = await supabase.from('users').select('is_survey_done').eq('user_id', userId).single();
+
+    if (error) {
+      console.error('Error fetching user data:', error);
+      return;
+    }
+
+    if (data.is_survey_done) {
+      router.push('/info-detail');
+    } else {
+      router.push('/info');
+    }
+  };
 
   return (
     <header className="fixed w-full bg-white z-10 h-[57px]">
       <div className="flex justify-between items-center px-10 py-4 h-full mx-auto max-w-container-l m:max-w-container-m s:max-w-container-s xs:max-w-container-xs xs:px-5">
         <div className="flex items-center">
           <Link href={'/'}>
-            <Image src={logo} alt="logo" width={100} height={28} />
+            <button>
+              <Image src={logo} alt="logo" width={100} height={28} />
+            </button>
           </Link>
         </div>
         <nav>
@@ -24,9 +54,9 @@ const Header = () => {
             <>
               <ul className="xs:hidden flex items-center px-0 gap-10">
                 <li>
-                  <Link href={'/info-detail'} className="hover-effect">
+                  <button onClick={filterdInfo} className="hover-effect">
                     나만의 식단
-                  </Link>
+                  </button>
                 </li>
                 <li>
                   <Link href={'/posting-main'} className="hover-effect">
