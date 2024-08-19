@@ -16,7 +16,7 @@ const pretandard = localFont({
   src: './fonts/subset-PretendardVariable-Regular.woff2',
   weight: '400 900',
   display: 'swap',
-  variable: '--font-pretentard'
+  variable: '--font-pretendard'
 });
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
