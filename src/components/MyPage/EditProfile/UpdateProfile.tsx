@@ -101,7 +101,6 @@ const UpdateProfile = (): JSX.Element => {
         const { data: publicUrlData } = supabase.storage.from('avatars').getPublicUrl(avatarData.path);
 
         avatarUrl = publicUrlData.publicUrl;
-        console.log('avatarUrl', avatarUrl);
         await revalidate();
         setUser({ ...user, profile_url: avatarUrl });
       }
@@ -151,7 +150,7 @@ const UpdateProfile = (): JSX.Element => {
         console.error('Failed to fetch updated user data: updatedUserData is null');
       }
 
-      router.push('/my-page');
+      router.push('/info-detail');
     } catch (error) {
       console.error('Failed to save user data:', error);
     }
