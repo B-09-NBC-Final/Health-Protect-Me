@@ -95,16 +95,23 @@ const ProfileForm = ({
   };
 
   const handleSave = () => {
+    const updatedData = { weight, goal };
     if (weight !== initialValues.weight || goal !== initialValues.goal) {
       setShowAlert(true);
     } else {
-      onSave();
+      saveData(updatedData);
     }
+  };
+
+  const saveData = (data: { weight: string; goal: string }) => {
+    onSave();
+    setInitialValues(data);
   };
 
   const handleAlertConfirm = () => {
     setShowAlert(false);
-    router.push('/info-detail');
+    const updatedData = { weight, goal };
+    saveData(updatedData);
   };
 
   const handleAlertCancel = () => {
@@ -113,13 +120,11 @@ const ProfileForm = ({
   };
 
   useEffect(() => {
-    const isNicknameValid = nickname.length >= 2 && nickname.length < 10;
-    const isHeightValid = height !== '' && !heightError;
     const isWeightValid = weight !== '' && !weightError;
     const isGoalValid = goal !== '';
 
-    setIsValid(isNicknameValid && isHeightValid && isWeightValid && isGoalValid);
-  }, [nickname, height, heightError, weight, weightError, goal]);
+    setIsValid(isWeightValid && isGoalValid);
+  }, [weight, weightError, goal]);
 
   return (
     <>

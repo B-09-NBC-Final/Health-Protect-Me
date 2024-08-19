@@ -151,7 +151,7 @@ const UpdateProfile = (): JSX.Element => {
         console.error('Failed to fetch updated user data: updatedUserData is null');
       }
 
-      router.push('/my-page');
+      router.push('/info-detail');
     } catch (error) {
       console.error('Failed to save user data:', error);
     }
