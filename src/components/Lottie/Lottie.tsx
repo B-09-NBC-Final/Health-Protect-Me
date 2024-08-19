@@ -16,7 +16,7 @@ const DefaultLottie = () => {
             options={defaultOptions}
             height={160}
             width={160}
-            speed={1.5}  // 여기에서 애니메이션의 속도를 조절합니다.
+            speed={2}  // 여기에서 애니메이션의 속도를 조절합니다.
         />
     );
 };
