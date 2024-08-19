@@ -76,9 +76,9 @@ const PostingList = () => {
             <button
               key={category}
               onClick={() => setSelectedCategory(category)}
-              className={`h-[40px] rounded-xl text-sm text-left py-3 px-4 flex items-center s:mb-0 ${
+              className={`h-[40px] rounded-xl text-sm text-left py-3 px-4 flex items-center text-gray900 s:mb-0 ${
                 category === selectedCategory
-                  ? 'bg-pramary500 text-white font-semibold'
+                  ? 'bg-pramary500 text-white font-[600]'
                   : 'bg-white text-black border-gray-300'
               } ${idx < categories.length - 1 ? 'mb-2' : ''}`}
             >
@@ -89,8 +89,8 @@ const PostingList = () => {
         <PostingMainBtn />
         <FloatingButton />
       </div>
-      <div className="border border-solid rounded-xl border-gray300 w-[1032px] ml-20 px-10 py-6 bg-white s:w-auto s:ml-0 s:mt-6 s:border-none s:bg-inherit s:p-0 s:text-lg s:font-semibold">
-        <h2 className="mb-4 text-2xl text-gray900 font-medium">건강한 식단 이야기</h2>
+      <div className="border border-solid rounded-xl border-gray300 w-[1032px] ml-20 px-10 py-6 bg-white s:w-auto s:ml-0 s:mt-6 s:border-none s:bg-inherit s:p-0">
+        <h2 className="mb-4 text-2xl text-gray900 font-medium s:text-xl s:font-semibold">건강한 식단 이야기</h2>
         {posts.data?.length === 0 ? (
           <p className="text-gray600 mt-2">
             아직 작성된 글이 존재하지 않아요. <br />첫 번째 글을 작성하고 커뮤니티를 시작해보세요!
@@ -111,15 +111,15 @@ const PostingList = () => {
                       alt=""
                       width={128}
                       height={128}
-                      className="!w-[128px] !h-[128px] rounded-lg shrink-0 object-cover s:!w-[88px] s:!h-[88px]"
+                      className="!w-[128px] !h-[128px] rounded-lg shrink-0 object-cover s:!w-[104px] s:!h-[104px]"
                     />
-                    <div className="flex flex-col justify-between ml-5 w-full">
+                    <div className="flex flex-col justify-between ml-5 w-full s:ml-3">
                       <div>
                         <span className="text-sm font-semibold text-primary600 mb-2">{item.category}</span>
-                        <p className="text-gray900 font-bold s:text-sm">{item.title}</p>
-                        <p className="line-clamp-2 text-gray800 text-sm">{item.content}</p>
+                        <p className="text-gray900 font-semibold  s:text-sm line-clamp-1">{item.title}</p>
+                        <p className="line-clamp-2 text-gray800 text-sm break-all">{item.content}</p>
                       </div>
-                      <div className="flex justify-between w-full">
+                      <div className="flex justify-between w-full mt-2">
                         <p className="text-xs text-gray600">{item.users?.nickname}</p>
                         <p className="text-xs text-gray600 pr-3">{formatDate(item.updated_at)}</p>
                       </div>
