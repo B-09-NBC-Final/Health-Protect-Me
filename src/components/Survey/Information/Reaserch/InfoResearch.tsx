@@ -6,7 +6,6 @@ import { createClient } from '@/supabase/client';
 import { toast } from 'react-toastify';
 import { useUserStore } from '@/store/userStore';
 import { useRouter } from 'next/navigation';
-import LoadingAnimation from '@/components/LoadingPage/ResultLoading/Loading';
 import LoadingPage from '@/components/LoadingPage/Loading';
 
 const supabase = createClient();
@@ -17,6 +16,7 @@ const InfoResearch = (): JSX.Element => {
   const user = useUserStore((state) => state.user);
   const setUser = useUserStore((state) => state.setUser);
   const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
+  const [mobileBar, setMobileBar] = useState(false);
   const [surveyData, setSurveyData] = useState<InformationInsertDataType>({
     year_of_birth: null,
     gender: '',
@@ -32,6 +32,16 @@ const InfoResearch = (): JSX.Element => {
 
   const steps: Step[] = ['출생연도', '성별', '신장 및 체중', '식단 목적'];
   const stepRefs = useRef<React.RefObject<HTMLDivElement>[]>(steps.map(() => React.createRef()));
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setMobileBar(window.innerWidth < 640);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const nextStep = (): void => {
     if (currentStepIndex < steps.length - 1) {
@@ -404,11 +414,16 @@ const InfoResearch = (): JSX.Element => {
         <h1 className="text-3xl font-bold mb-8 text-center text-gray-800 sr-only">{steps[currentStepIndex]}</h1>
         <div
           className="w-full mb-10 mt-20 bg-gray-200 rounded-full h-2 
-                    s:mb-0 s:mt-10 s:w-80 s:h-3 s:flex s:items-center s:pr-[240px]"
+              s:mb-0 s:mt-10 s:w-80 s:h-3"
         >
           <div
-            className="bg-red-400 h-2 s:h-3 rounded-full transition-all duration-500 ease-in-out s:w-40 "
-            style={{ width: `${((currentStepIndex + 1) / steps.length) * 100}%`, maxWidth: '100%' }}
+            className="bg-red-400 h-full rounded-full transition-all duration-500 ease-in-out"
+            style={{
+              width: mobileBar
+                ? `${((currentStepIndex + 1) / steps.length) * 80}%`
+                : `${((currentStepIndex + 1) / steps.length) * 80}%`,
+              maxWidth: '100%'
+            }}
           ></div>
         </div>
 
@@ -435,7 +450,7 @@ const InfoResearch = (): JSX.Element => {
             <Button
               onClick={saveDataToSupabase}
               disabled={!isStepValid()}
-              className="flex w-full s:w-56 h-12 s:mb-[332px] items-center justify-center text-base bg-[#FF7A85] text-white py-3 rounded-lg hover:bg-[#FF7A85] transition duration-300"
+              className="flex w-full s:w-56 h-12 s:mb-[332px] items-center justify-center text-base bg-[#FF7A85] text-white py-3 rounded-lg hover:bg-[#FF7A85] transition duration-300flex w-56 s:w-56 h-12 s:mb-[332px] items-center justify-center text-base bg-[#FF7A85] text-white py-3 rounded-lg hover:bg-[#FF7A85] transition duration-300"
             >
               결과보기
             </Button>
