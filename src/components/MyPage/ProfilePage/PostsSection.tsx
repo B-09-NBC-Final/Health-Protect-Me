@@ -57,7 +57,7 @@ const PostsSection = () => {
 
   return (
     <div className="w-[880px] s:w-full s:mt-6 px-10 s:px-4 py-6 border border-[#D5D6D8] rounded-2xl bg-white">
-      <h2 className="text-2xl font-medium mb-4 text-gray900 s:font-[600]">내가 작성한 글</h2>
+      <h2 className="text-2xl s:text-xl font-medium mb-4 text-gray900 s:font-[600]">내가 작성한 글</h2>
       <div className="h-[600px] s:h-full overflow-y-auto custom-scrollbar">
         <div className="flex flex-wrap gap-8">
           {posts.length > 0 ? (
