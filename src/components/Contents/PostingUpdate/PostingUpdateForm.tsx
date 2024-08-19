@@ -257,7 +257,9 @@ const PostingUpdateForm = ({ params }: { params: { id: string } }) => {
                 <AlertDialogAction onClick={handleAlertConfirm}>확인</AlertDialogAction>
               </>
             ) : (
-              <AlertDialogAction onClick={() => setShowAlert(false)}>확인</AlertDialogAction>
+              <AlertDialogAction className="bg-[#F5637C]" onClick={() => setShowAlert(false)}>
+                확인
+              </AlertDialogAction>
             )}
           </AlertDialogFooter>
         </AlertDialogContent>
