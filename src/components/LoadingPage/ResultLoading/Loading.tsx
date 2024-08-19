@@ -5,9 +5,9 @@ const LoadingAnimation = () => {
   const [message, setMessage] = useState<string>('');
 
   const messages: string[] = [
-    'AI가 나만을 위한 맞춤 식단과 운동을 깊게 고민하고 있어요!',
+    'AI가 나만을 위한 맞춤 식단과 운동을 \n깊게 고민하고 있어요!',
     '목표 달성을 위한 식단 생성중...\n효율적인 운동 플랜 생성중..',
-    'TIP! 균형 잡힌 식단과 매일 30분 운동이 건강에 변화를 줄 거예요'
+    'TIP! 균형 잡힌 식단과 매일 30분 운동이 \n건강에 변화를 줄 거예요'
   ];
 
   useEffect(() => {
