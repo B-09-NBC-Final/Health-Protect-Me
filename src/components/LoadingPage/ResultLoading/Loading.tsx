@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import DefaultLottie from '@/components/Lottie/Lottie';
+import DefaultLottie from '@/components/LoadingPage/Lottie/Lottie';
 
 const LoadingAnimation = () => {
   const [message, setMessage] = useState<string>('');

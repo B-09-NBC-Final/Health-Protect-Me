@@ -111,7 +111,9 @@ const KebabMenu = ({ params }: { params: { id: string } }) => {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>취소</AlertDialogCancel>
-            <AlertDialogAction onClick={confirmDelete}>삭제</AlertDialogAction>
+            <AlertDialogAction onClick={confirmDelete} className="bg-[#FF7A85] border hover:text-white hover:boder-2 hover:bg-[#F5637C] ">
+              삭제
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

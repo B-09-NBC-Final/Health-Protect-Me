@@ -21,8 +21,6 @@ export default function ClientRootLayout({ children }: { children: React.ReactNo
         setLoading(false);
         return;
       }
-
-      router.push('/login');
     };
 
     const checkSession = async () => {

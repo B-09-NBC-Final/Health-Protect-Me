@@ -179,7 +179,9 @@ const TextareaPage = () => {
             <AlertDialogDescription>{alertMessage}</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogAction onClick={() => setShowAlert(false)}>확인</AlertDialogAction>
+            <AlertDialogAction className="bg-[#FF7A85] border hover:text-white hover:boder-2 hover:bg-[#F5637C] " onClick={() => setShowAlert(false)}>
+              확인
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

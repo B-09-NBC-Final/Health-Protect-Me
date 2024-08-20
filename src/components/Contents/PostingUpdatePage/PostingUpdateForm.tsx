@@ -29,7 +29,6 @@ const PostingUpdateForm = ({ params }: { params: { id: string } }) => {
   const [uploadFile, setUploadFile] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
   const [imageError, setImageError] = useState<string | null>(null);
-  // const [error, setError] = useState<string | null>(null);
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const [isConfirmDialog, setIsConfirmDialog] = useState(false);
@@ -253,11 +252,13 @@ const PostingUpdateForm = ({ params }: { params: { id: string } }) => {
           <AlertDialogFooter>
             {isConfirmDialog ? (
               <>
-                <AlertDialogAction onClick={() => setShowAlert(false)}>취소</AlertDialogAction>
-                <AlertDialogAction onClick={handleAlertConfirm}>확인</AlertDialogAction>
+                <AlertDialogAction onClick={() => setShowAlert(false)} className="bg-white border text-black hover:bg-gray-100 mt-2 s:mt-0">취소</AlertDialogAction>
+                <AlertDialogAction onClick={handleAlertConfirm} className="bg-[#FF7A85] border hover:text-white hover:boder-2 hover:bg-[#F5637C] ">확인</AlertDialogAction>
               </>
             ) : (
-              <AlertDialogAction onClick={() => setShowAlert(false)}>확인</AlertDialogAction>
+              <AlertDialogAction className="bg-[#FF7A85]" onClick={() => setShowAlert(false)}>
+                확인
+              </AlertDialogAction>
             )}
           </AlertDialogFooter>
         </AlertDialogContent>

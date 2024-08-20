@@ -402,9 +402,7 @@ const InfoResearch = (): JSX.Element => {
       {isLoading ? (
         <Loading />
       ) : (
-        <div
-          className={`w-full s:w-[1360px] max-w-2xl flex flex-col items-center mx-auto px-4 s:px-0`}
-        >
+        <div className={`w-full s:w-[1360px] max-w-2xl flex flex-col items-center mx-auto px-4 s:px-0`}>
           <h1 className="text-3xl font-bold mb-8 text-center text-gray-800 sr-only">{steps[currentStepIndex]}</h1>
           <div
             className="w-full mb-10 mt-20 bg-gray-200 rounded-full h-2 
@@ -454,7 +452,6 @@ const InfoResearch = (): JSX.Element => {
       )}
     </div>
   );
-
 };
 
 export default InfoResearch;
