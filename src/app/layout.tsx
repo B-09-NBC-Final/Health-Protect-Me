@@ -25,7 +25,7 @@ export const metadata: Metadata = {
 
     images: [
       {
-        url: 'src/assets/image/og.png',
+        url: '/og.png',
         width: 516,
         height: 504,
         alt: 'Health-Protect-Me.'
