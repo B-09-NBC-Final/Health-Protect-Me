@@ -289,11 +289,10 @@ const InfoResearch = (): JSX.Element => {
                 placeholder="예) 1990"
                 value={surveyData.year_of_birth ?? ''}
                 onChange={handleInputChange}
-                className={`w-full p-3 text-sm border rounded-lg focus:outline-none focus:ring-1 ${
-                  surveyData.year_of_birth !== null && !/^(19|20)\d{2}$/.test(surveyData.year_of_birth.toString())
-                    ? 'focus:ring-red-500 focus:border-red-500'
-                    : 'focus:ring-[#49BA43] focus:border-[#49BA43]'
-                }`}
+                className={`w-full p-3 text-sm border rounded-lg focus:outline-none focus:ring-1 ${surveyData.year_of_birth !== null && !/^(19|20)\d{2}$/.test(surveyData.year_of_birth.toString())
+                  ? 'focus:ring-red-500 focus:border-red-500'
+                  : 'focus:ring-[#49BA43] focus:border-[#49BA43]'
+                  }`}
               />
               {surveyData.year_of_birth !== null && !/^(19|20)\d{2}$/.test(surveyData.year_of_birth.toString()) && (
                 <p className="text-red-500 text-sm mt-1">1900년대 또는 2000년대 4자리로 입력해주세요</p>
@@ -312,17 +311,15 @@ const InfoResearch = (): JSX.Element => {
             <div className="flex space-x-2 gap-4 s:flex-row  s:space-y-0 ">
               <button
                 onClick={() => handleGenderSelect('남')}
-                className={`w-full s:flex-1 s:w-36 h-12 py-3 s:py-3 s:text-center px-4 text-base border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-red-400 transition duration-200 ${
-                  surveyData.gender === '남' ? 'bg-[#FFF6F2] text-black' : 'bg-white text-gray-700'
-                }`}
+                className={`w-full s:flex-1 s:w-36 h-12 py-3 s:py-3 s:text-center px-4 text-base border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-red-400 transition duration-200 ${surveyData.gender === '남' ? 'bg-[#FFF6F2] text-black' : 'bg-white text-gray-700'
+                  }`}
               >
                 남자
               </button>
               <button
                 onClick={() => handleGenderSelect('여')}
-                className={`w-full s:w-36 h-12 s:ml-0 py-3 px-4 text-base border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-red-400 transition duration-200 ${
-                  surveyData.gender === '여' ? 'bg-[#FFF6F2] text-black' : 'bg-white text-gray-700'
-                }`}
+                className={`w-full s:w-36 h-12 s:ml-0 py-3 px-4 text-base border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-red-400 transition duration-200 ${surveyData.gender === '여' ? 'bg-[#FFF6F2] text-black' : 'bg-white text-gray-700'
+                  }`}
               >
                 여자
               </button>
@@ -345,11 +342,10 @@ const InfoResearch = (): JSX.Element => {
                 placeholder="cm (예: 170)"
                 value={surveyData.height ?? ''}
                 onChange={handleInputChange}
-                className={`w-full s:flex p-3 text-sm border rounded focus:outline-none focus:ring-1 ${
-                  surveyData.height !== null && !/^1\d{2}$/.test(surveyData.height.toString())
-                    ? 'border-red-500 focus:ring-red-500 focus:border-red-500'
-                    : 'focus:ring-[#49BA43] focus:border-[#49BA43]'
-                }`}
+                className={`w-full s:flex p-3 text-sm border rounded focus:outline-none focus:ring-1 ${surveyData.height !== null && !/^1\d{2}$/.test(surveyData.height.toString())
+                  ? 'border-red-500 focus:ring-red-500 focus:border-red-500'
+                  : 'focus:ring-[#49BA43] focus:border-[#49BA43]'
+                  }`}
               />
               {surveyData.height !== null && !/^1\d{2}$/.test(surveyData.height.toString()) && (
                 <p className="flex text-red-500 text-sm">100~199cm 사이로 입력해주세요</p>
@@ -363,11 +359,10 @@ const InfoResearch = (): JSX.Element => {
                 placeholder="kg (예: 65)"
                 value={surveyData.weight ?? ''}
                 onChange={handleInputChange}
-                className={`w-full p-3 s:flex text-sm border rounded focus:outline-none focus:ring-1 ${
-                  surveyData.weight !== null && !/^\d{2,3}$/.test(surveyData.weight.toString())
-                    ? 'border-red-500 focus:ring-red-500 focus:border-red-500'
-                    : 'focus:ring-[#49BA43] focus:border-[#49BA43]'
-                }`}
+                className={`w-full p-3 s:flex text-sm border rounded focus:outline-none focus:ring-1 ${surveyData.weight !== null && !/^\d{2,3}$/.test(surveyData.weight.toString())
+                  ? 'border-red-500 focus:ring-red-500 focus:border-red-500'
+                  : 'focus:ring-[#49BA43] focus:border-[#49BA43]'
+                  }`}
               />
               {surveyData.weight !== null && !/^\d{2,3}$/.test(surveyData.weight.toString()) && (
                 <p className="flex text-red-500 text-sm">30kg~200kg 사이로 입력해주세요</p>
@@ -390,9 +385,8 @@ const InfoResearch = (): JSX.Element => {
                 <button
                   key={goal}
                   onClick={() => handleDietGoalSelect(goal)}
-                  className={`w-full s:w-80 flex h-12 items-center text-center justify-center py-3 px-4 text-base border border-gray-300 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-red-400 transition duration-200 ${
-                    surveyData.purpose === goal ? 'bg-[#FFF6F2] text-black' : 'bg-white text-gray-700'
-                  }`}
+                  className={`w-full s:w-80 flex h-12 items-center text-center justify-center py-3 px-4 text-base border border-gray-300 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-red-400 transition duration-200 ${surveyData.purpose === goal ? 'bg-[#FFF6F2] text-black' : 'bg-white text-gray-700'
+                    }`}
                 >
                   {goal}
                 </button>
@@ -406,9 +400,7 @@ const InfoResearch = (): JSX.Element => {
   return (
     <div className="flex flex-col items-center justify-center">
       {isLoading ? (
-        <div className="opacity-50">
-          <Loading />
-        </div>
+        <Loading />
       ) : (
         <div className={`w-full s:w-[1360px] max-w-2xl flex flex-col items-center mx-auto px-4 s:px-0`}>
           <h1 className="text-3xl font-bold mb-8 text-center text-gray-800 sr-only">{steps[currentStepIndex]}</h1>
