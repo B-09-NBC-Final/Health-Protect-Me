@@ -240,7 +240,7 @@ const ProfileForm = ({
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel onClick={handleAlertCancel}>아니오</AlertDialogCancel>
-            <AlertDialogAction className="bg-[#F5637C]" onClick={handleAlertConfirm}>
+            <AlertDialogAction className="bg-[#FF7A85] border hover:text-white hover:boder-2 hover:bg-[#F5637C] " onClick={handleAlertConfirm}>
               예
             </AlertDialogAction>
           </AlertDialogFooter>
