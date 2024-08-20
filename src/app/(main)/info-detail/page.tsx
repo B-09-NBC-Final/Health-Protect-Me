@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { createClient } from '@/supabase/client';
 import { useUserStore } from '@/store/userStore';
@@ -12,7 +12,6 @@ import running from '@/assets/icons/running_man.png';
 import dumbbel from '@/assets/icons/dumbbel.png';
 import clock from '@/assets/icons/clock.png';
 import Button from '@/components/Common/Button';
-import Loading from '@/components/LoadingPage/Loading';
 import dynamic from 'next/dynamic';
 
 type UserData = {
@@ -23,8 +22,7 @@ type UserData = {
   purpose: string;
 };
 
-const DynamicLoading = dynamic(() => import('@/components/LoadingPage/Loading'), {
-  loading: () => <p>Loading...</p>,
+const DynamicLoading = dynamic(() => import('@/components/LoadingPage/ResultLoading/Loading'), {
   ssr: false
 });
 
@@ -131,7 +129,7 @@ const InforDetailPage = () => {
   }, [userData, currentDay]);
 
   // ai 결과 식단과 운동 나누기
-  const parseAiResults = (result: string) => {
+  const parseAiResults = useCallback((result: string) => {
     if (!result) return null;
     const days = result.split('@').slice(1);
     const dietPlans = days.map((day) => parseDiet(day));
@@ -141,10 +139,10 @@ const InforDetailPage = () => {
       result_diet: JSON.stringify(dietPlans),
       result_exercise: JSON.stringify(exercises)
     };
-  };
+  }, []);
 
   // 식단 쪼개기
-  const parseDiet = (dayString: string) => {
+  const parseDiet = useCallback((dayString: string) => {
     const sections = dayString.split('\n');
     const diet = {
       day: '',
@@ -180,10 +178,10 @@ const InforDetailPage = () => {
     });
 
     return diet;
-  };
+  }, []);
 
   // 운동 쪼개기
-  const parseExercise = (exerciseString: string) => {
+  const parseExercise = useCallback((exerciseString: string) => {
     if (!exerciseString) return null;
     const lines = exerciseString.split('\n');
     const exercise = {
@@ -226,7 +224,7 @@ const InforDetailPage = () => {
     }
 
     return exercise;
-  };
+  }, []);
 
   // supabase에 바뀐 식단과 운동 저장
   const saveResultsToSupabase = async (parsedResults: { result_diet: string; result_exercise: string }) => {
@@ -268,6 +266,10 @@ const InforDetailPage = () => {
     };
   };
 
+  if (isLoading || gptMutation.status === 'pending') {
+    return <DynamicLoading />;
+  }
+
   if (meal.length === 0 || !work) return null;
 
   // 각 식사의 탄단지 쪼개기
@@ -275,12 +277,10 @@ const InforDetailPage = () => {
   const lunchRatios = extractRatios(meal[1].ratio);
   const dinnerRatios = extractRatios(meal[2].ratio);
 
-  if (isLoading) return <DynamicLoading />;
   if (error) return <div>에러가 발생했습니다: {error.message}</div>;
 
   return (
     <div className="border-gray100 border border-solid rounded-xl py-[24px] px-10 bg-white s:w-full s:py-2 s:px-0 s:border-none s:bg-transparent">
-      {gptMutation.status === 'pending' && <Loading />}
       <div>
         <h1 className="text-2xl text-[#27282A] font-medium mb-2 s:text-xl">오늘의 추천 식단</h1>
         <div>
@@ -391,7 +391,7 @@ const InforDetailPage = () => {
                 </div>
               </CardContent>
             </Card>
-            <Card className="!flex-[0_0_auto] shadow-floating overflow-hidden w-full max-w-[400px] s:max-w-[320px] rounded-[20px] flex flex-col">
+            <Card className="!flex-[0_0_auto] shadow-floating overflow-hidden w-[400px] rounded-[20px] flex flex-col s:w-[320px]">
               <CardHeader className="!text-color-text-sub">
                 <CardDescription className="text-[#3E9B2E] font-semibold s:text-sm">저녁</CardDescription>
                 <CardDescription className="text-[#27282A] text-base mt-2">{meal[2].menu.trim().replace(/^-/, '')}</CardDescription>
@@ -462,7 +462,6 @@ const InforDetailPage = () => {
               <div className="font-bold text-[#27282A] text-lg ml-2">{work.type}</div>
             </div>
           </div>
-          {/* <div>dsahfkjdshkjfahdskjfhkaj</div> */}
         </div>
         <div className="flex flex-col items-start gap-6 relative w-full flex-[0_0_auto] s:w-full s:items-center">
           {/* <div className="flex flex-col items-center justify-center gap-6 w-full s:w-full s:justify-center"> */}

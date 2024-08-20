@@ -39,7 +39,7 @@ html {
 @layer base {
   * {
     @apply border-border;
-    font-family: var(--font-pretentard);
+    font-family: var(--font-pretendard);
   }
   body {
     @apply bg-background text-foreground;

@@ -82,7 +82,7 @@ const UpdateProfile = (): JSX.Element => {
     });
   };
 
-  const handleSave = async (): Promise<void> => {
+  const handleSave = async (save:string): Promise<void> => {
     try {
       if (!user || !user.userId) {
         throw new Error('사용자 ID를 찾을 수 없습니다.');
@@ -149,8 +149,11 @@ const UpdateProfile = (): JSX.Element => {
       } else {
         console.error('Failed to fetch updated user data: updatedUserData is null');
       }
-
-      router.push('/info-detail');
+      if(save ==='toMyPage'){
+        router.push('/my-page');
+      }else{
+        router.push('/info-detail');
+      }
     } catch (error) {
       console.error('Failed to save user data:', error);
     }

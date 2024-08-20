@@ -21,7 +21,7 @@ type ProfileFormProps = {
   setWeight: (value: string) => void;
   goal: string;
   setGoal: (value: string) => void;
-  onSave: () => void;
+  onSave: (save:string) => void;
   onCancel: () => void;
 };
 
@@ -99,19 +99,20 @@ const ProfileForm = ({
     if (weight !== initialValues.weight || goal !== initialValues.goal) {
       setShowAlert(true);
     } else {
-      saveData(updatedData);
+      saveData(updatedData,'toMyPage');
     }
   };
 
-  const saveData = (data: { weight: string; goal: string }) => {
-    onSave();
+  const saveData = (data: { weight: string; goal: string },save:string) => {
+    onSave(save);
     setInitialValues(data);
   };
 
   const handleAlertConfirm = () => {
     setShowAlert(false);
     const updatedData = { weight, goal };
-    saveData(updatedData);
+    saveData(updatedData,'toInfo');
+    router.push('/info-detail')
   };
 
   const handleAlertCancel = () => {
@@ -183,23 +184,25 @@ const ProfileForm = ({
         <div className="mb-4 ">
           <label className="block text-left mb-1 s:text-sm s:font-normal">나의 식단 목표</label>
           <div className="flex justify-center space-x-2 s:mb-10">
-            <button 
-            type="button" 
-            className={`${getButtonClasses('체중 감량')} s:py-3 s:px-4 s:h-16 `} 
-            onClick={() => setGoal('체중 감량')}
+            <button
+              type="button"
+              className={`${getButtonClasses('체중 감량')} s:py-3 s:px-4 s:h-16 `}
+              onClick={() => setGoal('체중 감량')}
             >
               체중 감량
             </button>
-            <button 
-            type="button" 
-            className={`${getButtonClasses('체중 유지')} s:py-3 s:px-4 s:h-16`}
-            onClick={() => setGoal('체중 유지')}>
+            <button
+              type="button"
+              className={`${getButtonClasses('체중 유지')} s:py-3 s:px-4 s:h-16`}
+              onClick={() => setGoal('체중 유지')}
+            >
               체중 유지
             </button>
-            <button 
-            type="button" 
-            className={`${getButtonClasses('체중 증가')} s:py-3 s:px-4 s:h-16`}
-            onClick={() => setGoal('체중 증가')}>
+            <button
+              type="button"
+              className={`${getButtonClasses('체중 증가')} s:py-3 s:px-4 s:h-16`}
+              onClick={() => setGoal('체중 증가')}
+            >
               체중 증가
             </button>
           </div>
@@ -209,7 +212,7 @@ const ProfileForm = ({
             buttonName="취소"
             bgColor="bg-white"
             textColor="text-[#27282A]"
-            paddingY='py-2 s:py-2 px-3 s:px-3'
+            paddingY="py-2 s:py-2 px-3 s:px-3"
             buttonWidth="w-full s:w-[152px] "
             boxShadow="shadow-none"
             border="border-solid-[#B7B9BD]"
@@ -220,7 +223,7 @@ const ProfileForm = ({
             buttonName="저장"
             bgColor={isValid ? 'bg-[#FF7A85]' : 'bg-gray-300'}
             textColor="text-white"
-            paddingY='py-2 s:py-2 px-3 s:px-3'
+            paddingY="py-2 s:py-2 px-3 s:px-3"
             buttonWidth="w-full s:w-[152px]"
             boxShadow="shadow-none"
             onClick={isValid ? handleSave : undefined}
@@ -237,7 +240,9 @@ const ProfileForm = ({
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel onClick={handleAlertCancel}>아니오</AlertDialogCancel>
-            <AlertDialogAction className='bg-[#F5637C]' onClick={handleAlertConfirm}>예</AlertDialogAction>
+            <AlertDialogAction className="bg-[#F5637C]" onClick={handleAlertConfirm}>
+              예
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
