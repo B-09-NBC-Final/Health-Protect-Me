@@ -3,6 +3,7 @@
 import { useUserStore } from '@/store/userStore';
 import { createClient } from '@/supabase/client';
 import { Comments, Post } from '@/types';
+import { ReceiptEuro } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -19,7 +20,7 @@ const PostingComments = ({ post }: { post: Post }) => {
   const [isEditing, setIsEditing] = useState<number | null>(null);
   const { user } = useUserStore((state) => state);
   const supabase = createClient();
-  const router = useRouter();
+  const [titleError, setTitleError] = useState<string | null>(null);
   const dayjs = require('dayjs');
   const formatDate = (date: string) => dayjs(date).format('YY.MM.DD');
 
@@ -50,6 +51,11 @@ const PostingComments = ({ post }: { post: Post }) => {
   const submitComment = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    if (comment.trim() === '') {
+      setTitleError('내용을 입력해주세요.');
+      return;
+    }
+
     const { data: commentData, error } = await supabase.from('comments').insert({
       user_id: user?.userId as string,
       content: comment,
@@ -61,6 +67,7 @@ const PostingComments = ({ post }: { post: Post }) => {
     }
 
     setComment('');
+    setTitleError(null);
   };
 
   const updateComment = async (id: number, newContent: string) => {
@@ -91,22 +98,25 @@ const PostingComments = ({ post }: { post: Post }) => {
       {!user || user.is_survey_done ? (
         ''
       ) : (
-        <form onSubmit={submitComment} className="flex pt-6">
-          <input
-            className="w-full border border-solid border-gray300 py-2 px-3 rounded-lg text-sm"
-            type="text"
-            placeholder="댓글을 작성해 보세요."
-            maxLength={300}
-            onChange={(e) => setComment(e.target.value)}
-            value={comment}
-          />
-          <button
-            className="w-20 text-sm text-gray900 py-2 border border-solid border-gray400 bg-white rounded ml-2"
-            type="submit"
-          >
-            등록
-          </button>
-        </form>
+        <>
+          <form onSubmit={submitComment} className="flex pt-6">
+            <input
+              className="w-full border border-solid border-gray300 py-2 px-3 rounded-lg text-sm"
+              type="text"
+              placeholder="댓글을 작성해 보세요."
+              maxLength={300}
+              onChange={(e) => setComment(e.target.value)}
+              value={comment}
+            />
+            <button
+              className="w-20 text-sm text-gray900 py-2 border border-solid border-gray400 bg-white rounded ml-2"
+              type="submit"
+            >
+              등록
+            </button>
+          </form>
+          {titleError && <div className="text-backgroundError mt-1 text-sm">{titleError}</div>}
+        </>
       )}
 
       <ul>
@@ -164,7 +174,7 @@ const PostingComments = ({ post }: { post: Post }) => {
                   type="text"
                   value={newContent}
                   onChange={(e) => setNewContent(e.target.value)}
-                  className="inline-block mt-1 bg-white border border-solid border-gray300 rounded-lg py-2 px-3 text-gray800 text-sm w-full"
+                  className="inline-block mt-1 bg-[#FFF1F0] rounded-lg py-2 px-3 text-gray800 text-sm w-full"
                   maxLength={300}
                 />
               ) : (
@@ -173,7 +183,7 @@ const PostingComments = ({ post }: { post: Post }) => {
                 </p>
               )}
             </div>
-            <p className="mt-2 text-xs text-gray600">{formatDate(comment.created_at)}</p>
+            <p className="mt-2 text-gray600 text-xs">{formatDate(comment.created_at)}</p>
           </li>
         ))}
       </ul>
