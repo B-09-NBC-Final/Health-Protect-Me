@@ -40,7 +40,7 @@ const PostingComments = ({ post }: { post: Post }) => {
     if (post && post.id) {
       getCommentList();
     }
-  }, [post]);
+  }, [post, commentList]);
 
   const submitComment = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
