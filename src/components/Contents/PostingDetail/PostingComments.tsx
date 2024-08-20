@@ -14,7 +14,6 @@ type newComments = Comments & {
 const PostingComments = ({ post }: { post: Post }) => {
   const [comment, setComment] = useState('');
   const [commentList, setCommentList] = useState<newComments[] | null>(null);
-  const [userPurpose, setUserPurpose] = useState<string | null>(null);
   const { user } = useUserStore((state) => state);
   const supabase = createClient();
   const dayjs = require('dayjs');
@@ -58,6 +57,15 @@ const PostingComments = ({ post }: { post: Post }) => {
     setComment('');
   };
 
+  const deleteComment = async (id: number) => {
+    const { data, error } = await supabase.from('comments').delete().eq('id', id);
+
+    if (error) {
+      console.log('error', error);
+      return;
+    }
+  };
+
   return (
     <div className="mt-10 pb-16">
       <p className="text-sm text-gray900 font-semibold pb-4">
@@ -94,6 +102,7 @@ const PostingComments = ({ post }: { post: Post }) => {
                 <button
                   type="button"
                   className="text-sm text-gray900 border border-solid border-gray200 rounded px-2 py-[2px] ml-1"
+                  onClick={() => deleteComment(comment.id)}
                 >
                   삭제
                 </button>
