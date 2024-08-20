@@ -92,21 +92,25 @@ const PostingComments = ({ post }: { post: Post }) => {
           <li key={idx} className="mt-6">
             <div className="flex justify-between items-center">
               <strong className="block font-normal text-sm text-gray900">{comment.users?.nickname}</strong>
-              <div>
-                <button
-                  type="button"
-                  className="text-sm text-gray900 border border-solid border-gray200 rounded px-2 py-[2px]"
-                >
-                  수정
-                </button>
-                <button
-                  type="button"
-                  className="text-sm text-gray900 border border-solid border-gray200 rounded px-2 py-[2px] ml-1"
-                  onClick={() => deleteComment(comment.id)}
-                >
-                  삭제
-                </button>
-              </div>
+              {user?.userId === comment.user_id ? (
+                <div>
+                  <button
+                    type="button"
+                    className="text-sm text-gray900 border border-solid border-gray200 rounded px-2 py-[2px]"
+                  >
+                    수정
+                  </button>
+                  <button
+                    type="button"
+                    className="text-sm text-gray900 border border-solid border-gray200 rounded px-2 py-[2px] ml-1"
+                    onClick={() => deleteComment(comment.id)}
+                  >
+                    삭제
+                  </button>
+                </div>
+              ) : (
+                ''
+              )}
             </div>
             <p className="inline-block mt-2 bg-[#FFF1F0] rounded-lg py-2 px-3 text-gray800 text-sm">
               {comment.content}
