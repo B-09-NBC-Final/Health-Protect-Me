@@ -36,7 +36,7 @@ const SignOutButton = () => {
         <AlertDialogFooter>
           <AlertDialogCancel>아니요</AlertDialogCancel>
           <AlertDialogAction
-            className="bg-[#F5637C]"
+            className="bg-[#FF7A85] border hover:text-white hover:boder-2 hover:bg-[#F5637C] "
             onClick={(e) => {
               e.preventDefault();
               signOut();
