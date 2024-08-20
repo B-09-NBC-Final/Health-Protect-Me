@@ -3,7 +3,6 @@
 import { useUserStore } from '@/store/userStore';
 import { createClient } from '@/supabase/client';
 import { Comments, Post } from '@/types';
-import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
 type newComments = Comments & {
@@ -68,7 +67,8 @@ const PostingComments = ({ post }: { post: Post }) => {
         <input
           className="w-full border border-solid border-gray300 py-2 px-3 rounded-lg text-sm"
           type="text"
-          placeholder="댓글을 작성해 보세요. 최대 300자 까지 입력 가능해요."
+          placeholder="댓글을 작성해 보세요."
+          maxLength={300}
           onChange={(e) => setComment(e.target.value)}
           value={comment}
         />
@@ -82,7 +82,23 @@ const PostingComments = ({ post }: { post: Post }) => {
       <ul>
         {commentList?.map((comment, idx) => (
           <li key={idx} className="mt-6">
-            <strong className="block font-normal text-sm text-gray900">{comment.users?.nickname}</strong>
+            <div className="flex justify-between items-center">
+              <strong className="block font-normal text-sm text-gray900">{comment.users?.nickname}</strong>
+              <div>
+                <button
+                  type="button"
+                  className="text-sm text-gray900 border border-solid border-gray200 rounded px-2 py-[2px]"
+                >
+                  수정
+                </button>
+                <button
+                  type="button"
+                  className="text-sm text-gray900 border border-solid border-gray200 rounded px-2 py-[2px] ml-1"
+                >
+                  삭제
+                </button>
+              </div>
+            </div>
             <p className="inline-block mt-2 bg-[#FFF1F0] rounded-lg py-2 px-3 text-gray800 text-sm">
               {comment.content}
             </p>
