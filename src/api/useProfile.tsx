@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useUserStore } from '../store/userStore';
 import { createClient } from '@/supabase/client';
 
-const UserProfile = () => {
+const useProfile = () => {
   const { user, setUser } = useUserStore();
   const supabase = createClient();
 
@@ -24,7 +24,7 @@ const UserProfile = () => {
     getUser();
   }, []);
 
-  return null;
+  return {user}
 };
 
-export default UserProfile;
+export default useProfile;
