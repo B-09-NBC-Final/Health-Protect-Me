@@ -29,7 +29,6 @@ const PostingUpdateForm = ({ params }: { params: { id: string } }) => {
   const [uploadFile, setUploadFile] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
   const [imageError, setImageError] = useState<string | null>(null);
-  // const [error, setError] = useState<string | null>(null);
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const [isConfirmDialog, setIsConfirmDialog] = useState(false);
@@ -254,7 +253,7 @@ const PostingUpdateForm = ({ params }: { params: { id: string } }) => {
             {isConfirmDialog ? (
               <>
                 <AlertDialogAction onClick={() => setShowAlert(false)}>취소</AlertDialogAction>
-                <AlertDialogAction onClick={handleAlertConfirm}>확인</AlertDialogAction>
+                <AlertDialogAction onClick={handleAlertConfirm} className="bg-[#F5637C]">확인</AlertDialogAction>
               </>
             ) : (
               <AlertDialogAction className="bg-[#F5637C]" onClick={() => setShowAlert(false)}>

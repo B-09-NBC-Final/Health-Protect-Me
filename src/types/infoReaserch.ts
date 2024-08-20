@@ -1,4 +1,3 @@
-// import { InfomationTable } from "./supabase";
 
 export type Step = '출생연도' | '성별' | '신장 및 체중' | '식단 목적';
 export type Gender = '남' | '여' | null;
@@ -13,7 +12,6 @@ export type SurveyData = {
 };
 
 export type FullSurveyData = Pick<SurveyData, 'year_of_birth' | 'gender' | 'height' | 'weight' | 'purpose'>;
-// export type InformationInsertDataType = Pick<InfomationTable, 'year_of_birth' | 'gender' | 'height' | 'purpose' | 'weight'>;
 export type InformationInsertDataType = {
   year_of_birth: number | null;
   gender: string;
