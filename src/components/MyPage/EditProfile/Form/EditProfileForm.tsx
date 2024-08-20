@@ -21,7 +21,7 @@ type ProfileFormProps = {
   setWeight: (value: string) => void;
   goal: string;
   setGoal: (value: string) => void;
-  onSave: () => void;
+  onSave: (save:string) => void;
   onCancel: () => void;
 };
 
@@ -99,19 +99,20 @@ const ProfileForm = ({
     if (weight !== initialValues.weight || goal !== initialValues.goal) {
       setShowAlert(true);
     } else {
-      saveData(updatedData);
+      saveData(updatedData,'toMyPage');
     }
   };
 
-  const saveData = (data: { weight: string; goal: string }) => {
-    onSave();
+  const saveData = (data: { weight: string; goal: string },save:string) => {
+    onSave(save);
     setInitialValues(data);
   };
 
   const handleAlertConfirm = () => {
     setShowAlert(false);
     const updatedData = { weight, goal };
-    saveData(updatedData);
+    saveData(updatedData,'toInfo');
+    router.push('/info-detail')
   };
 
   const handleAlertCancel = () => {
