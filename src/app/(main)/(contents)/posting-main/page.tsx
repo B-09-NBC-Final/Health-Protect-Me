@@ -1,4 +1,4 @@
-import PostingList from '@/components/Contents/PostingMain/PostingList';
+import PostingList from '@/components/Contents/PostingMainPage/PostingList';
 
 const PostingMainPage = () => {
   return (

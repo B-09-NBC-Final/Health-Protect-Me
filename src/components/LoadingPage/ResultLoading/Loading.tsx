@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import DefaultLottie from '@/components/Lottie/Lottie';
+import DefaultLottie from '@/components/LoadingPage/Lottie/Lottie';
 
 const LoadingAnimation = () => {
   const [message, setMessage] = useState<string>('');
@@ -22,7 +22,7 @@ const LoadingAnimation = () => {
   }, []);
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
+    <div className="flex flex-col items-center mt-20 justify-center">
       <div className="relative w-48 h-48">
         <DefaultLottie />
       </div>

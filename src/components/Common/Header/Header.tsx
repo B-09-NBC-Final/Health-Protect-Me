@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useUserStore } from '@/store/userStore';
-import Dropdown from '@/utils/Dropdown';
+import Dropdown from '@/components/Common/Dropdown';
 import Image from 'next/image';
 import logo from '@/assets/icons/Vector.svg';
 import { useMediaQuery } from 'react-responsive';

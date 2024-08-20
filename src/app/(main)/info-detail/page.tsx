@@ -304,7 +304,7 @@ const InforDetailPage = () => {
           )}
         </div>
         <div className="inline-flex gap-10 flex-col items-start flex-[0_0_auto] pb-14 s:pb-6 s:w-full s:items-center">
-          <div className="flex gap-10 s:flex-col s:gap-6">
+          <div className="flex flex-wrap w-100% gap-8 s:flex-col s:gap-6">
             <Card className="!flex-[0_0_auto] shadow-floating overflow-hidden w-[400px] rounded-[20px] flex flex-col s:w-[320px]">
               <CardHeader className="!text-color-text-sub">
                 <CardDescription className="text-[#3E9B2E] font-semibold s:text-sm">아침</CardDescription>
@@ -348,7 +348,7 @@ const InforDetailPage = () => {
                 </div>
               </CardContent>
             </Card>
-            <Card className="!flex-[0_0_auto] shadow-floating overflow-hidden w-[400px] s:w-[320px] rounded-[20px] flex flex-col">
+            <Card className="!flex-[0_0_auto] shadow-floating overflow-hidden mx-1 w-[400px] s:w-[320px] rounded-[20px] flex flex-col">
               <CardHeader className="!text-color-text-sub">
                 <CardDescription className="text-[#3E9B2E] font-semibold s:text-sm">점심</CardDescription>
                 <CardDescription className="text-[#27282A] text-base mt-2">{meal[1].menu.trim().replace(/^-/, '')}</CardDescription>
