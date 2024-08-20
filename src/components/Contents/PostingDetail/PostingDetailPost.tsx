@@ -7,6 +7,7 @@ import { Post, User } from '@/types';
 import Defaultimg from '@/assets/image/defaultimg.png';
 import KebabMenu from '@/components/Common/KebabMenu';
 import Skeleton from '@/components/Common/Skeleton';
+import PostingComments from './PostingComments';
 
 const PostingDetailPost = ({ params }: { params: { id: string } }) => {
   const { id } = params;
@@ -173,6 +174,7 @@ const PostingDetailPost = ({ params }: { params: { id: string } }) => {
             )}
           </div>
         </div>
+        <PostingComments post={post as Post} />
       </div>
     </>
   );

@@ -112,7 +112,7 @@ const config = {
         'mobile-main-height': 'calc(100vh - 188px)'
       },
       fontFamily: {
-        Pretendard: ['var(--font-pretentard)', 'sans-serif']
+        Pretendard: ['var(--font-pretendard)', 'sans-serif']
       },
       screens: {
         ml: { max: '1299px' },
