@@ -1,5 +1,5 @@
 import React from 'react';
-import InfoMain from '@/components/Survey/Information/InfoMain';
+import InfoMain from '@/components/SurveyPage/Info-main/InfoMain';
 
 const infoPage = () => {
   return <InfoMain />;
