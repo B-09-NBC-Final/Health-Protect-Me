@@ -43,6 +43,8 @@
 
 - 스와이퍼로 기능으로 여러 후기를 한 눈에 볼 수 있어요. <br/><br/>
 
+<img ![메인](https://github.com/user-attachments/assets/e0065bbe-93f4-4f3b-bf28-041200090bc3)>
+
 ### 3. AI API를 이용한 설문조사 페이지 구현
 
 - 최신기술인 AI에게 나의 정보를 입력해요. <br/><br/>
