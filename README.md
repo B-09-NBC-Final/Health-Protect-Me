@@ -1,38 +1,42 @@
-# 🤗 Health Protect Me
+# ![16 16](https://github.com/user-attachments/assets/a76c304e-6b71-4b87-8ab4-eaf730080e6f) Health_Protect_Me
 
 <img src="https://teamsparta.notion.site/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F83c75a39-3aba-4ba4-a792-7aefe4b07895%2Fe2c6988c-9b89-4762-944f-b0a6cf92ce20%2Fbrochure_%25EA%25B7%25B8%25EB%259D%25BC%25EB%258D%25B0%25EC%259D%25B4%25EC%2585%2598_(1).png?table=block&id=7a7b54bb-3118-41ef-9149-13bd9d03852c&spaceId=83c75a39-3aba-4ba4-a792-7aefe4b07895&width=2000&userId=&cache=v2"/>
 
-<a href="https://www.health-protect-me.store/">Health Protect Me Store</a>
+📌 서비스 링크: <a href="https://www.health-protect-me.store/">Health Protect Me Store</a>
 
 - [x] 나만을 위한 식단과 운동을 동시에 추천 받을 수 있어요!<br/>
-- [x] 커뮤니티 페이지를 통해 사용자들간의 의견 공유가 가능해요!<br/><br/>
+- [x] 커뮤니티 내에서 사용자들 간의 의견 공유가 가능해요!<br/><br/>
 
-## 팀원
+<br/>
+
+## ⭐️ 팀원 ⭐️
 
 | 서주환 | 윤희수 | 전인화 | 김택수 |
-| :----------------------------------------------------------------------: | :-------------------------------------------------------------------: | :----------------------------------------------------------------------: | :---------------------------------------------------------------------: |
-|게시글 작성 / AI API로 입력된 정보 전달,등록 , 프로필 / 마이페이지 | 카카오,구글 api 연동 / zustand 전역 상태 관리 / header, footer / middleware 제어 ,메인페이지 aos |  메인페이지 / 커뮤니티 메인 / 상세 (수정 삭제 페이지      | gpt api 연동 / ai값 조회 / 설문조사 결과 페이지 |
+| :---: | :---: | :---: | :---: | 
+| <img src="https://avatars.githubusercontent.com/JoohwanSeo" width="200"> | <img src="https://avatars.githubusercontent.com/heesu21" width="200"> | <img src="https://avatars.githubusercontent.com/YCDM03" width="200"> | <img src="https://avatars.githubusercontent.com/hb9901" width="200"> | <img src="https://avatars.githubusercontent.com/tpring" width="200"> |
+| Leader | Sub-Leader | Member | Member |
+| [JoohwanSeo](https://github.com/JoohwanSeo) | [heesu21](https://github.com/heesu21) | [jeoninhwa3](https://github.com/jeoninhwa3) | [Elephant24456](https://github.com/Elephant24456)| 
+| 게시글 등록/ 설문 페이지(유저정보 취합, AI api로 정보 전달, DB 저장)/ 프로필•마이페이지 | 소셜로그인(카카오,구글) api/ 전역상태 관리(zustand)/ Middleware 제어/ Header,Footer/ aos(이미지) | 메인 페이지/ 커뮤니티 메인 페이지/ 게시글 상세페이지(수정,삭제,댓글기능) | AI(GPT) api/ DB정보 조회/ 설문 결과 페이지(나만의 식단) |
 
-## 프로젝트 진행 기간
+<br/>
+
+## 📅 프로젝트 진행 기간
 - 2024.08.05 ~ 2024.08.21<br/>
 
-## 개발 환경
+<br/>
 
-<img src="https://img.shields.io/badge/typescript-3178C6?style=for-the-badge&logo=typescript&logoColor=white"/>
+## 🖥 개발 환경
 
-<img src="https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=next.js&logoColor=white"/> 
+<img src="https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=next.js&logoColor=white"/> <img src="https://img.shields.io/badge/typescript-3178C6?style=for-the-badge&logo=typescript&logoColor=white"/><img src="https://img.shields.io/badge/supabase-3FCF8E?style=for-the-badge&logo=supabase&logoColor=white"/><img src="https://img.shields.io/badge/tailwind-06B6D4?style=for-the-badge&logo=tailwind&logoColor=white"/><img src="https://img.shields.io/badge/zustand-F3DF49?style=for-the-badge&logo=zustand&logoColor=white"/>
 
-<img src="https://img.shields.io/badge/supabase-3FCF8E?style=for-the-badge&logo=supabase&logoColor=white"/>
+<br/>
 
-<img src="https://img.shields.io/badge/tailwind-06B6D4?style=for-the-badge&logo=tailwind&logoColor=white"/>
-
-<img src="https://img.shields.io/badge/zustand-F3DF49?style=for-the-badge&logo=zustand&logoColor=white"/>
-
+## 🗼 아키텍쳐
 <img src="https://github.com/user-attachments/assets/a285b30a-09d7-4e88-8fb9-9076afec3d2e"/>
 
+<br/>
 
-
-## 상세설명
+## 📚 상세설명
 
 ### 1. kakao,google social api를 이용한 로그인/회원가입 구현
 
