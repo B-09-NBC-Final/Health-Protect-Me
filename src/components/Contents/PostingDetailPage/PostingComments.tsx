@@ -3,8 +3,7 @@
 import { useUserStore } from '@/store/userStore';
 import { createClient } from '@/supabase/client';
 import { Comments, Post } from '@/types';
-import { ReceiptEuro } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
 type newComments = Comments & {
@@ -23,6 +22,7 @@ const PostingComments = ({ post }: { post: Post }) => {
   const [titleError, setTitleError] = useState<string | null>(null);
   const dayjs = require('dayjs');
   const formatDate = (date: string) => dayjs(date).format('YY.MM.DD');
+  const queryClient = useQueryClient();
 
   const getCommentList = async () => {
     if (!post || !post.id) {
@@ -39,14 +39,24 @@ const PostingComments = ({ post }: { post: Post }) => {
       return;
     }
 
-    setCommentList(commentsList);
+    return commentsList;
   };
 
+  const {
+    data: comments,
+    isPending,
+    isError
+  } = useQuery({
+    queryKey: ['comments', post?.id],
+    queryFn: () => getCommentList(),
+    enabled: !!post?.id
+  });
+
   useEffect(() => {
-    if (post && post.id) {
-      getCommentList();
+    if (comments) {
+      setCommentList(comments);
     }
-  }, [post]);
+  }, [comments]);
 
   const submitComment = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -66,9 +76,18 @@ const PostingComments = ({ post }: { post: Post }) => {
       console.log('comment error', error);
     }
 
+    queryClient.invalidateQueries({ queryKey: ['comments', post.id] });
     setComment('');
     setTitleError(null);
   };
+
+  if (isPending) {
+    return null;
+  }
+
+  if (isError) {
+    return <div>데이터 조회 중 오류가 발생했습니다.</div>;
+  }
 
   const updateComment = async (id: number, newContent: string) => {
     const { error } = await supabase.from('comments').update({ content: newContent }).eq('id', id);
@@ -78,6 +97,7 @@ const PostingComments = ({ post }: { post: Post }) => {
       return;
     }
 
+    queryClient.invalidateQueries({ queryKey: ['comments', post.id] });
     setIsEditing(null);
   };
 
@@ -88,6 +108,8 @@ const PostingComments = ({ post }: { post: Post }) => {
       console.log('error', error);
       return;
     }
+
+    queryClient.invalidateQueries({ queryKey: ['comments', post.id] });
   };
 
   return (
